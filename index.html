@@ -3,22 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Memori & Pengabdian KKN Desa Waru 2026</title>
+  <title>Memori & Pengabdian KKN 36 Desa Waru 2026</title>
 
   <!-- Tailwind CSS via CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Font Awesome Icons -->
+  <!-- Font Awesome Pro Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <!-- AOS (Animate On Scroll) -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
-  <!-- Google Fonts: Luxury Serif & Modern Sans -->
+  <!-- Google Fonts: Cormorant Garamond & Montserrat -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
     body {
-      background-color: #0b231c;
+      background-color: #071712;
       font-family: 'Montserrat', sans-serif;
     }
     .font-serif-luxury {
@@ -45,18 +45,40 @@
       to { transform: rotate(360deg); }
     }
     .spin-disk {
-      animation: spin-slow 4s linear infinite;
+      animation: spin-slow 5s linear infinite;
     }
     @keyframes float-subtle {
       0%, 100% { transform: translateY(0px) scale(1); }
-      50% { transform: translateY(-8px) scale(1.01); }
+      50% { transform: translateY(-6px) scale(1.01); }
     }
     .img-floating {
       animation: float-subtle 6s ease-in-out infinite;
     }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    .glass-card {
+      background: rgba(13, 38, 30, 0.55);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(52, 211, 153, 0.15);
+    }
+    .glass-card-hover {
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .glass-card-hover:hover {
+      background: rgba(16, 48, 38, 0.75);
+      border-color: rgba(52, 211, 153, 0.45);
+      transform: translateY(-4px);
+      box-shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.5), 0 0 20px 2px rgba(16, 185, 129, 0.15);
+    }
   </style>
 </head>
-<body class="text-stone-200 antialiased selection:bg-amber-600 selection:text-white lock-scroll" id="body-main">
+<body class="text-stone-200 antialiased selection:bg-emerald-600 selection:text-white lock-scroll" id="body-main">
 
   <!-- ================= AUDIO BACKGROUND ================= -->
   <audio id="bg-audio" loop preload="auto">
@@ -65,36 +87,73 @@
   </audio>
 
   <!-- ================= FLOATING MUSIC CONTROLLER ================= -->
-  <button id="music-btn" onclick="toggleAudio()" class="fixed bottom-6 right-6 z-40 w-12 h-12 rounded-full bg-black/60 backdrop-blur-md border border-emerald-500/40 text-emerald-400 flex items-center justify-center shadow-2xl hover:scale-110 transition-transform">
+  <button id="music-btn" onclick="toggleAudio()" class="fixed bottom-6 right-6 z-40 w-12 h-12 rounded-full glass-card border border-emerald-400/40 text-emerald-400 flex items-center justify-center shadow-2xl hover:scale-110 active:scale-95 transition-transform" title="Putar/Jeda Musik">
     <i id="music-icon" class="fa-solid fa-compact-disc text-xl spin-disk"></i>
   </button>
 
-  <!-- ================= 1. COVER SCREEN ================= -->
-  <div id="cover-screen" class="fixed inset-0 z-50 flex flex-col items-center justify-between text-center py-16 px-4 bg-stone-900 bg-cover bg-center overflow-hidden" 
-       style="background-image: linear-gradient(to bottom, rgba(11,35,28,0.45), rgba(11,35,28,0.85)), url('kumpuldisawah.JPG');">
-    
-    <div class="space-y-1">
-      <span class="text-xs uppercase tracking-[0.35em] text-emerald-300/80 font-medium">Dokumentasi & Kenangan</span>
-      <h2 class="text-xs uppercase tracking-[0.4em] text-stone-200">Kuliah Kerja Nyata</h2>
+  <!-- ================= LIGHTBOX POP-UP MODAL ================= -->
+  <div id="lightbox-modal" class="fixed inset-0 z-50 hidden bg-black/95 backdrop-blur-xl flex flex-col items-center justify-between p-4 select-none">
+    <div class="w-full flex items-center justify-between px-2 pt-2">
+      <div class="text-xs text-stone-300 flex items-center gap-2">
+        <span id="lb-kategori" class="px-2.5 py-1 rounded-md bg-emerald-950 border border-emerald-500/40 text-emerald-300 uppercase tracking-widest text-[10px] font-semibold">Kategori</span>
+        <span id="lb-counter" class="text-stone-400 text-xs font-mono"></span>
+      </div>
+      <div class="flex items-center gap-3">
+        <a id="lb-download" href="#" target="_blank" class="w-9 h-9 rounded-full bg-stone-900 border border-emerald-900/60 text-stone-300 hover:text-emerald-400 flex items-center justify-center transition-colors" title="Buka Asli di Drive">
+          <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+        </a>
+        <button onclick="tutupLightbox()" class="w-9 h-9 rounded-full bg-stone-900 border border-stone-800 text-stone-300 hover:bg-red-600 hover:text-white flex items-center justify-center transition-colors">
+          <i class="fa-solid fa-xmark text-sm"></i>
+        </button>
+      </div>
     </div>
 
-    <div class="max-w-xl mx-auto my-auto py-8">
-      <h1 class="font-serif-luxury text-4xl sm:text-6xl md:text-7xl font-bold tracking-wide text-white drop-shadow-md">
-        KKN Desa Waru
-      </h1>
-      
-      <div class="w-24 h-[1px] bg-white/40 mx-auto my-4"></div>
-      
-      <p class="font-serif-luxury tracking-[0.25em] text-sm sm:text-base text-stone-200">
-        29 . 0 7 . 2 0 2 6 — 2 . 0 8 . 2 0 2 6
-      </p>
-
-      <button onclick="openInvitation()" class="mt-8 px-8 py-3 rounded-md bg-stone-800/80 hover:bg-stone-800 border border-stone-400/40 text-stone-100 text-xs tracking-[0.3em] font-semibold uppercase shadow-xl hover:scale-105 transition-all duration-300">
-        <i class="fa-regular fa-envelope-open mr-2 text-emerald-400"></i> Klik untuk membuka Memori
+    <div class="relative flex items-center justify-center w-full flex-1 max-h-[82vh] my-auto">
+      <button onclick="prevLightbox(event)" class="absolute left-2 z-10 w-11 h-11 rounded-full bg-black/60 hover:bg-emerald-600/90 text-white flex items-center justify-center transition-all border border-white/10 shadow-lg">
+        <i class="fa-solid fa-chevron-left"></i>
+      </button>
+      <img id="lb-image" src="" alt="Preview" class="max-h-full max-w-full object-contain rounded-xl shadow-2xl border border-white/10">
+      <button onclick="nextLightbox(event)" class="absolute right-2 z-10 w-11 h-11 rounded-full bg-black/60 hover:bg-emerald-600/90 text-white flex items-center justify-center transition-all border border-white/10 shadow-lg">
+        <i class="fa-solid fa-chevron-right"></i>
       </button>
     </div>
 
-    <div class="text-[11px] tracking-widest text-stone-400 uppercase">
+    <div class="w-full text-center pb-2">
+      <p id="lb-filename" class="text-xs text-stone-300 font-light truncate max-w-md mx-auto"></p>
+    </div>
+  </div>
+
+  <!-- ================= 1. COVER SCREEN (RESPONSIF MOBILE ANTI-POTONG) ================= -->
+  <div id="cover-screen" class="fixed inset-0 z-50 flex flex-col items-center justify-between text-center py-12 px-4 bg-stone-950 overflow-hidden">
+    <!-- Dual-Layer Ambient Background: Blur + Center Fit -->
+    <div class="absolute inset-0 bg-cover bg-center opacity-35 blur-2xl scale-110" style="background-image: url('kumpuldisawah.JPG');"></div>
+    <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+      <img src="kumpuldisawah.JPG" alt="Foto Bersama KKN" class="w-full h-full max-h-[80vh] object-contain sm:object-cover sm:max-h-none opacity-90 transition-opacity">
+      <div class="absolute inset-0 bg-gradient-to-b from-[#071712]/80 via-transparent to-[#071712]/95"></div>
+    </div>
+
+    <div class="relative z-10 space-y-1">
+      <span class="text-[11px] uppercase tracking-[0.35em] text-emerald-300/90 font-medium">Dokumentasi & Kenangan</span>
+      <h2 class="text-[11px] uppercase tracking-[0.4em] text-stone-300">Kuliah Kerja Nyata</h2>
+    </div>
+
+    <div class="relative z-10 max-w-xl mx-auto my-auto py-6">
+      <h1 class="font-serif-luxury text-4xl sm:text-6xl md:text-7xl font-bold tracking-wide text-white drop-shadow-[0_5px_15px_rgba(0,0,0,0.8)]">
+        KKN Desa Waru
+      </h1>
+      
+      <div class="w-20 h-[1px] bg-gradient-to-r from-transparent via-emerald-400 to-transparent mx-auto my-4"></div>
+      
+      <p class="font-serif-luxury tracking-[0.25em] text-xs sm:text-base text-stone-200 drop-shadow">
+        29 . 0 7 . 2 0 2 6 — 0 2 . 0 9 . 2 0 2 6
+      </p>
+
+      <button onclick="openInvitation()" class="mt-8 px-8 py-3.5 rounded-full glass-card border border-emerald-400/50 text-stone-100 text-xs tracking-[0.25em] font-semibold uppercase shadow-2xl hover:scale-105 active:scale-95 transition-all duration-300">
+        <i class="fa-regular fa-envelope-open mr-2 text-emerald-400"></i> Buka Memori
+      </button>
+    </div>
+
+    <div class="relative z-10 text-[10px] sm:text-[11px] tracking-widest text-stone-400 uppercase">
       Kecamatan Mranggen • Kabupaten Demak
     </div>
   </div>
@@ -102,625 +161,581 @@
   <!-- ================= 2. ISI UTAMA ================= -->
   <main id="main-content">
 
-    <!-- HERO BANNER -->
-    <section class="relative min-h-screen w-full flex flex-col justify-between items-center text-center px-4 py-16 bg-cover bg-center"
-             style="background-image: linear-gradient(to bottom, rgba(11,35,28,0.35) 0%, rgba(11,35,28,0.95) 90%), url('barisdisawah.JPG');">
-      
-      <div></div>
+    <!-- HERO BANNER (RESPONSIF MOBILE ANTI-POTONG) -->
+   <!-- HERO BANNER (POSISI KOTAK SUDAH DITURUNKAN BEBAS TUTUP WAJAH) -->
+    <section class="relative min-h-screen w-full flex flex-col justify-between items-center text-center px-4 pt-12 pb-8 bg-stone-950 overflow-hidden">
+      <!-- Background Ambient & Foto Utuh -->
+      <div class="absolute inset-0 bg-cover bg-center opacity-30 blur-2xl scale-110" style="background-image: url('barisdisawah.JPG');"></div>
+      <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+        <img src="barisdisawah.JPG" alt="Foto Baris di Sawah" class="w-full h-full max-h-[85vh] object-contain sm:object-cover sm:max-h-none opacity-85">
+        <div class="absolute inset-0 bg-gradient-to-b from-[#071712]/80 via-[#071712]/30 to-[#071712]"></div>
+      </div>
 
-      <div class="max-w-3xl mx-auto my-auto space-y-6">
-        <span class="text-xs uppercase tracking-[0.3em] text-emerald-400 font-semibold block" data-aos="fade-down" data-aos-duration="1000">Keluarga Besar Posko</span>
-        <h1 class="font-serif-luxury text-4xl sm:text-6xl md:text-7xl font-bold text-white tracking-wide leading-tight" data-aos="zoom-in" data-aos-duration="1200">
+      <!-- 1. Area Judul: Di Area Langit Atas Kepala -->
+      <div class="relative z-10 max-w-3xl mx-auto space-y-2 mt-4 sm:mt-6">
+        <span class="text-[11px] sm:text-xs uppercase tracking-[0.3em] text-emerald-400 font-semibold block drop-shadow" data-aos="fade-down" data-aos-duration="1000">
+          Keluarga Besar Posko Sandran
+        </span>
+        <h1 class="font-serif-luxury text-3xl sm:text-6xl md:text-7xl font-bold text-white tracking-wide leading-tight drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]" data-aos="zoom-in" data-aos-duration="1200">
           17 Jiwa, 1 Pengabdian
         </h1>
+      </div>
 
-        <div class="pt-4" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">
-          <div class="inline-grid grid-cols-4 gap-4 sm:gap-8 px-6 py-4 rounded-2xl bg-black/40 backdrop-blur-md border border-emerald-900/60 shadow-2xl text-center">
+      <!-- 2. Area Kotak Angka: Diturunkan Jauh ke Bawah (Level Dada/Perut) -->
+      <div class="relative z-10 max-w-2xl mx-auto mt-28 sm:mt-36 space-y-4">
+        <div data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">
+          <div class="inline-grid grid-cols-4 gap-2 sm:gap-6 px-4 sm:px-6 py-2.5 sm:py-3 rounded-2xl bg-black/40 backdrop-blur-md border border-emerald-500/30 shadow-2xl text-center">
             <div>
-              <div class="text-xl sm:text-3xl font-bold text-emerald-400 font-serif-luxury">35</div>
-              <div class="text-[10px] text-stone-400 uppercase tracking-widest mt-0.5">Hari Bersama</div>
+              <div class="text-base sm:text-2xl font-bold text-emerald-400 font-serif-luxury">35</div>
+              <div class="text-[8px] sm:text-[9px] text-stone-300 uppercase tracking-widest mt-0.5">Hari Bersama</div>
             </div>
             <div>
-              <div class="text-xl sm:text-3xl font-bold text-emerald-400 font-serif-luxury">17</div>
-              <div class="text-[10px] text-stone-400 uppercase tracking-widest mt-0.5">Anggota Tim</div>
+              <div class="text-base sm:text-2xl font-bold text-emerald-400 font-serif-luxury">17</div>
+              <div class="text-[8px] sm:text-[9px] text-stone-300 uppercase tracking-widest mt-0.5">Anggota Tim</div>
             </div>
             <div>
-              <div class="text-xl sm:text-3xl font-bold text-emerald-400 font-serif-luxury">9</div>
-              <div class="text-[10px] text-stone-400 uppercase tracking-widest mt-0.5">Program Kerja</div>
+              <div class="text-base sm:text-2xl font-bold text-emerald-400 font-serif-luxury">9</div>
+              <div class="text-[8px] sm:text-[9px] text-stone-300 uppercase tracking-widest mt-0.5">Program Kerja</div>
             </div>
             <div>
-              <div class="text-xl sm:text-3xl font-bold text-emerald-400 font-serif-luxury">&infin;</div>
-              <div class="text-[10px] text-stone-400 uppercase tracking-widest mt-0.5">Kenangan Abadi</div>
+              <div class="text-base sm:text-2xl font-bold text-emerald-400 font-serif-luxury">&infin;</div>
+              <div class="text-[8px] sm:text-[9px] text-stone-300 uppercase tracking-widest mt-0.5">Kenangan Abadi</div>
             </div>
           </div>
         </div>
 
-        <p class="text-xs sm:text-sm text-stone-300 font-light max-w-md mx-auto italic leading-relaxed pt-2" data-aos="fade-up" data-aos-delay="400">
+        <p class="text-[11px] sm:text-xs text-stone-300 font-light max-w-md mx-auto italic leading-relaxed drop-shadow" data-aos="fade-up" data-aos-delay="300">
           "Bukan tentang seberapa megah tempatnya, melainkan tentang siapa saja yang berjuang bersama di dalamnya."
         </p>
       </div>
 
-      <div class="animate-bounce flex flex-col items-center gap-1 text-stone-400 text-xs tracking-widest uppercase">
+      <!-- 3. Indikator Scroll -->
+      <div class="relative z-10 animate-bounce flex flex-col items-center gap-1 text-stone-400 text-[10px] sm:text-xs tracking-widest uppercase mt-4">
         <span>Gulir ke bawah</span>
-        <i class="fa-solid fa-chevron-down text-emerald-400 text-sm"></i>
+        <i class="fa-solid fa-chevron-down text-emerald-400 text-xs"></i>
       </div>
     </section>
 
-    <!-- ================= 3. ANGGOTA KELOMPOK (17 ORANG) ================= -->
+    <!-- ================= 3. ANGGOTA KELOMPOK (17 ORANG LENGKAP) ================= -->
     <div id="members-container" class="divide-y divide-emerald-950/40 overflow-hidden">
 
-      <!-- ITEM 1: THE LEADER -->
+      <!-- 1: FADHIL -->
       <section class="min-h-screen w-full flex items-center justify-center relative px-6 py-16">
         <div class="max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-8 md:gap-14">
-          <div class="hidden md:flex items-center justify-center" data-aos="fade-right" data-aos-duration="1000">
-            <span class="vertical-text font-serif-luxury text-3xl lg:text-4xl tracking-[0.25em] text-stone-400/50 uppercase select-none">
-              The Leader
-            </span>
-          </div>
-
-          <div class="relative w-64 sm:w-72 md:w-80 aspect-[3/4] shrink-0 rounded-2xl overflow-hidden shadow-2xl border border-emerald-800/40 group img-floating"
-               data-aos="zoom-out-up" data-aos-duration="1200">
-            <img src="fadhil.jpg" 
-                 alt="Foto Ketua" 
-                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+          <div class="hidden md:flex items-center justify-center" data-aos="fade-right"><span class="vertical-text font-serif-luxury text-3xl lg:text-4xl tracking-[0.25em] text-stone-400/50 uppercase select-none">The Leader</span></div>
+          <div class="relative w-64 sm:w-72 md:w-80 aspect-[3/4] shrink-0 rounded-2xl overflow-hidden shadow-2xl border border-emerald-800/40 group img-floating" data-aos="zoom-out-up">
+            <img src="fadhil.jpg" alt="Foto Fadhil" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
             <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent"></div>
           </div>
-
-          <div class="text-center md:text-left max-w-md" data-aos="fade-left" data-aos-duration="1100">
+          <div class="text-center md:text-left max-w-md" data-aos="fade-left">
             <span class="text-xs uppercase tracking-[0.25em] text-emerald-400 font-semibold block mb-2">Koordinator Desa (Kordes)</span>
-            <h2 class="font-serif-luxury text-2xl sm:text-4xl font-bold text-white tracking-wide leading-snug">
-              Fadhil
-            </h2>
+            <h2 class="font-serif-luxury text-3xl sm:text-4xl font-bold text-white tracking-wide leading-snug">Fadhil</h2>
             <p class="text-xs sm:text-sm text-stone-300 mt-1 font-light">PJKR • UPGRIS</p>
             <div class="w-16 h-[1px] bg-emerald-500/50 my-4 mx-auto md:mx-0"></div>
-            <p class="text-xs sm:text-sm text-stone-400 italic leading-relaxed">
-              "Nahkoda posko yang selalu siaga menemui perangkat desa, meredakan kepanikan jadwal proker, dan memastikan semua anggota pulang selamat."
-            </p>
+            <p class="text-xs sm:text-sm text-stone-400 italic leading-relaxed">"Nahkoda posko yang selalu siaga menemui perangkat desa, meredakan kepanikan jadwal proker, dan memastikan semua anggota pulang selamat."</p>
             <div class="mt-6 flex items-center justify-center md:justify-start gap-4">
               <a href="#" class="inline-flex items-center gap-2 text-xs text-stone-300 hover:text-emerald-400 transition-colors">
-                <i class="fa-brands fa-instagram text-base text-emerald-400"></i>
-                <span>@fadhil_ig</span>
+                <i class="fa-brands fa-instagram text-base text-emerald-400"></i><span>@fadhil_ig</span>
               </a>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- ITEM 2: KORCAM -->
+      <!-- 2: IVAN GEDE -->
       <section class="min-h-screen w-full flex items-center justify-center relative px-6 py-16">
         <div class="max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-8 md:gap-14">
-          <div class="hidden md:flex items-center justify-center" data-aos="fade-right" data-aos-duration="1000">
-            <span class="vertical-text font-serif-luxury text-3xl lg:text-4xl tracking-[0.25em] text-stone-400/50 uppercase select-none">
-              Korcam
-            </span>
-          </div>
-
-          <div class="relative w-64 sm:w-72 md:w-80 aspect-[3/4] shrink-0 rounded-2xl overflow-hidden shadow-2xl border border-emerald-800/40 group img-floating"
-               data-aos="zoom-out-up" data-aos-duration="1200">
-            <img src="ivan.JPG" 
-                 alt="Foto Ivan Gede" 
-                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+          <div class="hidden md:flex items-center justify-center" data-aos="fade-right"><span class="vertical-text font-serif-luxury text-3xl lg:text-4xl tracking-[0.25em] text-stone-400/50 uppercase select-none">Korcam</span></div>
+          <div class="relative w-64 sm:w-72 md:w-80 aspect-[3/4] shrink-0 rounded-2xl overflow-hidden shadow-2xl border border-emerald-800/40 group img-floating" data-aos="zoom-out-up">
+            <img src="ivan.JPG" alt="Foto Ivan Gede" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
             <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent"></div>
           </div>
-
-          <div class="text-center md:text-left max-w-md" data-aos="fade-left" data-aos-duration="1100">
+          <div class="text-center md:text-left max-w-md" data-aos="fade-left">
             <span class="text-xs uppercase tracking-[0.25em] text-emerald-400 font-semibold block mb-2">Koordinator Kecamatan</span>
-            <h2 class="font-serif-luxury text-2xl sm:text-4xl font-bold text-white tracking-wide leading-snug">
-              Ivan Gede
-            </h2>
+            <h2 class="font-serif-luxury text-3xl sm:text-4xl font-bold text-white tracking-wide leading-snug">Ivan Gede</h2>
             <p class="text-xs sm:text-sm text-stone-300 mt-1 font-light">Informatika • UPGRIS</p>
             <div class="w-16 h-[1px] bg-emerald-500/50 my-4 mx-auto md:mx-0"></div>
-            <p class="text-xs sm:text-sm text-stone-400 italic leading-relaxed">
-              "Penghubung komunikasi lintas desa se-kecamatan yang sigap mengawal jalannya pengabdian."
-            </p>
+            <p class="text-xs sm:text-sm text-stone-400 italic leading-relaxed">"Penghubung komunikasi lintas desa se-kecamatan yang sigap mengawal jalannya pengabdian."</p>
             <div class="mt-6 flex items-center justify-center md:justify-start gap-4">
               <a href="#" class="inline-flex items-center gap-2 text-xs text-stone-300 hover:text-emerald-400 transition-colors">
-                <i class="fa-brands fa-instagram text-base text-emerald-400"></i>
-                <span>@ivangede_ig</span>
+                <i class="fa-brands fa-instagram text-base text-emerald-400"></i><span>@ivangede_ig</span>
               </a>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- ITEM 4: SEKRETARIS 1 -->
+      <!-- 3: PUTRI DJ -->
       <section class="min-h-screen w-full flex items-center justify-center relative px-6 py-16">
         <div class="max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-8 md:gap-14">
-          <div class="hidden md:flex items-center justify-center" data-aos="fade-right" data-aos-duration="1000">
-            <span class="vertical-text font-serif-luxury text-3xl lg:text-4xl tracking-[0.25em] text-stone-400/50 uppercase select-none">
-              Secretary
-            </span>
-          </div>
-          <div class="relative w-64 sm:w-72 md:w-80 aspect-[3/4] shrink-0 rounded-2xl overflow-hidden shadow-2xl border border-emerald-800/40 group img-floating" data-aos="zoom-out-up" data-aos-duration="1200">
-            <img src="putridj.JPG" alt="Foto Anggota" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+          <div class="hidden md:flex items-center justify-center" data-aos="fade-right"><span class="vertical-text font-serif-luxury text-3xl lg:text-4xl tracking-[0.25em] text-stone-400/50 uppercase select-none">Secretary</span></div>
+          <div class="relative w-64 sm:w-72 md:w-80 aspect-[3/4] shrink-0 rounded-2xl overflow-hidden shadow-2xl border border-emerald-800/40 group img-floating" data-aos="zoom-out-up">
+            <img src="putridj.JPG" alt="Foto Putri DJ" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
             <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent"></div>
           </div>
-          <div class="text-center md:text-left max-w-md" data-aos="fade-left" data-aos-duration="1100">
+          <div class="text-center md:text-left max-w-md" data-aos="fade-left">
             <span class="text-xs uppercase tracking-[0.25em] text-emerald-400 font-semibold block mb-2">Sekretaris</span>
-            <h2 class="font-serif-luxury text-2xl sm:text-4xl font-bold text-white tracking-wide leading-snug">Putri DJ</h2>
+            <h2 class="font-serif-luxury text-3xl sm:text-4xl font-bold text-white tracking-wide leading-snug">Putri DJ</h2>
             <p class="text-xs sm:text-sm text-stone-300 mt-1 font-light">Teknik Sipil • UPGRIS</p>
             <div class="w-16 h-[1px] bg-emerald-500/50 my-4 mx-auto md:mx-0"></div>
-            <p class="text-xs sm:text-sm text-stone-400 italic leading-relaxed">
-              "Pencatat notulensi paling teliti, pengingat tenggat waktu laporan akhir, dan arsiparis utama posko."
-            </p>
+            <p class="text-xs sm:text-sm text-stone-400 italic leading-relaxed">"Pencatat notulensi paling teliti, pengingat tenggat waktu laporan akhir, dan arsiparis utama posko."</p>
             <div class="mt-6 flex items-center justify-center md:justify-start gap-4">
               <a href="#" class="inline-flex items-center gap-2 text-xs text-stone-300 hover:text-emerald-400 transition-colors">
-                <i class="fa-brands fa-instagram text-base text-emerald-400"></i>
-                <span>@instagram</span>
+                <i class="fa-brands fa-instagram text-base text-emerald-400"></i><span>@instagram</span>
               </a>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- ITEM 5: SEKRETARIS 2 -->
+      <!-- 4: NISA -->
       <section class="min-h-screen w-full flex items-center justify-center relative px-6 py-16">
         <div class="max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-8 md:gap-14">
-          <div class="hidden md:flex items-center justify-center" data-aos="fade-right" data-aos-duration="1000">
-            <span class="vertical-text font-serif-luxury text-3xl lg:text-4xl tracking-[0.25em] text-stone-400/50 uppercase select-none">
-              Secretary
-            </span>
-          </div>
-          <div class="relative w-64 sm:w-72 md:w-80 aspect-[3/4] shrink-0 rounded-2xl overflow-hidden shadow-2xl border border-emerald-800/40 group img-floating" data-aos="zoom-out-up" data-aos-duration="1200">
-            <img src="nisa.JPG" alt="Foto Anggota" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+          <div class="hidden md:flex items-center justify-center" data-aos="fade-right"><span class="vertical-text font-serif-luxury text-3xl lg:text-4xl tracking-[0.25em] text-stone-400/50 uppercase select-none">Secretary</span></div>
+          <div class="relative w-64 sm:w-72 md:w-80 aspect-[3/4] shrink-0 rounded-2xl overflow-hidden shadow-2xl border border-emerald-800/40 group img-floating" data-aos="zoom-out-up">
+            <img src="nisa.JPG" alt="Foto Nisa" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
             <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent"></div>
           </div>
-          <div class="text-center md:text-left max-w-md" data-aos="fade-left" data-aos-duration="1100">
+          <div class="text-center md:text-left max-w-md" data-aos="fade-left">
             <span class="text-xs uppercase tracking-[0.25em] text-emerald-400 font-semibold block mb-2">Sekretaris 2</span>
-            <h2 class="font-serif-luxury text-2xl sm:text-4xl font-bold text-white tracking-wide leading-snug">Nisa</h2>
+            <h2 class="font-serif-luxury text-3xl sm:text-4xl font-bold text-white tracking-wide leading-snug">Nisa</h2>
             <p class="text-xs sm:text-sm text-stone-300 mt-1 font-light">PGSD • UPGRIS</p>
             <div class="w-16 h-[1px] bg-emerald-500/50 my-4 mx-auto md:mx-0"></div>
-            <p class="text-xs sm:text-sm text-stone-400 italic leading-relaxed">
-              "Pencatat absensi harian dan koordinator pengarsipan berkas surat perizinan warga desa."
-            </p>
+            <p class="text-xs sm:text-sm text-stone-400 italic leading-relaxed">"Pencatat absensi harian dan koordinator pengarsipan berkas surat perizinan warga desa."</p>
             <div class="mt-6 flex items-center justify-center md:justify-start gap-4">
               <a href="#" class="inline-flex items-center gap-2 text-xs text-stone-300 hover:text-emerald-400 transition-colors">
-                <i class="fa-brands fa-instagram text-base text-emerald-400"></i>
-                <span>@instagram</span>
+                <i class="fa-brands fa-instagram text-base text-emerald-400"></i><span>@instagram</span>
               </a>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- ITEM 6: BENDAHARA 1 -->
+      <!-- 5: MARSHA -->
       <section class="min-h-screen w-full flex items-center justify-center relative px-6 py-16">
         <div class="max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-8 md:gap-14">
-          <div class="hidden md:flex items-center justify-center" data-aos="fade-right" data-aos-duration="1000">
-            <span class="vertical-text font-serif-luxury text-3xl lg:text-4xl tracking-[0.25em] text-stone-400/50 uppercase select-none">
-              Treasurer
-            </span>
-          </div>
-          <div class="relative w-64 sm:w-72 md:w-80 aspect-[3/4] shrink-0 rounded-2xl overflow-hidden shadow-2xl border border-emerald-800/40 group img-floating" data-aos="zoom-out-up" data-aos-duration="1200">
-            <img src="marsha.jpg" alt="Foto Anggota" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+          <div class="hidden md:flex items-center justify-center" data-aos="fade-right"><span class="vertical-text font-serif-luxury text-3xl lg:text-4xl tracking-[0.25em] text-stone-400/50 uppercase select-none">Treasurer</span></div>
+          <div class="relative w-64 sm:w-72 md:w-80 aspect-[3/4] shrink-0 rounded-2xl overflow-hidden shadow-2xl border border-emerald-800/40 group img-floating" data-aos="zoom-out-up">
+            <img src="marsha.jpg" alt="Foto Marsha" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
             <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent"></div>
           </div>
-          <div class="text-center md:text-left max-w-md" data-aos="fade-left" data-aos-duration="1100">
+          <div class="text-center md:text-left max-w-md" data-aos="fade-left">
             <span class="text-xs uppercase tracking-[0.25em] text-emerald-400 font-semibold block mb-2">Bendahara</span>
-            <h2 class="font-serif-luxury text-2xl sm:text-4xl font-bold text-white tracking-wide leading-snug">Marsha</h2>
+            <h2 class="font-serif-luxury text-3xl sm:text-4xl font-bold text-white tracking-wide leading-snug">Marsha</h2>
             <p class="text-xs sm:text-sm text-stone-300 mt-1 font-light">PGSD • UPGRIS</p>
             <div class="w-16 h-[1px] bg-emerald-500/50 my-4 mx-auto md:mx-0"></div>
-            <p class="text-xs sm:text-sm text-stone-400 italic leading-relaxed">
-              "Paling disegani saat menagih uang kas mingguan, tapi paling lihai mengelola alokasi dana proker posko."
-            </p>
+            <p class="text-xs sm:text-sm text-stone-400 italic leading-relaxed">"Paling disegani saat menagih uang kas mingguan, tapi paling lihai mengelola alokasi dana proker posko."</p>
             <div class="mt-6 flex items-center justify-center md:justify-start gap-4">
               <a href="#" class="inline-flex items-center gap-2 text-xs text-stone-300 hover:text-emerald-400 transition-colors">
-                <i class="fa-brands fa-instagram text-base text-emerald-400"></i>
-                <span>@instagram</span>
+                <i class="fa-brands fa-instagram text-base text-emerald-400"></i><span>@instagram</span>
               </a>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- ITEM 7: BENDAHARA 2 -->
+      <!-- 6: REZAL -->
       <section class="min-h-screen w-full flex items-center justify-center relative px-6 py-16">
         <div class="max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-8 md:gap-14">
-          <div class="hidden md:flex items-center justify-center" data-aos="fade-right" data-aos-duration="1000">
-            <span class="vertical-text font-serif-luxury text-3xl lg:text-4xl tracking-[0.25em] text-stone-400/50 uppercase select-none">
-              Treasurer
-            </span>
-          </div>
-          <div class="relative w-64 sm:w-72 md:w-80 aspect-[3/4] shrink-0 rounded-2xl overflow-hidden shadow-2xl border border-emerald-800/40 group img-floating" data-aos="zoom-out-up" data-aos-duration="1200">
-            <img src="rezal.JPG" alt="Foto Anggota" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+          <div class="hidden md:flex items-center justify-center" data-aos="fade-right"><span class="vertical-text font-serif-luxury text-3xl lg:text-4xl tracking-[0.25em] text-stone-400/50 uppercase select-none">Treasurer</span></div>
+          <div class="relative w-64 sm:w-72 md:w-80 aspect-[3/4] shrink-0 rounded-2xl overflow-hidden shadow-2xl border border-emerald-800/40 group img-floating" data-aos="zoom-out-up">
+            <img src="rezal.JPG" alt="Foto Rezal" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
             <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent"></div>
           </div>
-          <div class="text-center md:text-left max-w-md" data-aos="fade-left" data-aos-duration="1100">
+          <div class="text-center md:text-left max-w-md" data-aos="fade-left">
             <span class="text-xs uppercase tracking-[0.25em] text-emerald-400 font-semibold block mb-2">Bendahara 2</span>
-            <h2 class="font-serif-luxury text-2xl sm:text-4xl font-bold text-white tracking-wide leading-snug">Rezal</h2>
+            <h2 class="font-serif-luxury text-3xl sm:text-4xl font-bold text-white tracking-wide leading-snug">Rezal</h2>
             <p class="text-xs sm:text-sm text-stone-300 mt-1 font-light">PGSD • UPGRIS</p>
             <div class="w-16 h-[1px] bg-emerald-500/50 my-4 mx-auto md:mx-0"></div>
-            <p class="text-xs sm:text-sm text-stone-400 italic leading-relaxed">
-              "Partner setia pembukuan keuangan posko dan penawar harga belanjaan sayur di pasar pagi."
-            </p>
+            <p class="text-xs sm:text-sm text-stone-400 italic leading-relaxed">"Partner setia pembukuan keuangan posko dan penawar harga belanjaan sayur di pasar pagi."</p>
             <div class="mt-6 flex items-center justify-center md:justify-start gap-4">
               <a href="#" class="inline-flex items-center gap-2 text-xs text-stone-300 hover:text-emerald-400 transition-colors">
-                <i class="fa-brands fa-instagram text-base text-emerald-400"></i>
-                <span>@instagram</span>
+                <i class="fa-brands fa-instagram text-base text-emerald-400"></i><span>@instagram</span>
               </a>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- ITEM 8: SIE ACARA 1 -->
+      <!-- 7: SELLA -->
       <section class="min-h-screen w-full flex items-center justify-center relative px-6 py-16">
         <div class="max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-8 md:gap-14">
-          <div class="hidden md:flex items-center justify-center" data-aos="fade-right" data-aos-duration="1000">
-            <span class="vertical-text font-serif-luxury text-3xl lg:text-4xl tracking-[0.25em] text-stone-400/50 uppercase select-none">
-              Div. Acara
-            </span>
-          </div>
-          <div class="relative w-64 sm:w-72 md:w-80 aspect-[3/4] shrink-0 rounded-2xl overflow-hidden shadow-2xl border border-emerald-800/40 group img-floating" data-aos="zoom-out-up" data-aos-duration="1200">
-            <img src="sella.jpg" alt="Foto Anggota" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+          <div class="hidden md:flex items-center justify-center" data-aos="fade-right"><span class="vertical-text font-serif-luxury text-3xl lg:text-4xl tracking-[0.25em] text-stone-400/50 uppercase select-none">Div. Acara</span></div>
+          <div class="relative w-64 sm:w-72 md:w-80 aspect-[3/4] shrink-0 rounded-2xl overflow-hidden shadow-2xl border border-emerald-800/40 group img-floating" data-aos="zoom-out-up">
+            <img src="sella.jpg" alt="Foto Sella" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
             <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent"></div>
           </div>
-          <div class="text-center md:text-left max-w-md" data-aos="fade-left" data-aos-duration="1100">
+          <div class="text-center md:text-left max-w-md" data-aos="fade-left">
             <span class="text-xs uppercase tracking-[0.25em] text-emerald-400 font-semibold block mb-2">Pendidikan</span>
-            <h2 class="font-serif-luxury text-2xl sm:text-4xl font-bold text-white tracking-wide leading-snug">Sella</h2>
+            <h2 class="font-serif-luxury text-3xl sm:text-4xl font-bold text-white tracking-wide leading-snug">Sella</h2>
             <p class="text-xs sm:text-sm text-stone-300 mt-1 font-light">BK • UPGRIS</p>
             <div class="w-16 h-[1px] bg-emerald-500/50 my-4 mx-auto md:mx-0"></div>
-            <p class="text-xs sm:text-sm text-stone-400 italic leading-relaxed">
-              "Perancang alur rundown dari lomba Agustusan hingga perpisahan dengan pemuda karang taruna."
-            </p>
+            <p class="text-xs sm:text-sm text-stone-400 italic leading-relaxed">"Perancang alur rundown dari lomba Agustusan hingga perpisahan dengan pemuda karang taruna."</p>
             <div class="mt-6 flex items-center justify-center md:justify-start gap-4">
               <a href="#" class="inline-flex items-center gap-2 text-xs text-stone-300 hover:text-emerald-400 transition-colors">
-                <i class="fa-brands fa-instagram text-base text-emerald-400"></i>
-                <span>@instagram</span>
+                <i class="fa-brands fa-instagram text-base text-emerald-400"></i><span>@instagram</span>
               </a>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- ITEM 9: SIE ACARA 2 -->
+      <!-- 8: CAHYA -->
       <section class="min-h-screen w-full flex items-center justify-center relative px-6 py-16">
         <div class="max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-8 md:gap-14">
-          <div class="hidden md:flex items-center justify-center" data-aos="fade-right" data-aos-duration="1000">
-            <span class="vertical-text font-serif-luxury text-3xl lg:text-4xl tracking-[0.25em] text-stone-400/50 uppercase select-none">
-              Div. Acara
-            </span>
-          </div>
-          <div class="relative w-64 sm:w-72 md:w-80 aspect-[3/4] shrink-0 rounded-2xl overflow-hidden shadow-2xl border border-emerald-800/40 group img-floating" data-aos="zoom-out-up" data-aos-duration="1200">
-            <img src="cahya.jpg" alt="Foto Anggota" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+          <div class="hidden md:flex items-center justify-center" data-aos="fade-right"><span class="vertical-text font-serif-luxury text-3xl lg:text-4xl tracking-[0.25em] text-stone-400/50 uppercase select-none">Div. Acara</span></div>
+          <div class="relative w-64 sm:w-72 md:w-80 aspect-[3/4] shrink-0 rounded-2xl overflow-hidden shadow-2xl border border-emerald-800/40 group img-floating" data-aos="zoom-out-up">
+            <img src="cahya.jpg" alt="Foto Cahya" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
             <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent"></div>
           </div>
-          <div class="text-center md:text-left max-w-md" data-aos="fade-left" data-aos-duration="1100">
+          <div class="text-center md:text-left max-w-md" data-aos="fade-left">
             <span class="text-xs uppercase tracking-[0.25em] text-emerald-400 font-semibold block mb-2">Pendidikan</span>
-            <h2 class="font-serif-luxury text-2xl sm:text-4xl font-bold text-white tracking-wide leading-snug">Cahya</h2>
+            <h2 class="font-serif-luxury text-3xl sm:text-4xl font-bold text-white tracking-wide leading-snug">Cahya</h2>
             <p class="text-xs sm:text-sm text-stone-300 mt-1 font-light">PJKR • UPGRIS</p>
             <div class="w-16 h-[1px] bg-emerald-500/50 my-4 mx-auto md:mx-0"></div>
-            <p class="text-xs sm:text-sm text-stone-400 italic leading-relaxed">
-              "Master of Ceremony andalan desa yang mampu membuat suasana riuh dan ceria."
-            </p>
+            <p class="text-xs sm:text-sm text-stone-400 italic leading-relaxed">"Master of Ceremony andalan desa yang mampu membuat suasana riuh dan ceria."</p>
             <div class="mt-6 flex items-center justify-center md:justify-start gap-4">
               <a href="#" class="inline-flex items-center gap-2 text-xs text-stone-300 hover:text-emerald-400 transition-colors">
-                <i class="fa-brands fa-instagram text-base text-emerald-400"></i>
-                <span>@instagram</span>
+                <i class="fa-brands fa-instagram text-base text-emerald-400"></i><span>@instagram</span>
               </a>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- ITEM 10: HUMAS 1 -->
+      <!-- 9: FAUZI -->
       <section class="min-h-screen w-full flex items-center justify-center relative px-6 py-16">
         <div class="max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-8 md:gap-14">
-          <div class="hidden md:flex items-center justify-center" data-aos="fade-right" data-aos-duration="1000">
-            <span class="vertical-text font-serif-luxury text-3xl lg:text-4xl tracking-[0.25em] text-stone-400/50 uppercase select-none">
-              Div. Humas
-            </span>
-          </div>
-          <div class="relative w-64 sm:w-72 md:w-80 aspect-[3/4] shrink-0 rounded-2xl overflow-hidden shadow-2xl border border-emerald-800/40 group img-floating" data-aos="zoom-out-up" data-aos-duration="1200">
-            <img src="fauzi.jpg" alt="Foto Anggota" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+          <div class="hidden md:flex items-center justify-center" data-aos="fade-right"><span class="vertical-text font-serif-luxury text-3xl lg:text-4xl tracking-[0.25em] text-stone-400/50 uppercase select-none">Div. Humas</span></div>
+          <div class="relative w-64 sm:w-72 md:w-80 aspect-[3/4] shrink-0 rounded-2xl overflow-hidden shadow-2xl border border-emerald-800/40 group img-floating" data-aos="zoom-out-up">
+            <img src="fauzi.jpg" alt="Foto Fauzi" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
             <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent"></div>
           </div>
-          <div class="text-center md:text-left max-w-md" data-aos="fade-left" data-aos-duration="1100">
+          <div class="text-center md:text-left max-w-md" data-aos="fade-left">
             <span class="text-xs uppercase tracking-[0.25em] text-emerald-400 font-semibold block mb-2">Lingkes</span>
-            <h2 class="font-serif-luxury text-2xl sm:text-4xl font-bold text-white tracking-wide leading-snug">Fauzi</h2>
+            <h2 class="font-serif-luxury text-3xl sm:text-4xl font-bold text-white tracking-wide leading-snug">Fauzi</h2>
             <p class="text-xs sm:text-sm text-stone-300 mt-1 font-light">PJKR • UPGRIS</p>
             <div class="w-16 h-[1px] bg-emerald-500/50 my-4 mx-auto md:mx-0"></div>
-            <p class="text-xs sm:text-sm text-stone-400 italic leading-relaxed">
-              "Paling supel dan rajin sowan ke rumah sesepuh, ketua RT, dan perangkat desa Waru."
-            </p>
+            <p class="text-xs sm:text-sm text-stone-400 italic leading-relaxed">"Paling supel dan rajin sowan ke rumah sesepuh, ketua RT, dan perangkat desa Waru."</p>
             <div class="mt-6 flex items-center justify-center md:justify-start gap-4">
               <a href="#" class="inline-flex items-center gap-2 text-xs text-stone-300 hover:text-emerald-400 transition-colors">
-                <i class="fa-brands fa-instagram text-base text-emerald-400"></i>
-                <span>@instagram</span>
+                <i class="fa-brands fa-instagram text-base text-emerald-400"></i><span>@instagram</span>
               </a>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- ITEM 11: HUMAS 2 -->
+      <!-- 10: LIA -->
       <section class="min-h-screen w-full flex items-center justify-center relative px-6 py-16">
         <div class="max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-8 md:gap-14">
-          <div class="hidden md:flex items-center justify-center" data-aos="fade-right" data-aos-duration="1000">
-            <span class="vertical-text font-serif-luxury text-3xl lg:text-4xl tracking-[0.25em] text-stone-400/50 uppercase select-none">
-              Div. Humas
-            </span>
-          </div>
-          <div class="relative w-64 sm:w-72 md:w-80 aspect-[3/4] shrink-0 rounded-2xl overflow-hidden shadow-2xl border border-emerald-800/40 group img-floating" data-aos="zoom-out-up" data-aos-duration="1200">
-            <img src="lia.JPG" alt="Foto Anggota" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+          <div class="hidden md:flex items-center justify-center" data-aos="fade-right"><span class="vertical-text font-serif-luxury text-3xl lg:text-4xl tracking-[0.25em] text-stone-400/50 uppercase select-none">Div. Humas</span></div>
+          <div class="relative w-64 sm:w-72 md:w-80 aspect-[3/4] shrink-0 rounded-2xl overflow-hidden shadow-2xl border border-emerald-800/40 group img-floating" data-aos="zoom-out-up">
+            <img src="lia.JPG" alt="Foto Lia" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
             <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent"></div>
           </div>
-          <div class="text-center md:text-left max-w-md" data-aos="fade-left" data-aos-duration="1100">
+          <div class="text-center md:text-left max-w-md" data-aos="fade-left">
             <span class="text-xs uppercase tracking-[0.25em] text-emerald-400 font-semibold block mb-2">Lingkes</span>
-            <h2 class="font-serif-luxury text-2xl sm:text-4xl font-bold text-white tracking-wide leading-snug">Lia</h2>
+            <h2 class="font-serif-luxury text-3xl sm:text-4xl font-bold text-white tracking-wide leading-snug">Lia</h2>
             <p class="text-xs sm:text-sm text-stone-300 mt-1 font-light">PGSD • UPGRIS</p>
             <div class="w-16 h-[1px] bg-emerald-500/50 my-4 mx-auto md:mx-0"></div>
-            <p class="text-xs sm:text-sm text-stone-400 italic leading-relaxed">
-              "Sahabat akrab anak-anak desa dan teman ngobrol warga pos ronda malam."
-            </p>
+            <p class="text-xs sm:text-sm text-stone-400 italic leading-relaxed">"Sahabat akrab anak-anak desa dan teman ngobrol warga pos ronda malam."</p>
             <div class="mt-6 flex items-center justify-center md:justify-start gap-4">
               <a href="#" class="inline-flex items-center gap-2 text-xs text-stone-300 hover:text-emerald-400 transition-colors">
-                <i class="fa-brands fa-instagram text-base text-emerald-400"></i>
-                <span>@instagram</span>
+                <i class="fa-brands fa-instagram text-base text-emerald-400"></i><span>@instagram</span>
               </a>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- ITEM 12: PDD / DOKUMENTASI -->
+      <!-- 11: PUSPA -->
       <section class="min-h-screen w-full flex items-center justify-center relative px-6 py-16">
         <div class="max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-8 md:gap-14">
-          <div class="hidden md:flex items-center justify-center" data-aos="fade-right" data-aos-duration="1000">
-            <span class="vertical-text font-serif-luxury text-3xl lg:text-4xl tracking-[0.25em] text-stone-400/50 uppercase select-none">
-              Div. PDD
-            </span>
-          </div>
-          <div class="relative w-64 sm:w-72 md:w-80 aspect-[3/4] shrink-0 rounded-2xl overflow-hidden shadow-2xl border border-emerald-800/40 group img-floating" data-aos="zoom-out-up" data-aos-duration="1200">
-            <img src="puspa.JPG" alt="Foto Anggota" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+          <div class="hidden md:flex items-center justify-center" data-aos="fade-right"><span class="vertical-text font-serif-luxury text-3xl lg:text-4xl tracking-[0.25em] text-stone-400/50 uppercase select-none">Div. PDD</span></div>
+          <div class="relative w-64 sm:w-72 md:w-80 aspect-[3/4] shrink-0 rounded-2xl overflow-hidden shadow-2xl border border-emerald-800/40 group img-floating" data-aos="zoom-out-up">
+            <img src="puspa.JPG" alt="Foto Puspa" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
             <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent"></div>
           </div>
-          <div class="text-center md:text-left max-w-md" data-aos="fade-left" data-aos-duration="1100">
+          <div class="text-center md:text-left max-w-md" data-aos="fade-left">
             <span class="text-xs uppercase tracking-[0.25em] text-emerald-400 font-semibold block mb-2">Kewis</span>
-            <h2 class="font-serif-luxury text-2xl sm:text-4xl font-bold text-white tracking-wide leading-snug">Puspa</h2>
+            <h2 class="font-serif-luxury text-3xl sm:text-4xl font-bold text-white tracking-wide leading-snug">Puspa</h2>
             <p class="text-xs sm:text-sm text-stone-300 mt-1 font-light">BK • UPGRIS</p>
             <div class="w-16 h-[1px] bg-emerald-500/50 my-4 mx-auto md:mx-0"></div>
-            <p class="text-xs sm:text-sm text-stone-400 italic leading-relaxed">
-              "Kamera selalu di tangan, mengabadikan setiap senyum dan lelah pengabdian posko."
-            </p>
+            <p class="text-xs sm:text-sm text-stone-400 italic leading-relaxed">"Kamera selalu di tangan, mengabadikan setiap senyum dan lelah pengabdian posko."</p>
             <div class="mt-6 flex items-center justify-center md:justify-start gap-4">
               <a href="#" class="inline-flex items-center gap-2 text-xs text-stone-300 hover:text-emerald-400 transition-colors">
-                <i class="fa-brands fa-instagram text-base text-emerald-400"></i>
-                <span>@instagram</span>
+                <i class="fa-brands fa-instagram text-base text-emerald-400"></i><span>@instagram</span>
               </a>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- ITEM 13: KONSUMSI 1 -->
+      <!-- 12: PUPUT -->
       <section class="min-h-screen w-full flex items-center justify-center relative px-6 py-16">
         <div class="max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-8 md:gap-14">
-          <div class="hidden md:flex items-center justify-center" data-aos="fade-right" data-aos-duration="1000">
-            <span class="vertical-text font-serif-luxury text-3xl lg:text-4xl tracking-[0.25em] text-stone-400/50 uppercase select-none">
-              Konsumsi
-            </span>
-          </div>
-          <div class="relative w-64 sm:w-72 md:w-80 aspect-[3/4] shrink-0 rounded-2xl overflow-hidden shadow-2xl border border-emerald-800/40 group img-floating" data-aos="zoom-out-up" data-aos-duration="1200">
-            <img src="puput.jpg" alt="Foto Anggota" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+          <div class="hidden md:flex items-center justify-center" data-aos="fade-right"><span class="vertical-text font-serif-luxury text-3xl lg:text-4xl tracking-[0.25em] text-stone-400/50 uppercase select-none">Konsumsi</span></div>
+          <div class="relative w-64 sm:w-72 md:w-80 aspect-[3/4] shrink-0 rounded-2xl overflow-hidden shadow-2xl border border-emerald-800/40 group img-floating" data-aos="zoom-out-up">
+            <img src="puput.jpg" alt="Foto Puput" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
             <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent"></div>
           </div>
-          <div class="text-center md:text-left max-w-md" data-aos="fade-left" data-aos-duration="1100">
+          <div class="text-center md:text-left max-w-md" data-aos="fade-left">
             <span class="text-xs uppercase tracking-[0.25em] text-emerald-400 font-semibold block mb-2">Kewis</span>
-            <h2 class="font-serif-luxury text-2xl sm:text-4xl font-bold text-white tracking-wide leading-snug">Puput</h2>
+            <h2 class="font-serif-luxury text-3xl sm:text-4xl font-bold text-white tracking-wide leading-snug">Puput</h2>
             <p class="text-xs sm:text-sm text-stone-300 mt-1 font-light">PGSD • UPGRIS</p>
             <div class="w-16 h-[1px] bg-emerald-500/50 my-4 mx-auto md:mx-0"></div>
-            <p class="text-xs sm:text-sm text-stone-400 italic leading-relaxed">
-              "Koki utama yang memastikan asupan gizi dan makan siang 17 anggota posko selalu tepat waktu."
-            </p>
+            <p class="text-xs sm:text-sm text-stone-400 italic leading-relaxed">"Koki utama yang memastikan asupan gizi dan makan siang 17 anggota posko selalu tepat waktu."</p>
             <div class="mt-6 flex items-center justify-center md:justify-start gap-4">
               <a href="#" class="inline-flex items-center gap-2 text-xs text-stone-300 hover:text-emerald-400 transition-colors">
-                <i class="fa-brands fa-instagram text-base text-emerald-400"></i>
-                <span>@instagram</span>
+                <i class="fa-brands fa-instagram text-base text-emerald-400"></i><span>@instagram</span>
               </a>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- ITEM 14: KONSUMSI 2 -->
+      <!-- 13: VINA -->
       <section class="min-h-screen w-full flex items-center justify-center relative px-6 py-16">
         <div class="max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-8 md:gap-14">
-          <div class="hidden md:flex items-center justify-center" data-aos="fade-right" data-aos-duration="1000">
-            <span class="vertical-text font-serif-luxury text-3xl lg:text-4xl tracking-[0.25em] text-stone-400/50 uppercase select-none">
-              Konsumsi
-            </span>
-          </div>
-          <div class="relative w-64 sm:w-72 md:w-80 aspect-[3/4] shrink-0 rounded-2xl overflow-hidden shadow-2xl border border-emerald-800/40 group img-floating" data-aos="zoom-out-up" data-aos-duration="1200">
-            <img src="vina.JPG" alt="Foto Anggota" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+          <div class="hidden md:flex items-center justify-center" data-aos="fade-right"><span class="vertical-text font-serif-luxury text-3xl lg:text-4xl tracking-[0.25em] text-stone-400/50 uppercase select-none">Konsumsi</span></div>
+          <div class="relative w-64 sm:w-72 md:w-80 aspect-[3/4] shrink-0 rounded-2xl overflow-hidden shadow-2xl border border-emerald-800/40 group img-floating" data-aos="zoom-out-up">
+            <img src="vina.JPG" alt="Foto Vina" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
             <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent"></div>
           </div>
-          <div class="text-center md:text-left max-w-md" data-aos="fade-left" data-aos-duration="1100">
+          <div class="text-center md:text-left max-w-md" data-aos="fade-left">
             <span class="text-xs uppercase tracking-[0.25em] text-emerald-400 font-semibold block mb-2">Humas</span>
-            <h2 class="font-serif-luxury text-2xl sm:text-4xl font-bold text-white tracking-wide leading-snug">Vina</h2>
+            <h2 class="font-serif-luxury text-3xl sm:text-4xl font-bold text-white tracking-wide leading-snug">Vina</h2>
             <p class="text-xs sm:text-sm text-stone-300 mt-1 font-light">P.Biologi • UPGRIS</p>
             <div class="w-16 h-[1px] bg-emerald-500/50 my-4 mx-auto md:mx-0"></div>
-            <p class="text-xs sm:text-sm text-stone-400 italic leading-relaxed">
-              "Penyedia cemilan, teh, dan kopi hangat penahan kantuk saat rapat evaluasi malam."
-            </p>
+            <p class="text-xs sm:text-sm text-stone-400 italic leading-relaxed">"Penyedia cemilan, teh, dan kopi hangat penahan kantuk saat rapat evaluasi malam."</p>
             <div class="mt-6 flex items-center justify-center md:justify-start gap-4">
               <a href="#" class="inline-flex items-center gap-2 text-xs text-stone-300 hover:text-emerald-400 transition-colors">
-                <i class="fa-brands fa-instagram text-base text-emerald-400"></i>
-                <span>@instagram</span>
+                <i class="fa-brands fa-instagram text-base text-emerald-400"></i><span>@instagram</span>
               </a>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- ITEM 15: PERLENGKAPAN 1 -->
+      <!-- 14: ADAM -->
       <section class="min-h-screen w-full flex items-center justify-center relative px-6 py-16">
         <div class="max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-8 md:gap-14">
-          <div class="hidden md:flex items-center justify-center" data-aos="fade-right" data-aos-duration="1000">
-            <span class="vertical-text font-serif-luxury text-3xl lg:text-4xl tracking-[0.25em] text-stone-400/50 uppercase select-none">
-              Perkap
-            </span>
-          </div>
-          <div class="relative w-64 sm:w-72 md:w-80 aspect-[3/4] shrink-0 rounded-2xl overflow-hidden shadow-2xl border border-emerald-800/40 group img-floating" data-aos="zoom-out-up" data-aos-duration="1200">
-            <img src="adam.JPG" alt="Foto Anggota" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+          <div class="hidden md:flex items-center justify-center" data-aos="fade-right"><span class="vertical-text font-serif-luxury text-3xl lg:text-4xl tracking-[0.25em] text-stone-400/50 uppercase select-none">Perkap</span></div>
+          <div class="relative w-64 sm:w-72 md:w-80 aspect-[3/4] shrink-0 rounded-2xl overflow-hidden shadow-2xl border border-emerald-800/40 group img-floating" data-aos="zoom-out-up">
+            <img src="adam.JPG" alt="Foto Adam" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
             <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent"></div>
           </div>
-          <div class="text-center md:text-left max-w-md" data-aos="fade-left" data-aos-duration="1100">
-            <span class="text-xs uppercase tracking-[0.25em] text-emerald-400 font-semibold block mb-2">Humas</span>
-            <h2 class="font-serif-luxury text-2xl sm:text-4xl font-bold text-white tracking-wide leading-snug">Adam</h2>
+          <div class="text-center md:text-left max-w-md" data-aos="fade-left">
+            <span class="text-xs uppercase tracking-[0.25em] text-emerald-400 font-semibold block mb-2">Humas & Developer</span>
+            <h2 class="font-serif-luxury text-3xl sm:text-4xl font-bold text-white tracking-wide leading-snug">Adam</h2>
             <p class="text-xs sm:text-sm text-stone-300 mt-1 font-light">Informatika • UPGRIS</p>
             <div class="w-16 h-[1px] bg-emerald-500/50 my-4 mx-auto md:mx-0"></div>
-            <p class="text-xs sm:text-sm text-stone-400 italic leading-relaxed">
-              "Paling tangguh urusan angkut panggung, sound system, dan instalasi kabel lapangan."
-            </p>
+            <p class="text-xs sm:text-sm text-stone-400 italic leading-relaxed">"Paling tangguh urusan angkut panggung, sound system, dan perancang website galeri kenangan posko ini."</p>
             <div class="mt-6 flex items-center justify-center md:justify-start gap-4">
               <a href="#" class="inline-flex items-center gap-2 text-xs text-stone-300 hover:text-emerald-400 transition-colors">
-                <i class="fa-brands fa-instagram text-base text-emerald-400"></i>
-                <span>@instagram</span>
+                <i class="fa-brands fa-instagram text-base text-emerald-400"></i><span>@instagram</span>
               </a>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- ITEM 16: PERLENGKAPAN 2 -->
+      <!-- 15: IRWAN -->
       <section class="min-h-screen w-full flex items-center justify-center relative px-6 py-16">
         <div class="max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-8 md:gap-14">
-          <div class="hidden md:flex items-center justify-center" data-aos="fade-right" data-aos-duration="1000">
-            <span class="vertical-text font-serif-luxury text-3xl lg:text-4xl tracking-[0.25em] text-stone-400/50 uppercase select-none">
-              Perkap
-            </span>
-          </div>
-          <div class="relative w-64 sm:w-72 md:w-80 aspect-[3/4] shrink-0 rounded-2xl overflow-hidden shadow-2xl border border-emerald-800/40 group img-floating" data-aos="zoom-out-up" data-aos-duration="1200">
-            <img src="irwan.JPG" alt="Foto Anggota" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+          <div class="hidden md:flex items-center justify-center" data-aos="fade-right"><span class="vertical-text font-serif-luxury text-3xl lg:text-4xl tracking-[0.25em] text-stone-400/50 uppercase select-none">Perkap</span></div>
+          <div class="relative w-64 sm:w-72 md:w-80 aspect-[3/4] shrink-0 rounded-2xl overflow-hidden shadow-2xl border border-emerald-800/40 group img-floating" data-aos="zoom-out-up">
+            <img src="irwan.JPG" alt="Foto Irwan" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
             <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent"></div>
           </div>
-          <div class="text-center md:text-left max-w-md" data-aos="fade-left" data-aos-duration="1100">
+          <div class="text-center md:text-left max-w-md" data-aos="fade-left">
             <span class="text-xs uppercase tracking-[0.25em] text-emerald-400 font-semibold block mb-2">PDD</span>
-            <h2 class="font-serif-luxury text-2xl sm:text-4xl font-bold text-white tracking-wide leading-snug">Irwan</h2>
+            <h2 class="font-serif-luxury text-3xl sm:text-4xl font-bold text-white tracking-wide leading-snug">Irwan</h2>
             <p class="text-xs sm:text-sm text-stone-300 mt-1 font-light">Informatika • UPGRIS</p>
             <div class="w-16 h-[1px] bg-emerald-500/50 my-4 mx-auto md:mx-0"></div>
-            <p class="text-xs sm:text-sm text-stone-400 italic leading-relaxed">
-              "Penyedia alat operasional dan penanggung jawab inventaris barang posko."
-            </p>
+            <p class="text-xs sm:text-sm text-stone-400 italic leading-relaxed">"Penyedia alat operasional, pengendali kabel rol, dan penanggung jawab inventaris barang posko."</p>
             <div class="mt-6 flex items-center justify-center md:justify-start gap-4">
               <a href="#" class="inline-flex items-center gap-2 text-xs text-stone-300 hover:text-emerald-400 transition-colors">
-                <i class="fa-brands fa-instagram text-base text-emerald-400"></i>
-                <span>@instagram</span>
+                <i class="fa-brands fa-instagram text-base text-emerald-400"></i><span>@instagram</span>
               </a>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- ITEM 17: LOGISTIK / UMUM -->
+      <!-- 16: MELI -->
       <section class="min-h-screen w-full flex items-center justify-center relative px-6 py-16">
         <div class="max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-8 md:gap-14">
-          <div class="hidden md:flex items-center justify-center" data-aos="fade-right" data-aos-duration="1000">
-            <span class="vertical-text font-serif-luxury text-3xl lg:text-4xl tracking-[0.25em] text-stone-400/50 uppercase select-none">
-              Div. Umum
-            </span>
-          </div>
-          <div class="relative w-64 sm:w-72 md:w-80 aspect-[3/4] shrink-0 rounded-2xl overflow-hidden shadow-2xl border border-emerald-800/40 group img-floating" data-aos="zoom-out-up" data-aos-duration="1200">
-            <img src="meli.JPG" alt="Foto Anggota" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+          <div class="hidden md:flex items-center justify-center" data-aos="fade-right"><span class="vertical-text font-serif-luxury text-3xl lg:text-4xl tracking-[0.25em] text-stone-400/50 uppercase select-none">Div. Umum</span></div>
+          <div class="relative w-64 sm:w-72 md:w-80 aspect-[3/4] shrink-0 rounded-2xl overflow-hidden shadow-2xl border border-emerald-800/40 group img-floating" data-aos="zoom-out-up">
+            <img src="meli.JPG" alt="Foto Meli" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
             <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent"></div>
           </div>
-          <div class="text-center md:text-left max-w-md" data-aos="fade-left" data-aos-duration="1100">
+          <div class="text-center md:text-left max-w-md" data-aos="fade-left">
             <span class="text-xs uppercase tracking-[0.25em] text-emerald-400 font-semibold block mb-2">PDD</span>
-            <h2 class="font-serif-luxury text-2xl sm:text-4xl font-bold text-white tracking-wide leading-snug">Meli</h2>
+            <h2 class="font-serif-luxury text-3xl sm:text-4xl font-bold text-white tracking-wide leading-snug">Meli</h2>
             <p class="text-xs sm:text-sm text-stone-300 mt-1 font-light">PGSD • UPGRIS</p>
             <div class="w-16 h-[1px] bg-emerald-500/50 my-4 mx-auto md:mx-0"></div>
-            <p class="text-xs sm:text-sm text-stone-400 italic leading-relaxed">
-              "Penjaga keharmonisan dan kenyamanan posko yang memastikan posko tetap rapi dan aman."
-            </p>
+            <p class="text-xs sm:text-sm text-stone-400 italic leading-relaxed">"Penjaga keharmonisan dan kenyamanan posko yang memastikan posko tetap rapi dan aman."</p>
             <div class="mt-6 flex items-center justify-center md:justify-start gap-4">
               <a href="#" class="inline-flex items-center gap-2 text-xs text-stone-300 hover:text-emerald-400 transition-colors">
-                <i class="fa-brands fa-instagram text-base text-emerald-400"></i>
-                <span>@instagram</span>
+                <i class="fa-brands fa-instagram text-base text-emerald-400"></i><span>@instagram</span>
               </a>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- ITEM 3: PDD -->
+      <!-- 17: IVANDA -->
       <section class="min-h-screen w-full flex items-center justify-center relative px-6 py-16">
         <div class="max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-8 md:gap-14">
-          <div class="hidden md:flex items-center justify-center" data-aos="fade-right" data-aos-duration="1000">
-            <span class="vertical-text font-serif-luxury text-3xl lg:text-4xl tracking-[0.25em] text-stone-400/50 uppercase select-none">
-              Div. PDD
-            </span>
-          </div>
-
-          <div class="relative w-64 sm:w-72 md:w-80 aspect-[3/4] shrink-0 rounded-2xl overflow-hidden shadow-2xl border border-emerald-800/40 group img-floating"
-               data-aos="zoom-out-up" data-aos-duration="1200">
-            <img src="ivanda.JPG" 
-                 alt="Foto Ivanda" 
-                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+          <div class="hidden md:flex items-center justify-center" data-aos="fade-right"><span class="vertical-text font-serif-luxury text-3xl lg:text-4xl tracking-[0.25em] text-stone-400/50 uppercase select-none">Div. PDD</span></div>
+          <div class="relative w-64 sm:w-72 md:w-80 aspect-[3/4] shrink-0 rounded-2xl overflow-hidden shadow-2xl border border-emerald-800/40 group img-floating" data-aos="zoom-out-up">
+            <img src="ivanda.JPG" alt="Foto Ivanda" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
             <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent"></div>
           </div>
-
-          <div class="text-center md:text-left max-w-md" data-aos="fade-left" data-aos-duration="1100">
+          <div class="text-center md:text-left max-w-md" data-aos="fade-left">
             <span class="text-xs uppercase tracking-[0.25em] text-emerald-400 font-semibold block mb-2">Publikasi & Dokumentasi</span>
-            <h2 class="font-serif-luxury text-2xl sm:text-4xl font-bold text-white tracking-wide leading-snug">Ivanda</h2>
+            <h2 class="font-serif-luxury text-3xl sm:text-4xl font-bold text-white tracking-wide leading-snug">Ivanda</h2>
             <p class="text-xs sm:text-sm text-stone-300 mt-1 font-light">PJKR • UPGRIS</p>
             <div class="w-16 h-[1px] bg-emerald-500/50 my-4 mx-auto md:mx-0"></div>
-            <p class="text-xs sm:text-sm text-stone-400 italic leading-relaxed">
-              "Sosok di balik kamera yang memastikan setiap momen berharga terekam dan tersimpan rapi selamanya."
-            </p>
+            <p class="text-xs sm:text-sm text-stone-400 italic leading-relaxed">"Sosok di balik kamera yang memastikan setiap momen berharga terekam dan tersimpan rapi selamanya."</p>
             <div class="mt-6 flex items-center justify-center md:justify-start gap-4">
               <a href="#" class="inline-flex items-center gap-2 text-xs text-stone-300 hover:text-emerald-400 transition-colors">
-                <i class="fa-brands fa-instagram text-base text-emerald-400"></i>
-                <span>@irwan_ig</span>
+                <i class="fa-brands fa-instagram text-base text-emerald-400"></i><span>@ivanda_ig</span>
               </a>
             </div>
           </div>
         </div>
       </section>
+
     </div>
 
-    <!-- ================= 4. GALERI FOTO KEGIATAN (100% FOTO) ================= -->
-    <section class="py-24 px-4 sm:px-8 max-w-7xl mx-auto border-t border-emerald-950/60" id="galeri-foto">
-      <div class="text-center max-w-2xl mx-auto mb-12" data-aos="fade-up">
-        <span class="text-xs uppercase tracking-[0.3em] text-emerald-400 font-semibold block">
-          Dokumentasi Lengkap
-        </span>
-        <h2 class="font-serif-luxury text-3xl sm:text-5xl font-bold text-white tracking-wide mt-2">
-          Galeri Arsip Foto
-        </h2>
-        <p class="text-xs sm:text-sm text-stone-400 mt-2 font-light">
-          Rangkuman foto-foto kenangan dari seluruh kegiatan di Desa Waru.
-        </p>
+    <!-- ================= 4. TIMELINE JEJAK PENGABDIAN ================= -->
+    <section class="py-24 px-4 sm:px-8 max-w-4xl mx-auto border-t border-emerald-950/60" id="jejak-pengabdian">
+      <div class="text-center mb-16" data-aos="fade-up">
+        <span class="text-xs uppercase tracking-[0.3em] text-emerald-400 font-semibold block">Kronologi 35 Hari</span>
+        <h2 class="font-serif-luxury text-3xl sm:text-5xl font-bold text-white tracking-wide mt-2">Jejak Langkah Pengabdian</h2>
+        <p class="text-xs sm:text-sm text-stone-400 mt-2 font-light">Rangkaian kisah perjalanan dari penerjunan hingga penarikan di Desa Waru.</p>
       </div>
 
-      <!-- Container Grid Foto -->
-      <div id="drive-gallery" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4">
+      <div class="relative border-l border-emerald-900/60 ml-4 sm:ml-32 space-y-12">
+        <div class="relative pl-8 sm:pl-10" data-aos="fade-up">
+          <div class="absolute -left-2.5 top-1.5 w-5 h-5 rounded-full bg-emerald-500 border-4 border-stone-900 shadow-md"></div>
+          <span class="sm:absolute sm:-left-36 text-xs font-semibold text-emerald-400 tracking-wider">29 JULI 2026</span>
+          <h3 class="font-serif-luxury text-xl text-white font-bold">Penerjunan & Sowan Balai Desa</h3>
+          <p class="text-xs text-stone-400 mt-1 leading-relaxed">Hari pertama tiba di Desa Waru, perkenalan resmi dengan Kepala Desa beserta perangkat, dan penataan posko tercinta di Dusun Sandran.</p>
+        </div>
+
+        <div class="relative pl-8 sm:pl-10" data-aos="fade-up">
+          <div class="absolute -left-2.5 top-1.5 w-5 h-5 rounded-full bg-emerald-600 border-4 border-stone-900 shadow-md"></div>
+          <span class="sm:absolute sm:-left-36 text-xs font-semibold text-emerald-400 tracking-wider">08 AGUSTUS 2026</span>
+          <h3 class="font-serif-luxury text-xl text-white font-bold">Eksekusi Program Kerja</h3>
+          <p class="text-xs text-stone-400 mt-1 leading-relaxed">Pelatihan digital, bimbingan belajar anak-anak desa, penyuluhan kesehatan keluarga, serta kolaborasi aktif bersama masyarakat.</p>
+        </div>
+
+        <div class="relative pl-8 sm:pl-10" data-aos="fade-up">
+          <div class="absolute -left-2.5 top-1.5 w-5 h-5 rounded-full bg-emerald-500 border-4 border-stone-900 shadow-md"></div>
+          <span class="sm:absolute sm:-left-36 text-xs font-semibold text-emerald-400 tracking-wider">17 AGUSTUS 2026</span>
+          <h3 class="font-serif-luxury text-xl text-white font-bold">Semarak Kemerdekaan HUT RI</h3>
+          <p class="text-xs text-stone-400 mt-1 leading-relaxed">Upacara khidmat kemerdekaan bersama masyarakat, parade lomba rakyat dusun yang riuh, dan pawai kebersamaan.</p>
+        </div>
+
+        <div class="relative pl-8 sm:pl-10" data-aos="fade-up">
+          <div class="absolute -left-2.5 top-1.5 w-5 h-5 rounded-full bg-amber-500 border-4 border-stone-900 shadow-md"></div>
+          <span class="sm:absolute sm:-left-36 text-xs font-semibold text-amber-400 tracking-wider">28 AGUSTUS 2026</span>
+          <h3 class="font-serif-luxury text-xl text-white font-bold">Malam Pentas Seni & Perpisahan</h3>
+          <p class="text-xs text-stone-400 mt-1 leading-relaxed">Malam haru bertabur tawa bersama pemuda karang taruna, penampilan kreasi seni adik-adik desa, dan perpisahan penuh kenangan.</p>
+        </div>
+
+        <div class="relative pl-8 sm:pl-10" data-aos="fade-up">
+          <div class="absolute -left-2.5 top-1.5 w-5 h-5 rounded-full bg-stone-400 border-4 border-stone-900 shadow-md"></div>
+          <span class="sm:absolute sm:-left-36 text-xs font-semibold text-stone-300 tracking-wider">02 SEPT 2026</span>
+          <h3 class="font-serif-luxury text-xl text-white font-bold">Penarikan Resmi Posko</h3>
+          <p class="text-xs text-stone-400 mt-1 leading-relaxed">Pengabdian tuntas dengan membawa sejuta kenangan berharga dan persaudaraan baru yang abadi.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 5. GALERI FOTO KEGIATAN & FILTER ================= -->
+    <section class="py-24 px-4 sm:px-8 max-w-7xl mx-auto border-t border-emerald-950/60" id="galeri-foto">
+      <div class="text-center max-w-2xl mx-auto mb-8" data-aos="fade-up">
+        <span class="text-xs uppercase tracking-[0.3em] text-emerald-400 font-semibold block">Dokumentasi Lengkap</span>
+        <h2 class="font-serif-luxury text-3xl sm:text-5xl font-bold text-white tracking-wide mt-2">Galeri Arsip Foto</h2>
+        <p class="text-xs sm:text-sm text-stone-400 mt-2 font-light">Pilih kategori folder untuk melihat dokumentasi kegiatan secara langsung.</p>
+      </div>
+
+      <!-- FILTER KATEGORI BEBAS SCROLL TANPA TERPOTONG -->
+      <div class="w-full max-w-6xl mx-auto px-2 mb-8">
+        <div class="flex items-center gap-2.5 overflow-x-auto py-3 px-2 no-scrollbar scroll-smooth" id="filter-buttons">
+          <button onclick="filterGaleri('semua', this)" class="filter-btn shrink-0 px-5 py-2.5 rounded-full text-xs font-semibold tracking-wider whitespace-nowrap bg-emerald-500 text-stone-950 transition-all shadow-lg shadow-emerald-500/20">
+            Semua Foto (<span id="total-semua-count">0</span>)
+          </button>
+        </div>
+      </div>
+
+      <!-- CONTAINER GRID FOTO -->
+      <div id="drive-gallery" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4 min-h-[300px]">
         <div class="col-span-full py-16 text-center text-stone-400 text-xs">
           <i class="fa-solid fa-spinner fa-spin text-2xl text-emerald-400 mb-3 block"></i>
           Memuat galeri foto...
         </div>
       </div>
 
-      <!-- Tombol Muat 30 Foto Lainnya -->
+      <!-- TOMBOL MUAT LEBIH BANYAK -->
       <div id="load-more-container" class="hidden text-center mt-12">
-        <button id="load-more-btn" onclick="renderBatchFoto()" class="px-8 py-3 rounded-full bg-emerald-900/60 hover:bg-emerald-800 border border-emerald-500/50 text-emerald-300 text-xs tracking-widest uppercase font-semibold transition-all hover:scale-105 shadow-xl">
+        <button id="load-more-btn" onclick="renderBatchFoto()" class="px-8 py-3 rounded-full glass-card border border-emerald-500/50 text-emerald-300 text-xs tracking-widest uppercase font-semibold transition-all hover:scale-105 active:scale-95 shadow-xl">
           <i class="fa-solid fa-images mr-2"></i> Muat Foto Lainnya
         </button>
       </div>
     </section>
 
-    <!-- ================= 5. VIDEO AFTER MOVIE ================= -->
+    <!-- ================= 6. KKN POSKO AWARDS ================= -->
+    <section class="py-24 px-4 sm:px-8 max-w-6xl mx-auto border-t border-emerald-950/60" id="awards">
+      <div class="text-center max-w-2xl mx-auto mb-14" data-aos="fade-up">
+        <span class="text-xs uppercase tracking-[0.3em] text-amber-400 font-semibold block">Apresiasi Spesial</span>
+        <h2 class="font-serif-luxury text-3xl sm:text-5xl font-bold text-white tracking-wide mt-2">KKN Posko Awards 2026</h2>
+        <p class="text-xs sm:text-sm text-stone-400 mt-2 font-light">Penghargaan kehormatan berdasarkan fakta unik selama 35 hari bersama di Desa Waru.</p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="p-6 rounded-2xl glass-card glass-card-hover border-amber-500/30 text-center" data-aos="zoom-in" data-aos-delay="100">
+          <div class="w-12 h-12 mx-auto rounded-full bg-amber-500/10 text-amber-400 flex items-center justify-center text-xl mb-4 border border-amber-500/40">🏆</div>
+          <h3 class="text-xs font-bold uppercase tracking-wider text-amber-400">The Early Bird</h3>
+          <p class="font-serif-luxury text-xl font-bold text-white mt-1">Ter-Pagi Bangun</p>
+          <p class="text-xs text-stone-400 mt-2 italic leading-relaxed">"Sosok yang membuka pintu posko pertama kali dan sudah rapi sebelum yang lain bangun."</p>
+        </div>
+
+        <div class="p-6 rounded-2xl glass-card glass-card-hover border-emerald-500/30 text-center" data-aos="zoom-in" data-aos-delay="200">
+          <div class="w-12 h-12 mx-auto rounded-full bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-xl mb-4 border border-emerald-500/40">☕</div>
+          <h3 class="text-xs font-bold uppercase tracking-wider text-emerald-400">Duta Pos Ronda</h3>
+          <p class="font-serif-luxury text-xl font-bold text-white mt-1">Suhu Ngopi Malam</p>
+          <p class="text-xs text-stone-400 mt-2 italic leading-relaxed">"Paling akrab dengan bapak-bapak pos ronda dan paling betah nongkrong sampai fajar."</p>
+        </div>
+
+        <div class="p-6 rounded-2xl glass-card glass-card-hover border-amber-500/30 text-center" data-aos="zoom-in" data-aos-delay="300">
+          <div class="w-12 h-12 mx-auto rounded-full bg-amber-500/10 text-amber-400 flex items-center justify-center text-xl mb-4 border border-amber-500/40">🍳</div>
+          <h3 class="text-xs font-bold uppercase tracking-wider text-amber-400">Masterchef Posko</h3>
+          <p class="font-serif-luxury text-xl font-bold text-white mt-1">Juara Dapur</p>
+          <p class="text-xs text-stone-400 mt-2 italic leading-relaxed">"Penyelamat rasa lapar tengah malam dengan racikan mie rebus dan telur dadar krispi."</p>
+        </div>
+
+        <div class="p-6 rounded-2xl glass-card glass-card-hover border-emerald-500/30 text-center" data-aos="zoom-in" data-aos-delay="400">
+          <div class="w-12 h-12 mx-auto rounded-full bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-xl mb-4 border border-emerald-500/40">😴</div>
+          <h3 class="text-xs font-bold uppercase tracking-wider text-emerald-400">Sleeping Beauty</h3>
+          <p class="font-serif-luxury text-xl font-bold text-white mt-1">Rebahan Di Mana Saja</p>
+          <p class="text-xs text-stone-400 mt-2 italic leading-relaxed">"Di karpet, di kursi balai desa, sampai di teras posko tetap tertidur pulas tanpa gangguan."</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 7. VIDEO AFTER MOVIE ================= -->
     <section class="min-h-screen w-full flex flex-col justify-center items-center py-20 px-4 sm:px-6 relative bg-black/40 border-t border-emerald-950/60" id="after-movie">
       <div class="max-w-4xl w-full mx-auto text-center space-y-4" data-aos="fade-up">
-        <span class="text-xs uppercase tracking-[0.3em] text-amber-400 font-semibold block">
-          Kenangan
-        </span>
-        <h2 class="font-serif-luxury text-3xl sm:text-5xl font-bold text-white tracking-wide">
-          After Movie KKN Waru 2026
-        </h2>
-        <p class="text-xs sm:text-sm text-stone-400 max-w-lg mx-auto font-light leading-relaxed">
-          Rangkuman kebersamaan kita selama mengabdi di Desa Waru.
-        </p>
+        <span class="text-xs uppercase tracking-[0.3em] text-amber-400 font-semibold block">Kenangan Sinematik</span>
+        <h2 class="font-serif-luxury text-3xl sm:text-5xl font-bold text-white tracking-wide">After Movie KKN Waru 2026</h2>
+        <p class="text-xs sm:text-sm text-stone-400 max-w-lg mx-auto font-light leading-relaxed">Rangkuman visual kebersamaan kita selama mengabdi di Desa Waru.</p>
 
         <div class="pt-6" data-aos="zoom-in" data-aos-delay="200">
           <div class="relative w-full aspect-video rounded-2xl overflow-hidden shadow-2xl border border-emerald-800/40 bg-stone-900 group">
@@ -732,23 +747,81 @@
         </div>
 
         <div class="pt-2">
-          <span class="text-[11px] tracking-widest text-stone-500 uppercase">
-            KKN Desa Waru 2026
-          </span>
+          <span class="text-[11px] tracking-widest text-stone-500 uppercase">KKN Desa Waru 2026</span>
         </div>
       </div>
     </section>
 
-    <!-- ================= 6. FOOTER ================= -->
-    <footer class="py-20 text-center px-4 border-t border-emerald-950/60 bg-stone-950/80">
+    <!-- ================= 8. PETA TITIK JEJAK POSKO (GMAPS) ================= -->
+    <section class="py-24 px-4 sm:px-8 max-w-6xl mx-auto border-t border-emerald-950/60" id="lokasi-posko">
+      <div class="text-center max-w-2xl mx-auto mb-12" data-aos="fade-up">
+        <span class="text-xs uppercase tracking-[0.3em] text-emerald-400 font-semibold block">Titik Jejak Pengabdian</span>
+        <h2 class="font-serif-luxury text-3xl sm:text-5xl font-bold text-white tracking-wide mt-2">Posko Sandran, Desa Waru</h2>
+        <p class="text-xs sm:text-sm text-stone-400 mt-2 font-light">RT 03 RW 02 Sandran, Waru, Mranggen, Demak — Saksi bisu 35 hari kebersamaan kita.</p>
+      </div>
+
+      <div class="relative w-full rounded-2xl overflow-hidden shadow-2xl border border-emerald-800/40 bg-stone-900" data-aos="zoom-in" data-aos-duration="1000">
+        <div class="relative w-full aspect-[16/9] sm:aspect-[21/9]">
+          <iframe 
+            src="https://maps.google.com/maps?q=2G4M%2B4PR%2C%20Sandran%2C%20Waru%2C%20Mranggen%2C%20Demak&t=&z=17&ie=UTF8&iwloc=&output=embed" 
+            class="w-full h-full border-0 contrast-[1.08] saturate-[0.85]" 
+            allowfullscreen="" 
+            loading="lazy" 
+            referrerpolicy="no-referrer-when-downgrade">
+          </iframe>
+        </div>
+
+        <div class="p-6 bg-stone-900/95 border-t border-emerald-900/50 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div class="flex items-center gap-4 text-left">
+            <div class="w-12 h-12 rounded-full bg-emerald-950/80 border border-emerald-500/40 text-emerald-400 flex items-center justify-center text-xl shrink-0">
+              <i class="fa-solid fa-location-dot"></i>
+            </div>
+            <div>
+              <h4 class="font-serif-luxury text-lg font-bold text-white">Posko KKN 36 Sandran</h4>
+              <p class="text-xs text-stone-400">RT.03 / RW.02 Sandran, Waru, Kec. Mranggen, Kab. Demak 59567</p>
+            </div>
+          </div>
+
+          <a href="https://www.google.com/maps/search/?api=1&query=2G4M%2B4PR%2C+Sandran%2C+Waru%2C+Kec.+Mranggen%2C+Kabupaten+Demak" target="_blank" class="px-6 py-2.5 rounded-full bg-emerald-900/60 hover:bg-emerald-800 border border-emerald-500/50 text-emerald-300 text-xs font-semibold tracking-wider uppercase transition-all hover:scale-105 shadow-lg whitespace-nowrap">
+            <i class="fa-solid fa-diamond-turn-right mr-2"></i> Petunjuk Arah ↗
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 9. BUKU TAMU INTERAKTIF ================= -->
+    <section class="py-24 px-4 sm:px-8 max-w-3xl mx-auto border-t border-emerald-950/60" id="buku-tamu">
+      <div class="text-center mb-10" data-aos="fade-up">
+        <span class="text-xs uppercase tracking-[0.3em] text-emerald-400 font-semibold block">Kotak Pesan Teman</span>
+        <h2 class="font-serif-luxury text-3xl sm:text-4xl font-bold text-white tracking-wide mt-2">Buku Kenangan Posko</h2>
+        <p class="text-xs sm:text-sm text-stone-400 mt-2 font-light">Tuliskan kesan, lelucon rahasia, atau pesan perpisahan untuk kita semua.</p>
+      </div>
+
+      <form onsubmit="tambahPesan(event)" class="glass-card p-6 rounded-2xl shadow-xl space-y-4" data-aos="fade-up">
+        <div class="flex flex-col sm:flex-row gap-3">
+          <input type="text" id="guest-name" placeholder="Nama kamu (atau kosongkan untuk anonim)" class="flex-1 bg-stone-950/70 border border-emerald-900/50 rounded-lg px-4 py-2.5 text-xs text-stone-200 focus:outline-none focus:border-emerald-500">
+          <select id="guest-mood" class="bg-stone-950/70 border border-emerald-900/50 rounded-lg px-3 py-2.5 text-xs text-emerald-400 focus:outline-none focus:border-emerald-500">
+            <option value="❤️ Terharu">❤️ Terharu</option>
+            <option value="😂 Ngakak">😂 Ngakak</option>
+            <option value="🥺 Kangen">🥺 Kangen</option>
+            <option value="🔥 Semangat">🔥 Semangat</option>
+          </select>
+        </div>
+        <textarea id="guest-message" rows="3" required placeholder="Tuliskan pesanmu di sini..." class="w-full bg-stone-950/70 border border-emerald-900/50 rounded-lg p-3 text-xs text-stone-200 focus:outline-none focus:border-emerald-500"></textarea>
+        <button type="submit" class="w-full py-3 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-stone-950 font-bold text-xs uppercase tracking-wider transition-colors shadow-lg">
+          Kirim Pesan Kenangan 🚀
+        </button>
+      </form>
+
+      <div id="messages-list" class="mt-8 space-y-3"></div>
+    </section>
+
+    <!-- ================= 10. FOOTER ================= -->
+    <footer class="py-20 text-center px-4 border-t border-emerald-950/60 bg-stone-950/90">
       <div class="max-w-2xl mx-auto space-y-4" data-aos="fade-up">
         <h3 class="font-serif-luxury text-2xl sm:text-3xl text-white">Terima Kasih, Desa Waru</h3>
-        <p class="text-xs sm:text-sm text-stone-400 leading-relaxed font-light">
-          "Pengabdian telah tuntas, namun ikatan persaudaraan ini akan selalu tinggal dalam ingatan."
-        </p>
-        <div class="pt-6 text-[11px] uppercase tracking-widest text-emerald-500 font-semibold">
-          Tim KKN Desa Waru • 2026
-        </div>
+        <p class="text-xs sm:text-sm text-stone-400 leading-relaxed font-light">"Pengabdian telah tuntas, namun ikatan persaudaraan ini akan selalu tinggal dalam ingatan."</p>
+        <div class="pt-6 text-[11px] uppercase tracking-widest text-emerald-500 font-semibold">Tim KKN Desa Waru • 2026</div>
       </div>
     </footer>
 
@@ -765,15 +838,14 @@
     const musicIcon = document.getElementById('music-icon');
     let isPlaying = false;
 
-    let semuaFoto = [];
+    // Galeri & Filter State
+    let semuaFotoMaster = [];
+    let fotoAktif = [];
     let fotoDitampilkan = 0;
-    const JUMLAH_PER_KLIK = 30; // Batas muat 30 foto per batch agar loading super ringan
+    const JUMLAH_PER_KLIK = 30;
+    let indexLightbox = 0;
 
-    AOS.init({
-      once: false,
-      mirror: true,
-      easing: 'ease-out-cubic'
-    });
+    AOS.init({ once: false, mirror: true, easing: 'ease-out-cubic' });
 
     function openInvitation() {
       bgAudio.play().then(() => {
@@ -783,10 +855,7 @@
 
       coverScreen.classList.add('hide-cover');
       bodyMain.classList.remove('lock-scroll');
-
-      setTimeout(() => {
-        AOS.refresh();
-      }, 500);
+      setTimeout(() => { AOS.refresh(); }, 500);
     }
 
     function toggleAudio() {
@@ -806,12 +875,54 @@
     }
 
     function handleVideoPlay() {
-      if (isPlaying) {
-        toggleAudio();
-      }
+      if (isPlaying) toggleAudio();
     }
 
-    // Mengambil data dan MENYARING 100% HANYA FOTO
+    // ================= LIGHTBOX LOGIC =================
+    function bukaLightbox(index) {
+      indexLightbox = index;
+      updateLightboxContent();
+      document.getElementById('lightbox-modal').classList.remove('hidden');
+      bodyMain.classList.add('lock-scroll');
+    }
+
+    function tutupLightbox() {
+      document.getElementById('lightbox-modal').classList.add('hidden');
+      bodyMain.classList.remove('lock-scroll');
+    }
+
+    function updateLightboxContent() {
+      const item = fotoAktif[indexLightbox];
+      if (!item) return;
+
+      document.getElementById('lb-image').src = `https://lh3.googleusercontent.com/d/${item.id}=w1200`;
+      document.getElementById('lb-kategori').textContent = item.kategori;
+      document.getElementById('lb-filename').textContent = item.name;
+      document.getElementById('lb-counter').textContent = `${indexLightbox + 1} / ${fotoAktif.length}`;
+      document.getElementById('lb-download').href = item.viewUrl;
+    }
+
+    function nextLightbox(e) {
+      if (e) e.stopPropagation();
+      indexLightbox = (indexLightbox + 1) % fotoAktif.length;
+      updateLightboxContent();
+    }
+
+    function prevLightbox(e) {
+      if (e) e.stopPropagation();
+      indexLightbox = (indexLightbox - 1 + fotoAktif.length) % fotoAktif.length;
+      updateLightboxContent();
+    }
+
+    document.addEventListener('keydown', (e) => {
+      const modal = document.getElementById('lightbox-modal');
+      if (modal.classList.contains('hidden')) return;
+      if (e.key === 'ArrowRight') nextLightbox();
+      if (e.key === 'ArrowLeft') prevLightbox();
+      if (e.key === 'Escape') tutupLightbox();
+    });
+
+    // ================= GALERI & FILTER LOGIC =================
     async function muatFotoDrive() {
       const container = document.getElementById('drive-gallery');
       if (!container) return;
@@ -820,13 +931,16 @@
         const response = await fetch('./galeri.json');
         const rawData = await response.json();
 
-        // Filter: Hanya izinkan media bertipe gambar
-        semuaFoto = rawData.filter(item => item.type === "image");
+        semuaFotoMaster = rawData.filter(item => item.type === "image");
+        fotoAktif = [...semuaFotoMaster];
 
-        if (!semuaFoto || semuaFoto.length === 0) {
+        if (!semuaFotoMaster || semuaFotoMaster.length === 0) {
           container.innerHTML = '<p class="col-span-full text-center text-stone-400 text-xs">Tidak ada data foto ditemukan.</p>';
           return;
         }
+
+        document.getElementById('total-semua-count').textContent = semuaFotoMaster.length;
+        buatTombolFilter();
 
         container.innerHTML = "";
         renderBatchFoto();
@@ -837,24 +951,61 @@
       }
     }
 
+    function buatTombolFilter() {
+      const filterBox = document.getElementById('filter-buttons');
+      
+      const kategoriMap = {};
+      semuaFotoMaster.forEach(item => {
+        const kat = item.kategori || "Umum";
+        kategoriMap[kat] = (kategoriMap[kat] || 0) + 1;
+      });
+
+      Object.keys(kategoriMap).sort().forEach(kat => {
+        const btn = document.createElement('button');
+        btn.className = "filter-btn shrink-0 px-4 py-2.5 rounded-full text-xs font-semibold tracking-wider whitespace-nowrap bg-stone-900/90 text-stone-300 border border-emerald-900/50 hover:border-emerald-500 transition-all";
+        btn.textContent = `${kat} (${kategoriMap[kat]})`;
+        btn.onclick = function() { filterGaleri(kat, this); };
+        filterBox.appendChild(btn);
+      });
+    }
+
+    function filterGaleri(kategoriDipilih, elemenTombol) {
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.className = "filter-btn shrink-0 px-4 py-2.5 rounded-full text-xs font-semibold tracking-wider whitespace-nowrap bg-stone-900/90 text-stone-300 border border-emerald-900/50 hover:border-emerald-500 transition-all";
+      });
+      elemenTombol.className = "filter-btn shrink-0 px-5 py-2.5 rounded-full text-xs font-semibold tracking-wider whitespace-nowrap bg-emerald-500 text-stone-950 transition-all shadow-lg shadow-emerald-500/20";
+
+      if (kategoriDipilih === 'semua') {
+        fotoAktif = [...semuaFotoMaster];
+      } else {
+        fotoAktif = semuaFotoMaster.filter(f => f.kategori === kategoriDipilih);
+      }
+
+      const container = document.getElementById('drive-gallery');
+      container.innerHTML = "";
+      fotoDitampilkan = 0;
+      renderBatchFoto();
+    }
+
     function renderBatchFoto() {
       const container = document.getElementById('drive-gallery');
       const loadMoreContainer = document.getElementById('load-more-container');
-      const batasAkhir = Math.min(fotoDitampilkan + JUMLAH_PER_KLIK, semuaFoto.length);
+      const batasAkhir = Math.min(fotoDitampilkan + JUMLAH_PER_KLIK, fotoAktif.length);
 
       for (let i = fotoDitampilkan; i < batasAkhir; i++) {
-        const item = semuaFoto[i];
+        const item = fotoAktif[i];
+        const currentIndex = i;
         const card = document.createElement('div');
-        card.className = "group relative aspect-[3/4] rounded-xl overflow-hidden bg-stone-900 border border-emerald-900/40 shadow-lg cursor-pointer transition-transform hover:-translate-y-1 duration-300";
+        card.className = "group relative aspect-[3/4] rounded-xl overflow-hidden bg-stone-900 border border-emerald-900/40 shadow-lg cursor-pointer transition-all duration-300 hover:-translate-y-1.5 hover:shadow-emerald-950/50 hover:shadow-xl";
+        card.onclick = () => bukaLightbox(currentIndex);
 
-        // Kompresi cepat Google =w400 (sangat hemat data dan tajam di HP)
         const imgUrl = `https://lh3.googleusercontent.com/d/${item.id}=w400`;
         card.innerHTML = `
           <img src="${imgUrl}" alt="${item.name}" loading="lazy" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity p-3 flex flex-col justify-end">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity p-3 flex flex-col justify-end">
             <span class="text-[9px] uppercase tracking-wider text-emerald-400 font-bold">${item.kategori}</span>
             <p class="text-[11px] text-stone-200 truncate">${item.name}</p>
-            <a href="${item.viewUrl}" target="_blank" class="text-[10px] text-stone-300 hover:text-white underline mt-1">Buka HD di Drive ↗</a>
+            <span class="text-[10px] text-emerald-400 font-medium mt-1"><i class="fa-solid fa-expand mr-1"></i> Perbesar Foto</span>
           </div>
         `;
 
@@ -863,14 +1014,61 @@
 
       fotoDitampilkan = batasAkhir;
 
-      if (fotoDitampilkan < semuaFoto.length) {
+      if (fotoDitampilkan < fotoAktif.length) {
         loadMoreContainer.classList.remove('hidden');
       } else {
         loadMoreContainer.classList.add('hidden');
       }
     }
 
-    document.addEventListener("DOMContentLoaded", muatFotoDrive);
+    // ================= BUKU TAMU LOCALSTORAGE =================
+    function renderPesan() {
+      const listContainer = document.getElementById('messages-list');
+      const data = JSON.parse(localStorage.getItem('kkn_messages') || '[]');
+
+      if (data.length === 0) {
+        listContainer.innerHTML = '<p class="text-center text-stone-500 text-xs py-4">Belum ada pesan. Jadilah yang pertama menulis kenangan!</p>';
+        return;
+      }
+
+      listContainer.innerHTML = data.map(item => `
+        <div class="p-4 rounded-xl glass-card text-xs">
+          <div class="flex items-center justify-between text-[11px] text-stone-400 mb-1">
+            <span class="font-bold text-emerald-400">${item.nama}</span>
+            <span class="px-2 py-0.5 rounded bg-black/40 text-[10px] border border-white/5">${item.mood}</span>
+          </div>
+          <p class="text-stone-300 leading-relaxed font-light mt-1">${item.pesan}</p>
+          <span class="text-[9px] text-stone-500 block mt-2 font-mono">${item.tanggal}</span>
+        </div>
+      `).reverse().join('');
+    }
+
+    function tambahPesan(e) {
+      e.preventDefault();
+      const namaInput = document.getElementById('guest-name');
+      const moodInput = document.getElementById('guest-mood');
+      const messageInput = document.getElementById('guest-message');
+
+      const nama = namaInput.value.trim() || "Anonim Posko";
+      const pesan = messageInput.value.trim();
+      const mood = moodInput.value;
+      const tanggal = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+
+      if (!pesan) return;
+
+      const pesanLama = JSON.parse(localStorage.getItem('kkn_messages') || '[]');
+      pesanLama.push({ nama, mood, pesan, tanggal });
+      localStorage.setItem('kkn_messages', JSON.stringify(pesanLama));
+
+      messageInput.value = "";
+      namaInput.value = "";
+      renderPesan();
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      muatFotoDrive();
+      renderPesan();
+    });
   </script>
 </body>
 </html>
