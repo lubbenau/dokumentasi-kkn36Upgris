@@ -123,43 +123,58 @@
     </div>
   </div>
 
-  <!-- ================= 1. COVER SCREEN (RESPONSIF MOBILE ANTI-POTONG) ================= -->
-  <!-- ================= 1. COVER SCREEN (FULL-SCREEN SEPERTI SCREENSHOT) ================= -->
-  <div id="cover-screen" class="fixed inset-0 z-50 flex flex-col justify-between items-center text-center py-14 px-4 bg-cover bg-center overflow-hidden" 
-       style="background-image: linear-gradient(to bottom, rgba(11,35,28,0.5) 0%, rgba(11,35,28,0.3) 40%, rgba(11,35,28,0.85) 100%), url('kumpuldisawah.JPG');">
+ <!-- ================= 1. COVER SCREEN (TRIPLE PHOTO STRIP - ANTI KROPING) ================= -->
+  <div id="cover-screen" class="fixed inset-0 z-50 flex flex-col justify-between items-center text-center py-10 px-4 bg-stone-950 overflow-hidden">
     
-    <!-- Teks Atas: Di Area Langit -->
-    <div class="space-y-1.5 pt-2">
-      <span class="text-xs uppercase tracking-[0.35em] text-emerald-300/90 font-medium drop-shadow">
+    <!-- BACKGROUND: 3 FOTO MENUMPUK VERTIKAL (MENUTUP PENUH LAYAR HP 100%) -->
+    <div class="absolute inset-0 z-0 flex flex-col h-full w-full">
+      <div class="flex-1 w-full overflow-hidden border-b border-black/30">
+        <img src="kumpuldisawah.JPG" alt="Pose 1" class="w-full h-full object-cover object-center filter brightness-[0.82]">
+      </div>
+      <div class="flex-1 w-full overflow-hidden border-b border-black/30">
+        <img src="kumpuldisawah.JPG" alt="Pose 2" class="w-full h-full object-cover object-center filter brightness-[0.82]">
+      </div>
+      <div class="flex-1 w-full overflow-hidden">
+        <img src="kumpuldisawah.JPG" alt="Pose 3" class="w-full h-full object-cover object-center filter brightness-[0.82]">
+      </div>
+
+      <!-- Lapisan Gradasi Halus agar Tulisan & Tombol Terbaca Jelas -->
+      <div class="absolute inset-0 bg-gradient-to-b from-[#071712]/80 via-black/25 to-[#071712]/90 pointer-events-none"></div>
+    </div>
+
+    <!-- 1. BAGIAN ATAS: TEKS DOKUMENTASI -->
+    <div class="relative z-10 space-y-1 pt-2">
+      <span class="text-[11px] sm:text-xs uppercase tracking-[0.35em] text-emerald-300 font-semibold drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
         Dokumentasi & Kenangan
       </span>
-      <h2 class="text-xs uppercase tracking-[0.4em] text-stone-200 drop-shadow">
+      <h2 class="text-[11px] sm:text-xs uppercase tracking-[0.4em] text-stone-200 drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
         Kuliah Kerja Nyata
       </h2>
     </div>
 
-    <!-- Teks Tengah & Tombol: Persis Seperti Screenshot -->
-    <div class="w-full max-w-md mx-auto my-auto px-2">
-      <h1 class="font-serif-luxury text-4xl sm:text-6xl md:text-7xl font-bold tracking-wide text-white drop-shadow-[0_4px_10px_rgba(0,0,0,0.9)]">
+    <!-- 2. BAGIAN TENGAH: JUDUL, TANGGAL & TOMBOL BUKA -->
+    <div class="relative z-10 w-full max-w-sm sm:max-w-md mx-auto px-2 my-auto">
+      <h1 class="font-serif-luxury text-4xl sm:text-6xl md:text-7xl font-bold tracking-wide text-white drop-shadow-[0_4px_12px_rgba(0,0,0,0.95)]">
         KKN Desa Waru
       </h1>
       
-      <div class="w-24 h-[1px] bg-white/40 mx-auto my-3"></div>
+      <div class="w-20 h-[1px] bg-gradient-to-r from-transparent via-emerald-400 to-transparent mx-auto my-3"></div>
       
-      <p class="font-serif-luxury tracking-[0.25em] text-xs sm:text-sm text-stone-200 drop-shadow">
+      <p class="font-serif-luxury tracking-[0.25em] text-xs sm:text-sm text-stone-200 drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]">
         29 . 0 7 . 2 0 2 6 — 0 2 . 0 9 . 2 0 2 6
       </p>
 
-      <button onclick="openInvitation()" class="mt-6 w-full max-w-xs mx-auto py-3.5 px-6 rounded-xl bg-black/40 backdrop-blur-sm border border-stone-400/40 text-stone-100 text-[11px] sm:text-xs tracking-[0.25em] font-semibold uppercase shadow-2xl hover:bg-black/60 active:scale-95 transition-all duration-300 flex items-center justify-center gap-2">
+      <button onclick="openInvitation()" class="mt-6 w-full max-w-xs mx-auto py-3.5 px-6 rounded-xl bg-black/50 backdrop-blur-md border border-emerald-500/40 text-stone-100 text-[11px] sm:text-xs tracking-[0.25em] font-semibold uppercase shadow-[0_10px_25px_rgba(0,0,0,0.8)] hover:bg-black/70 hover:border-emerald-400 active:scale-95 transition-all duration-300 flex items-center justify-center gap-2">
         <i class="fa-regular fa-envelope-open text-emerald-400 text-sm"></i>
         <span>Klik untuk membuka Memori</span>
       </button>
     </div>
 
-    <!-- Teks Bawah: Kecamatan & Kabupaten -->
-    <div class="text-[10px] sm:text-[11px] tracking-widest text-stone-300/80 uppercase pb-2 drop-shadow">
+    <!-- 3. BAGIAN BAWAH: LOKASI DESA -->
+    <div class="relative z-10 text-[10px] sm:text-[11px] tracking-widest text-stone-300 uppercase pb-1 drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
       Kecamatan Mranggen • Kabupaten Demak
     </div>
+
   </div>
 
     <div class="relative z-10 text-[10px] sm:text-[11px] tracking-widest text-stone-400 uppercase">
