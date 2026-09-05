@@ -185,38 +185,45 @@
   <!-- ================= 2. ISI UTAMA ================= -->
   <main id="main-content">
 
-   <!-- HERO BANNER: PANORAMA CINEMATIC (100% WAJAH UTUH & LAYAR PENUH) -->
+   <!-- HERO BANNER: DUAL LAYER BLEND (PORTRAIT BG + SEAMLESS LANDSCAPE) -->
     <section class="relative min-h-screen w-full flex flex-col justify-between items-center text-center px-4 py-8 bg-[#071712] overflow-hidden">
       
-      <!-- 1. LAYER BACKGROUND ULTRA-BLUR (MENUTUPI 100% LAYAR HP DENGAN NUANSA HIJAU SAWAH ASLI) -->
-      <div class="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-        <img src="barisdisawah.JPG" alt="Ambient Blur" class="w-full h-full object-cover scale-125 filter blur-2xl brightness-[0.45] saturate-150">
-        <div class="absolute inset-0 bg-gradient-to-b from-[#071712]/70 via-black/30 to-[#071712]"></div>
+      <!-- LAYER 1 (BACKGROUND): FOTO POTRAIT FULL LAYAR PENUH -->
+      <div class="absolute inset-0 z-0">
+        <!-- Anda bisa menggunakan file portrait khusus atau foto kumpuldisawah.JPG -->
+        <img src="kumpuldisawah.JPG" alt="Background Potret" class="w-full h-full object-cover object-center filter brightness-[0.6] contrast-[1.05]">
+        <!-- Tint Nuansa Hijau KKN agar tone warna selaras -->
+        <div class="absolute inset-0 bg-[#071712]/40"></div>
       </div>
 
-      <!-- 2. AREA ATAS: JUDUL & KELUARGA BESAR (DI ATAS FOTO) -->
-      <div class="relative z-10 max-w-3xl mx-auto space-y-1.5 pt-4" data-aos="fade-down">
-        <span class="text-[11px] sm:text-xs uppercase tracking-[0.3em] text-emerald-400 font-semibold block drop-shadow">
+      <!-- 1. AREA ATAS: JUDUL (DI AREA LANGIT) -->
+      <div class="relative z-20 max-w-3xl mx-auto space-y-1 pt-4" data-aos="fade-down">
+        <span class="text-[11px] sm:text-xs uppercase tracking-[0.35em] text-emerald-300 font-semibold block drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
           Keluarga Besar Posko Sandran
         </span>
-        <h1 class="font-serif-luxury text-3xl sm:text-5xl md:text-6xl font-bold text-white tracking-wide leading-tight drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]">
+        <h1 class="font-serif-luxury text-3xl sm:text-5xl md:text-6xl font-bold text-white tracking-wide leading-tight drop-shadow-[0_4px_12px_rgba(0,0,0,0.95)]">
           17 Jiwa, 1 Pengabdian
         </h1>
       </div>
 
-      <!-- 3. AREA TENGAH: FOTO 17 ANGGOTA UTUH TANPA TERPOTONG (EDGES BLENDED) -->
-      <div class="relative z-10 w-full max-w-5xl my-auto py-2" data-aos="zoom-in" data-aos-duration="1000">
-        <div class="relative w-full rounded-2xl overflow-hidden shadow-[0_15px_35px_rgba(0,0,0,0.8)] border border-emerald-500/20">
-          <!-- Foto Utuh 100% dari ujung kiri ke ujung kanan -->
-          <img src="barisdisawah.JPG" alt="17 Anggota KKN Desa Waru" class="w-full h-auto max-h-[50vh] sm:max-h-[60vh] object-contain mx-auto">
-          <!-- Vignette halus di tepi foto agar menyatu mewah dengan background blur -->
-          <div class="absolute inset-0 bg-gradient-to-t from-[#071712]/60 via-transparent to-[#071712]/40 pointer-events-none"></div>
+      <!-- LAYER 2 (FOREGROUND): FOTO LANSKAP DENGAN GRADASI HALUS MENYATU (SEAMLESS FADE) -->
+      <div class="relative z-10 w-full max-w-5xl my-auto py-2 flex items-center justify-center" data-aos="zoom-in" data-aos-duration="1100">
+        <div class="relative w-full overflow-hidden">
+          
+          <!-- Foto Lanskap 17 Anggota: Gradasi Masking Transparan di Atas & Bawah -->
+          <img src="barisdisawah.JPG" alt="17 Anggota Baris di Sawah" 
+               class="w-full h-auto max-h-[55vh] sm:max-h-[65vh] object-contain mx-auto filter drop-shadow-[0_10px_25px_rgba(0,0,0,0.6)]"
+               style="-webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%);
+                      mask-image: linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%);">
+
+          <!-- Layer Gradien Pelengkap untuk Efek Blending Sempurna -->
+          <div class="absolute inset-0 pointer-events-none bg-gradient-to-b from-transparent via-transparent to-[#071712]/50"></div>
         </div>
       </div>
 
-      <!-- 4. AREA BAWAH: KOTAK STATISTIK & QUOTE (DI BAWAH FOTO, SAMA SEKALI TIDAK MENUTUPI WAJAH) -->
-      <div class="relative z-10 w-full max-w-2xl mx-auto space-y-3 pb-2" data-aos="fade-up">
-        <div class="inline-grid grid-cols-4 gap-2 sm:gap-6 px-4 sm:px-6 py-2.5 sm:py-3 rounded-2xl bg-black/55 backdrop-blur-md border border-emerald-500/30 shadow-2xl text-center">
+      <!-- 2. AREA BAWAH: KOTAK STATISTIK & QUOTE (DI LEVEL PERUT/KAKI - TIDAK TUTUP WAJAH) -->
+      <div class="relative z-20 w-full max-w-2xl mx-auto space-y-3 pb-2" data-aos="fade-up">
+        <div class="inline-grid grid-cols-4 gap-2 sm:gap-6 px-4 sm:px-6 py-2.5 sm:py-3 rounded-2xl bg-black/60 backdrop-blur-md border border-emerald-500/30 shadow-[0_10px_30px_rgba(0,0,0,0.8)] text-center">
           <div>
             <div class="text-base sm:text-2xl font-bold text-emerald-400 font-serif-luxury">35</div>
             <div class="text-[8px] sm:text-[9px] text-stone-300 uppercase tracking-widest mt-0.5">Hari Bersama</div>
@@ -235,7 +242,7 @@
           </div>
         </div>
 
-        <p class="text-[11px] sm:text-xs text-stone-300 font-light max-w-md mx-auto italic leading-relaxed drop-shadow">
+        <p class="text-[11px] sm:text-xs text-stone-200 font-light max-w-md mx-auto italic leading-relaxed drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
           "Bukan tentang seberapa megah tempatnya, melainkan tentang siapa saja yang berjuang bersama di dalamnya."
         </p>
 
