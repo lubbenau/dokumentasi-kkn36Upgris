@@ -185,19 +185,20 @@
   <!-- ================= 2. ISI UTAMA ================= -->
   <main id="main-content">
 
-    <!-- HERO BANNER (RESPONSIF MOBILE ANTI-POTONG) -->
-   <!-- HERO BANNER (POSISI KOTAK SUDAH DITURUNKAN BEBAS TUTUP WAJAH) -->
-    <section class="relative min-h-screen w-full flex flex-col justify-between items-center text-center px-4 pt-12 pb-8 bg-stone-950 overflow-hidden">
-      <!-- Background Ambient & Foto Utuh -->
-      <div class="absolute inset-0 bg-cover bg-center opacity-30 blur-2xl scale-110" style="background-image: url('barisdisawah.JPG');"></div>
-      <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
-        <img src="barisdisawah.JPG" alt="Foto Baris di Sawah" class="w-full h-full max-h-[85vh] object-contain sm:object-cover sm:max-h-none opacity-85">
-        <div class="absolute inset-0 bg-gradient-to-b from-[#071712]/80 via-[#071712]/30 to-[#071712]"></div>
+    <!-- HERO BANNER (100% FULL LAYAR HP TANPA RUANG KOSONG) -->
+    <section class="relative min-h-screen w-full flex flex-col justify-between items-center text-center px-4 py-12 bg-stone-950 overflow-hidden">
+      
+      <!-- FOTO FULL SATU LAYAR PENUH 100% -->
+      <div class="absolute inset-0 z-0">
+        <img src="barisdisawah.JPG" alt="Foto Baris di Sawah" class="w-full h-full object-cover object-[center_35%] filter brightness-[0.85] contrast-[1.05]">
+        <!-- Gradasi Halus: Langit & Bawah Sedikit Gelap agar Teks Terbaca Jelas, Tengah Tempat Wajah Tetap Terang -->
+        <div class="absolute inset-0 bg-gradient-to-b from-[#071712]/85 via-transparent to-[#071712]/90"></div>
+        <div class="absolute inset-0 bg-black/20"></div>
       </div>
 
-      <!-- 1. Area Judul: Di Area Langit Atas Kepala -->
-      <div class="relative z-10 max-w-3xl mx-auto space-y-2 mt-4 sm:mt-6">
-        <span class="text-[11px] sm:text-xs uppercase tracking-[0.3em] text-emerald-400 font-semibold block drop-shadow" data-aos="fade-down" data-aos-duration="1000">
+      <!-- 1. AREA ATAS: JUDUL & KATEGORI (BERADA DI LANGIT) -->
+      <div class="relative z-10 max-w-3xl mx-auto space-y-2 pt-4">
+        <span class="text-[11px] sm:text-xs uppercase tracking-[0.3em] text-emerald-400 font-semibold block drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]" data-aos="fade-down" data-aos-duration="1000">
           Keluarga Besar Posko Sandran
         </span>
         <h1 class="font-serif-luxury text-3xl sm:text-6xl md:text-7xl font-bold text-white tracking-wide leading-tight drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]" data-aos="zoom-in" data-aos-duration="1200">
@@ -205,10 +206,13 @@
         </h1>
       </div>
 
-      <!-- 2. Area Kotak Angka: Diturunkan Jauh ke Bawah (Level Dada/Perut) -->
-      <div class="relative z-10 max-w-2xl mx-auto mt-28 sm:mt-36 space-y-4">
+      <!-- AREA TENGAH SENGAJA KOSONG: FOKUS MENAMPILKAN SEMUA WAJAH ANGGOTA -->
+      <div class="relative z-0 my-auto pointer-events-none"></div>
+
+      <!-- 2. AREA BAWAH: KOTAK STATISTIK & QUOTE (DI LEVEL DADA/PERUT KE BAWAH) -->
+      <div class="relative z-10 max-w-2xl mx-auto pb-2 space-y-3">
         <div data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">
-          <div class="inline-grid grid-cols-4 gap-2 sm:gap-6 px-4 sm:px-6 py-2.5 sm:py-3 rounded-2xl bg-black/40 backdrop-blur-md border border-emerald-500/30 shadow-2xl text-center">
+          <div class="inline-grid grid-cols-4 gap-2 sm:gap-6 px-4 sm:px-6 py-2.5 sm:py-3 rounded-2xl bg-black/50 backdrop-blur-md border border-emerald-500/30 shadow-2xl text-center">
             <div>
               <div class="text-base sm:text-2xl font-bold text-emerald-400 font-serif-luxury">35</div>
               <div class="text-[8px] sm:text-[9px] text-stone-300 uppercase tracking-widest mt-0.5">Hari Bersama</div>
@@ -228,10 +232,18 @@
           </div>
         </div>
 
-        <p class="text-[11px] sm:text-xs text-stone-300 font-light max-w-md mx-auto italic leading-relaxed drop-shadow" data-aos="fade-up" data-aos-delay="300">
+        <p class="text-[11px] sm:text-xs text-stone-200 font-light max-w-md mx-auto italic leading-relaxed drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]" data-aos="fade-up" data-aos-delay="300">
           "Bukan tentang seberapa megah tempatnya, melainkan tentang siapa saja yang berjuang bersama di dalamnya."
         </p>
+
+        <!-- Indikator Gulir -->
+        <div class="animate-bounce flex flex-col items-center gap-0.5 text-stone-400 text-[10px] sm:text-xs tracking-widest uppercase pt-1">
+          <span>Gulir ke bawah</span>
+          <i class="fa-solid fa-chevron-down text-emerald-400 text-xs"></i>
+        </div>
       </div>
+
+    </section>
 
       <!-- 3. Indikator Scroll -->
       <div class="relative z-10 animate-bounce flex flex-col items-center gap-1 text-stone-400 text-[10px] sm:text-xs tracking-widest uppercase mt-4">
