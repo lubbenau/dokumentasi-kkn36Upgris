@@ -124,34 +124,43 @@
   </div>
 
   <!-- ================= 1. COVER SCREEN (RESPONSIF MOBILE ANTI-POTONG) ================= -->
-  <div id="cover-screen" class="fixed inset-0 z-50 flex flex-col items-center justify-between text-center py-12 px-4 bg-stone-950 overflow-hidden">
-    <!-- Dual-Layer Ambient Background: Blur + Center Fit -->
-    <div class="absolute inset-0 bg-cover bg-center opacity-35 blur-2xl scale-110" style="background-image: url('kumpuldisawah.JPG');"></div>
-    <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
-      <img src="kumpuldisawah.JPG" alt="Foto Bersama KKN" class="w-full h-full max-h-[80vh] object-contain sm:object-cover sm:max-h-none opacity-90 transition-opacity">
-      <div class="absolute inset-0 bg-gradient-to-b from-[#071712]/80 via-transparent to-[#071712]/95"></div>
+  <!-- ================= 1. COVER SCREEN (FULL-SCREEN SEPERTI SCREENSHOT) ================= -->
+  <div id="cover-screen" class="fixed inset-0 z-50 flex flex-col justify-between items-center text-center py-14 px-4 bg-cover bg-center overflow-hidden" 
+       style="background-image: linear-gradient(to bottom, rgba(11,35,28,0.5) 0%, rgba(11,35,28,0.3) 40%, rgba(11,35,28,0.85) 100%), url('kumpuldisawah.JPG');">
+    
+    <!-- Teks Atas: Di Area Langit -->
+    <div class="space-y-1.5 pt-2">
+      <span class="text-xs uppercase tracking-[0.35em] text-emerald-300/90 font-medium drop-shadow">
+        Dokumentasi & Kenangan
+      </span>
+      <h2 class="text-xs uppercase tracking-[0.4em] text-stone-200 drop-shadow">
+        Kuliah Kerja Nyata
+      </h2>
     </div>
 
-    <div class="relative z-10 space-y-1">
-      <span class="text-[11px] uppercase tracking-[0.35em] text-emerald-300/90 font-medium">Dokumentasi & Kenangan</span>
-      <h2 class="text-[11px] uppercase tracking-[0.4em] text-stone-300">Kuliah Kerja Nyata</h2>
-    </div>
-
-    <div class="relative z-10 max-w-xl mx-auto my-auto py-6">
-      <h1 class="font-serif-luxury text-4xl sm:text-6xl md:text-7xl font-bold tracking-wide text-white drop-shadow-[0_5px_15px_rgba(0,0,0,0.8)]">
+    <!-- Teks Tengah & Tombol: Persis Seperti Screenshot -->
+    <div class="w-full max-w-md mx-auto my-auto px-2">
+      <h1 class="font-serif-luxury text-4xl sm:text-6xl md:text-7xl font-bold tracking-wide text-white drop-shadow-[0_4px_10px_rgba(0,0,0,0.9)]">
         KKN Desa Waru
       </h1>
       
-      <div class="w-20 h-[1px] bg-gradient-to-r from-transparent via-emerald-400 to-transparent mx-auto my-4"></div>
+      <div class="w-24 h-[1px] bg-white/40 mx-auto my-3"></div>
       
-      <p class="font-serif-luxury tracking-[0.25em] text-xs sm:text-base text-stone-200 drop-shadow">
+      <p class="font-serif-luxury tracking-[0.25em] text-xs sm:text-sm text-stone-200 drop-shadow">
         29 . 0 7 . 2 0 2 6 — 0 2 . 0 9 . 2 0 2 6
       </p>
 
-      <button onclick="openInvitation()" class="mt-8 px-8 py-3.5 rounded-full glass-card border border-emerald-400/50 text-stone-100 text-xs tracking-[0.25em] font-semibold uppercase shadow-2xl hover:scale-105 active:scale-95 transition-all duration-300">
-        <i class="fa-regular fa-envelope-open mr-2 text-emerald-400"></i> Buka Memori
+      <button onclick="openInvitation()" class="mt-6 w-full max-w-xs mx-auto py-3.5 px-6 rounded-xl bg-black/40 backdrop-blur-sm border border-stone-400/40 text-stone-100 text-[11px] sm:text-xs tracking-[0.25em] font-semibold uppercase shadow-2xl hover:bg-black/60 active:scale-95 transition-all duration-300 flex items-center justify-center gap-2">
+        <i class="fa-regular fa-envelope-open text-emerald-400 text-sm"></i>
+        <span>Klik untuk membuka Memori</span>
       </button>
     </div>
+
+    <!-- Teks Bawah: Kecamatan & Kabupaten -->
+    <div class="text-[10px] sm:text-[11px] tracking-widest text-stone-300/80 uppercase pb-2 drop-shadow">
+      Kecamatan Mranggen • Kabupaten Demak
+    </div>
+  </div>
 
     <div class="relative z-10 text-[10px] sm:text-[11px] tracking-widest text-stone-400 uppercase">
       Kecamatan Mranggen • Kabupaten Demak
