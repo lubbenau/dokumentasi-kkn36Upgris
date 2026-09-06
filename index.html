@@ -17,9 +17,13 @@
   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
+    :root {
+      --bg-current: #071712;
+    }
     body {
-      background-color: #071712;
+      background-color: var(--bg-current);
       font-family: 'Montserrat', sans-serif;
+      transition: background-color 0.8s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .font-serif-luxury {
       font-family: 'Cormorant Garamond', serif;
@@ -27,16 +31,12 @@
     .font-handwriting {
       font-family: 'Caveat', cursive;
     }
-    .vertical-text {
-      writing-mode: vertical-rl;
-      transform: rotate(180deg);
-    }
     .lock-scroll {
       overflow: hidden;
       height: 100vh;
     }
     #cover-screen {
-      transition: transform 1.2s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.9s ease-in-out;
+      transition: transform 1.1s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.8s ease-in-out;
     }
     #cover-screen.hide-cover {
       transform: translateY(-100%);
@@ -58,74 +58,45 @@
       scrollbar-width: none;
     }
     .glass-card {
-      background: rgba(18, 30, 24, 0.55);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(18, 30, 24, 0.65);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
     }
     .tape-effect {
-      background: rgba(255, 255, 255, 0.35);
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+      background: rgba(255, 255, 255, 0.4);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
       backdrop-filter: blur(2px);
     }
-    .ambient-glow {
-      position: absolute;
-      width: 450px;
-      height: 450px;
-      border-radius: 50%;
-      filter: blur(120px);
-      opacity: 0.15;
-      pointer-events: none;
+
+    /* WADAH INTERAKTIF SCROLL-SCRUB (TINGGI 200VH SUPAYA ADA RUANG GERAK) */
+    .member-scroll-track {
+      position: relative;
+      height: 200vh;
+    }
+    .member-sticky-stage {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
     }
 
-    /* ================= ANIMASI SCROLL ANGGOTA ================= */
-    .member-photo-box {
-      transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.6s ease;
-      transform: translateY(20px) scale(1.08);
-      opacity: 0.9;
+    /* ELEMEN FOTO & TEKS BERGERAK DARI TENGAH KE SAMPING */
+    .polaroid-mover {
+      will-change: transform;
+      transform-origin: center center;
     }
-
-    .member-desc-box {
-      opacity: 0;
-      transform: translateY(30px);
-      transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
-      pointer-events: none;
-    }
-
-    @media (min-width: 768px) {
-      .member-photo-box {
-        transform: translateX(140px) scale(1.15);
-      }
-      .member-desc-box {
-        transform: translateX(40px);
-      }
-      .member-row.active .member-photo-box {
-        transform: translateX(0) scale(1);
-        opacity: 1;
-      }
-      .member-row.active .member-desc-box {
-        opacity: 1;
-        transform: translateX(0);
-        pointer-events: auto;
-      }
-    }
-
-    @media (max-width: 767px) {
-      .member-row.active .member-photo-box {
-        transform: translateY(0) scale(1);
-        opacity: 1;
-      }
-      .member-row.active .member-desc-box {
-        opacity: 1;
-        transform: translateY(0);
-        pointer-events: auto;
-      }
+    .desc-mover {
+      will-change: transform, opacity;
     }
   </style>
 </head>
 <body class="text-stone-200 antialiased selection:bg-amber-600 selection:text-white lock-scroll" id="body-main">
 
-  <!-- ================= AUDIO BACKGROUND ================= -->
+  <!-- AUDIO BACKGROUND -->
   <audio id="bg-audio" loop preload="auto">
     <source src="neira.mp3" type="audio/mp3">
     <source src="Banda Neira - Sampai Jadi Debu (Lirik Lagu).mp3" type="audio/mp3">
@@ -136,7 +107,7 @@
     <i id="music-icon" class="fa-solid fa-compact-disc text-xl spin-disk"></i>
   </button>
 
-  <!-- ================= LIGHTBOX POP-UP MODAL ================= -->
+  <!-- LIGHTBOX POP-UP MODAL -->
   <div id="lightbox-modal" class="fixed inset-0 z-50 hidden bg-black/95 backdrop-blur-xl flex flex-col items-center justify-between p-4 select-none">
     <div class="w-full flex items-center justify-between px-2 pt-2">
       <div class="text-xs text-stone-300 flex items-center gap-2">
@@ -144,7 +115,7 @@
         <span id="lb-counter" class="text-stone-400 text-xs font-mono"></span>
       </div>
       <div class="flex items-center gap-3">
-        <a id="lb-download" href="#" target="_blank" class="w-9 h-9 rounded-full bg-stone-900 border border-stone-800 text-stone-300 hover:text-emerald-400 flex items-center justify-center transition-colors" title="Buka Asli di Drive">
+        <a id="lb-download" href="#" target="_blank" class="w-9 h-9 rounded-full bg-stone-900 border border-stone-800 text-stone-300 hover:text-emerald-400 flex items-center justify-center transition-colors">
           <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
         </a>
         <button onclick="tutupLightbox()" class="w-9 h-9 rounded-full bg-stone-900 border border-stone-800 text-stone-300 hover:bg-red-600 hover:text-white flex items-center justify-center transition-colors">
@@ -215,13 +186,11 @@
   <!-- ================= 2. ISI UTAMA ================= -->
   <main id="main-content">
 
-    <!-- HERO BANNER: SEAMLESS DUAL LAYER -->
-    <section class="relative min-h-screen w-full flex flex-col justify-between items-center text-center py-8 bg-gradient-to-b from-[#071712] via-[#091f19] to-[#121c17] overflow-hidden">
-      <div class="ambient-glow bg-emerald-500 -top-20 -left-20"></div>
-
+    <!-- HERO BANNER -->
+    <section class="relative min-h-screen w-full flex flex-col justify-between items-center text-center py-8 bg-[#071712] overflow-hidden" data-bg="#071712">
       <div class="absolute inset-0 z-0 overflow-hidden pointer-events-none">
         <img src="kumpuldisawah.JPG" alt="Background Potret" class="w-full h-full object-cover object-center filter brightness-[0.4] contrast-[1.1] scale-105">
-        <div class="absolute inset-0 bg-gradient-to-b from-[#071712]/90 via-[#0b211a]/50 to-[#121c17]/95"></div>
+        <div class="absolute inset-0 bg-gradient-to-b from-[#071712]/90 via-[#0b211a]/50 to-[#071712]/95"></div>
       </div>
 
       <div class="relative z-20 max-w-3xl mx-auto px-4 space-y-1 pt-3" data-aos="fade-down">
@@ -240,7 +209,7 @@
                style="-webkit-mask-image: radial-gradient(ellipse 95% 75% at 50% 50%, black 55%, transparent 100%);
                       mask-image: radial-gradient(ellipse 95% 75% at 50% 50%, black 55%, transparent 100%);">
           <div class="absolute inset-x-0 top-0 h-1/3 bg-gradient-to-b from-[#071712] via-[#071712]/50 to-transparent"></div>
-          <div class="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-[#121c17] via-[#121c17]/50 to-transparent"></div>
+          <div class="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-[#071712] via-[#071712]/50 to-transparent"></div>
         </div>
       </div>
 
@@ -269,514 +238,461 @@
         </p>
 
         <div class="animate-bounce flex flex-col items-center gap-0.5 text-stone-400 text-[10px] tracking-widest uppercase pt-1">
-          <span>Gulir ke bawah</span>
+          <span>Gulir perlahan ke bawah</span>
           <i class="fa-solid fa-chevron-down text-emerald-400 text-xs"></i>
         </div>
       </div>
     </section>
 
-    <!-- ================= 3. ANGGOTA KELOMPOK (DENGAN EFEK SCROLL SHIFT) ================= -->
-    <div id="members-container" class="relative divide-y divide-stone-800/60 bg-gradient-to-b from-[#121c17] via-[#161a15] to-[#1c1813] overflow-hidden">
-      <div class="ambient-glow bg-amber-600/10 top-1/4 -right-24"></div>
-      <div class="ambient-glow bg-emerald-600/10 top-3/4 -left-24"></div>
+    <!-- ================= 3. ANGGOTA KELOMPOK (STICKY SCROLL-DRIVEN TRANSITION) ================= -->
+    <div id="members-container" class="relative">
 
       <!-- 1: FADHIL -->
-      <section class="member-row min-h-screen w-full flex items-center justify-center relative px-6 py-16">
-        <div class="max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-6 md:gap-14">
-          <div class="member-photo-box relative bg-stone-100 p-3 pb-8 rounded-sm shadow-2xl -rotate-2 group max-w-[270px] sm:max-w-xs shrink-0">
-            <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-6 tape-effect rotate-1 z-10"></div>
-            <div class="relative aspect-[3/4] overflow-hidden bg-stone-900">
-              <img src="fadhil.jpg" alt="Fadhil" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-              <span class="absolute bottom-2 right-2 font-mono text-[10px] text-amber-500 font-bold tracking-widest drop-shadow">'26 08 14</span>
+      <div class="member-scroll-track" data-bg="#0c1a15">
+        <div class="member-sticky-stage px-4 sm:px-8">
+          <div class="stage-content max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-6 md:gap-14 relative">
+            <div class="polaroid-mover relative bg-stone-100 p-3 pb-8 rounded-sm shadow-2xl -rotate-2 max-w-[260px] sm:max-w-xs shrink-0">
+              <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-6 tape-effect rotate-1 z-10"></div>
+              <div class="relative aspect-[3/4] overflow-hidden bg-stone-900">
+                <img src="fadhil.jpg" alt="Fadhil" class="w-full h-full object-cover">
+                <span class="absolute bottom-2 right-2 font-mono text-[10px] text-amber-500 font-bold tracking-widest drop-shadow">'26 08 14</span>
+              </div>
+              <p class="font-handwriting text-xl text-stone-800 text-center mt-3">Pak Kordes kita ni bos 🫡</p>
             </div>
-            <p class="font-handwriting text-xl text-stone-800 text-center mt-3">Pak Kordes kita ni bos 🫡</p>
-          </div>
-
-          <div class="member-desc-box text-center md:text-left max-w-md">
-            <span class="text-xs uppercase tracking-[0.25em] text-amber-400 font-semibold block mb-1">Kordes • PJKR</span>
-            <h2 class="font-serif-luxury text-3xl sm:text-4xl font-bold text-white tracking-wide">Fadhil</h2>
-            <div class="w-16 h-[1px] bg-amber-500/50 my-3 mx-auto md:mx-0"></div>
-            <p class="text-sm text-stone-300 leading-relaxed font-light">
-              "Paling sering pusing nyocokin jadwal rapat sama perangkat desa, tapi tetep paling santai kalo diajak cari makan malem-malem."
-            </p>
-            <p class="font-handwriting text-amber-300 text-lg mt-2">"Gimana ges, proker aman kan?"</p>
-            <div class="mt-4 flex items-center justify-center md:justify-start gap-4">
-              <a href="#" class="inline-flex items-center gap-2 text-xs text-stone-400 hover:text-amber-400 transition-colors">
-                <i class="fa-brands fa-instagram text-base text-amber-400"></i><span>@fadhil_ig</span>
-              </a>
+            <div class="desc-mover text-center md:text-left max-w-md">
+              <span class="text-xs uppercase tracking-[0.25em] text-amber-400 font-semibold block mb-1">Kordes • PJKR</span>
+              <h2 class="font-serif-luxury text-3xl sm:text-4xl font-bold text-white tracking-wide">Fadhil</h2>
+              <div class="w-16 h-[1px] bg-amber-500/50 my-3 mx-auto md:mx-0"></div>
+              <p class="text-sm text-stone-300 leading-relaxed font-light">"Paling sering pusing nyocokin jadwal rapat sama perangkat desa, tapi tetep paling santai kalo diajak cari makan malem-malem."</p>
+              <p class="font-handwriting text-amber-300 text-lg mt-2">"Gimana ges, proker aman kan?"</p>
+              <div class="mt-4 flex items-center justify-center md:justify-start gap-4">
+                <a href="#" class="inline-flex items-center gap-2 text-xs text-stone-400 hover:text-amber-400 transition-colors"><i class="fa-brands fa-instagram text-base text-amber-400"></i><span>@fadhil_ig</span></a>
+              </div>
             </div>
           </div>
         </div>
-      </section>
+      </div>
 
       <!-- 2: IVAN GEDE -->
-      <section class="member-row min-h-screen w-full flex items-center justify-center relative px-6 py-16">
-        <div class="max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-6 md:gap-14">
-          <div class="member-photo-box relative bg-stone-100 p-3 pb-8 rounded-sm shadow-2xl rotate-2 group max-w-[270px] sm:max-w-xs shrink-0">
-            <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-6 tape-effect -rotate-2 z-10"></div>
-            <div class="relative aspect-[3/4] overflow-hidden bg-stone-900">
-              <img src="ivan.JPG" alt="Ivan Gede" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-              <span class="absolute bottom-2 right-2 font-mono text-[10px] text-amber-500 font-bold tracking-widest drop-shadow">'26 08 14</span>
+      <div class="member-scroll-track" data-bg="#141c16">
+        <div class="member-sticky-stage px-4 sm:px-8">
+          <div class="stage-content max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-6 md:gap-14 relative">
+            <div class="polaroid-mover relative bg-stone-100 p-3 pb-8 rounded-sm shadow-2xl rotate-2 max-w-[260px] sm:max-w-xs shrink-0">
+              <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-6 tape-effect -rotate-2 z-10"></div>
+              <div class="relative aspect-[3/4] overflow-hidden bg-stone-900">
+                <img src="ivan.JPG" alt="Ivan Gede" class="w-full h-full object-cover">
+                <span class="absolute bottom-2 right-2 font-mono text-[10px] text-amber-500 font-bold tracking-widest drop-shadow">'26 08 14</span>
+              </div>
+              <p class="font-handwriting text-xl text-stone-800 text-center mt-3">Korcam keliling Mranggen 🛵</p>
             </div>
-            <p class="font-handwriting text-xl text-stone-800 text-center mt-3">Korcam keliling Mranggen 🛵</p>
-          </div>
-
-          <div class="member-desc-box text-center md:text-left max-w-md">
-            <span class="text-xs uppercase tracking-[0.25em] text-amber-400 font-semibold block mb-1">Korcam • Informatika</span>
-            <h2 class="font-serif-luxury text-3xl sm:text-4xl font-bold text-white tracking-wide">Ivan Gede</h2>
-            <div class="w-16 h-[1px] bg-amber-500/50 my-3 mx-auto md:mx-0"></div>
-            <p class="text-sm text-stone-300 leading-relaxed font-light">
-              "Jarang keliatan di posko pas siang gara-gara mondar-mandir koordinasi se-kecamatan, tapi kalo pulang selalu bawa kabar penting."
-            </p>
-            <p class="font-handwriting text-amber-300 text-lg mt-2">"Bentar ya, gue meluncur ke posko sebelah dulu."</p>
-            <div class="mt-4 flex items-center justify-center md:justify-start gap-4">
-              <a href="#" class="inline-flex items-center gap-2 text-xs text-stone-400 hover:text-amber-400 transition-colors">
-                <i class="fa-brands fa-instagram text-base text-amber-400"></i><span>@ivangede_ig</span>
-              </a>
+            <div class="desc-mover text-center md:text-left max-w-md">
+              <span class="text-xs uppercase tracking-[0.25em] text-amber-400 font-semibold block mb-1">Korcam • Informatika</span>
+              <h2 class="font-serif-luxury text-3xl sm:text-4xl font-bold text-white tracking-wide">Ivan Gede</h2>
+              <div class="w-16 h-[1px] bg-amber-500/50 my-3 mx-auto md:mx-0"></div>
+              <p class="text-sm text-stone-300 leading-relaxed font-light">"Jarang keliatan di posko pas siang gara-gara mondar-mandir koordinasi se-kecamatan, tapi kalo pulang selalu bawa kabar penting."</p>
+              <p class="font-handwriting text-amber-300 text-lg mt-2">"Bentar ya, gue meluncur ke posko sebelah dulu."</p>
+              <div class="mt-4 flex items-center justify-center md:justify-start gap-4">
+                <a href="#" class="inline-flex items-center gap-2 text-xs text-stone-400 hover:text-amber-400 transition-colors"><i class="fa-brands fa-instagram text-base text-amber-400"></i><span>@ivangede_ig</span></a>
+              </div>
             </div>
           </div>
         </div>
-      </section>
+      </div>
 
       <!-- 3: PUTRI DJ -->
-      <section class="member-row min-h-screen w-full flex items-center justify-center relative px-6 py-16">
-        <div class="max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-6 md:gap-14">
-          <div class="member-photo-box relative bg-stone-100 p-3 pb-8 rounded-sm shadow-2xl -rotate-1 group max-w-[270px] sm:max-w-xs shrink-0">
-            <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-6 tape-effect rotate-1 z-10"></div>
-            <div class="relative aspect-[3/4] overflow-hidden bg-stone-900">
-              <img src="putridj.JPG" alt="Putri DJ" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-              <span class="absolute bottom-2 right-2 font-mono text-[10px] text-amber-500 font-bold tracking-widest drop-shadow">'26 08 14</span>
+      <div class="member-scroll-track" data-bg="#181a14">
+        <div class="member-sticky-stage px-4 sm:px-8">
+          <div class="stage-content max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-6 md:gap-14 relative">
+            <div class="polaroid-mover relative bg-stone-100 p-3 pb-8 rounded-sm shadow-2xl -rotate-1 max-w-[260px] sm:max-w-xs shrink-0">
+              <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-6 tape-effect rotate-1 z-10"></div>
+              <div class="relative aspect-[3/4] overflow-hidden bg-stone-900">
+                <img src="putridj.JPG" alt="Putri DJ" class="w-full h-full object-cover">
+                <span class="absolute bottom-2 right-2 font-mono text-[10px] text-amber-500 font-bold tracking-widest drop-shadow">'26 08 14</span>
+              </div>
+              <p class="font-handwriting text-xl text-stone-800 text-center mt-3">Tukang nagih bab laporan ✍️</p>
             </div>
-            <p class="font-handwriting text-xl text-stone-800 text-center mt-3">Tukang nagih bab laporan ✍️</p>
-          </div>
-
-          <div class="member-desc-box text-center md:text-left max-w-md">
-            <span class="text-xs uppercase tracking-[0.25em] text-amber-400 font-semibold block mb-1">Sekretaris 1 • Teknik Sipil</span>
-            <h2 class="font-serif-luxury text-3xl sm:text-4xl font-bold text-white tracking-wide">Putri DJ</h2>
-            <div class="w-16 h-[1px] bg-amber-500/50 my-3 mx-auto md:mx-0"></div>
-            <p class="text-sm text-stone-300 leading-relaxed font-light">
-              "Paling disiplin kalo udah urusan ketik laporan akhir. Kalo dia udah buka laptop, satu posko auto sungkan kalo mau mager."
-            </p>
-            <p class="font-handwriting text-amber-300 text-lg mt-2">"Revisi bab 3 kirim malem ini ya rek, jangan telat!"</p>
-            <div class="mt-4 flex items-center justify-center md:justify-start gap-4">
-              <a href="#" class="inline-flex items-center gap-2 text-xs text-stone-400 hover:text-amber-400 transition-colors">
-                <i class="fa-brands fa-instagram text-base text-emerald-400"></i><span>@instagram</span>
-              </a>
+            <div class="desc-mover text-center md:text-left max-w-md">
+              <span class="text-xs uppercase tracking-[0.25em] text-amber-400 font-semibold block mb-1">Sekretaris 1 • Teknik Sipil</span>
+              <h2 class="font-serif-luxury text-3xl sm:text-4xl font-bold text-white tracking-wide">Putri DJ</h2>
+              <div class="w-16 h-[1px] bg-amber-500/50 my-3 mx-auto md:mx-0"></div>
+              <p class="text-sm text-stone-300 leading-relaxed font-light">"Paling disiplin kalo udah urusan ketik laporan akhir. Kalo dia udah buka laptop, satu posko auto sungkan kalo mau mager."</p>
+              <p class="font-handwriting text-amber-300 text-lg mt-2">"Revisi bab 3 kirim malem ini ya rek, jangan telat!"</p>
+              <div class="mt-4 flex items-center justify-center md:justify-start gap-4">
+                <a href="#" class="inline-flex items-center gap-2 text-xs text-stone-400 hover:text-amber-400 transition-colors"><i class="fa-brands fa-instagram text-base text-emerald-400"></i><span>@instagram</span></a>
+              </div>
             </div>
           </div>
         </div>
-      </section>
+      </div>
 
       <!-- 4: NISA -->
-      <section class="member-row min-h-screen w-full flex items-center justify-center relative px-6 py-16">
-        <div class="max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-6 md:gap-14">
-          <div class="member-photo-box relative bg-stone-100 p-3 pb-8 rounded-sm shadow-2xl rotate-2 group max-w-[270px] sm:max-w-xs shrink-0">
-            <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-6 tape-effect -rotate-1 z-10"></div>
-            <div class="relative aspect-[3/4] overflow-hidden bg-stone-900">
-              <img src="nisa.JPG" alt="Nisa" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-              <span class="absolute bottom-2 right-2 font-mono text-[10px] text-amber-500 font-bold tracking-widest drop-shadow">'26 08 14</span>
+      <div class="member-scroll-track" data-bg="#1d1c15">
+        <div class="member-sticky-stage px-4 sm:px-8">
+          <div class="stage-content max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-6 md:gap-14 relative">
+            <div class="polaroid-mover relative bg-stone-100 p-3 pb-8 rounded-sm shadow-2xl rotate-2 max-w-[260px] sm:max-w-xs shrink-0">
+              <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-6 tape-effect -rotate-1 z-10"></div>
+              <div class="relative aspect-[3/4] overflow-hidden bg-stone-900">
+                <img src="nisa.JPG" alt="Nisa" class="w-full h-full object-cover">
+                <span class="absolute bottom-2 right-2 font-mono text-[10px] text-amber-500 font-bold tracking-widest drop-shadow">'26 08 14</span>
+              </div>
+              <p class="font-handwriting text-xl text-stone-800 text-center mt-3">Partner persuratan posko 📋</p>
             </div>
-            <p class="font-handwriting text-xl text-stone-800 text-center mt-3">Partner persuratan posko 📋</p>
-          </div>
-
-          <div class="member-desc-box text-center md:text-left max-w-md">
-            <span class="text-xs uppercase tracking-[0.25em] text-amber-400 font-semibold block mb-1">Sekretaris 2 • PGSD</span>
-            <h2 class="font-serif-luxury text-3xl sm:text-4xl font-bold text-white tracking-wide">Nisa</h2>
-            <div class="w-16 h-[1px] bg-amber-500/50 my-3 mx-auto md:mx-0"></div>
-            <p class="text-sm text-stone-300 leading-relaxed font-light">
-              "Kolektor tanda tangan warga dan kepala desa. Surat izin keluar, proposal jalan, absensi beres tanpa ribet."
-            </p>
-            <p class="font-handwriting text-amber-300 text-lg mt-2">"Yang belum tanda tangan absensi cepetan sini."</p>
-            <div class="mt-4 flex items-center justify-center md:justify-start gap-4">
-              <a href="#" class="inline-flex items-center gap-2 text-xs text-stone-400 hover:text-amber-400 transition-colors">
-                <i class="fa-brands fa-instagram text-base text-emerald-400"></i><span>@instagram</span>
-              </a>
+            <div class="desc-mover text-center md:text-left max-w-md">
+              <span class="text-xs uppercase tracking-[0.25em] text-amber-400 font-semibold block mb-1">Sekretaris 2 • PGSD</span>
+              <h2 class="font-serif-luxury text-3xl sm:text-4xl font-bold text-white tracking-wide">Nisa</h2>
+              <div class="w-16 h-[1px] bg-amber-500/50 my-3 mx-auto md:mx-0"></div>
+              <p class="text-sm text-stone-300 leading-relaxed font-light">"Kolektor tanda tangan warga dan kepala desa. Surat izin keluar, proposal jalan, absensi beres tanpa ribet."</p>
+              <p class="font-handwriting text-amber-300 text-lg mt-2">"Yang belum tanda tangan absensi cepetan sini."</p>
+              <div class="mt-4 flex items-center justify-center md:justify-start gap-4">
+                <a href="#" class="inline-flex items-center gap-2 text-xs text-stone-400 hover:text-amber-400 transition-colors"><i class="fa-brands fa-instagram text-base text-emerald-400"></i><span>@instagram</span></a>
+              </div>
             </div>
           </div>
         </div>
-      </section>
+      </div>
 
       <!-- 5: MARSHA -->
-      <section class="member-row min-h-screen w-full flex items-center justify-center relative px-6 py-16">
-        <div class="max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-6 md:gap-14">
-          <div class="member-photo-box relative bg-stone-100 p-3 pb-8 rounded-sm shadow-2xl -rotate-2 group max-w-[270px] sm:max-w-xs shrink-0">
-            <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-6 tape-effect rotate-2 z-10"></div>
-            <div class="relative aspect-[3/4] overflow-hidden bg-stone-900">
-              <img src="marsha.jpg" alt="Marsha" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-              <span class="absolute bottom-2 right-2 font-mono text-[10px] text-amber-500 font-bold tracking-widest drop-shadow">'26 08 14</span>
+      <div class="member-scroll-track" data-bg="#211b15">
+        <div class="member-sticky-stage px-4 sm:px-8">
+          <div class="stage-content max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-6 md:gap-14 relative">
+            <div class="polaroid-mover relative bg-stone-100 p-3 pb-8 rounded-sm shadow-2xl -rotate-2 max-w-[260px] sm:max-w-xs shrink-0">
+              <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-6 tape-effect rotate-2 z-10"></div>
+              <div class="relative aspect-[3/4] overflow-hidden bg-stone-900">
+                <img src="marsha.jpg" alt="Marsha" class="w-full h-full object-cover">
+                <span class="absolute bottom-2 right-2 font-mono text-[10px] text-amber-500 font-bold tracking-widest drop-shadow">'26 08 14</span>
+              </div>
+              <p class="font-handwriting text-xl text-stone-800 text-center mt-3">Menteri Keuangan Sandran 💰</p>
             </div>
-            <p class="font-handwriting text-xl text-stone-800 text-center mt-3">Menteri Keuangan Sandran 💰</p>
-          </div>
-
-          <div class="member-desc-box text-center md:text-left max-w-md">
-            <span class="text-xs uppercase tracking-[0.25em] text-amber-400 font-semibold block mb-1">Bendahara 1 • PGSD</span>
-            <h2 class="font-serif-luxury text-3xl sm:text-4xl font-bold text-white tracking-wide">Marsha</h2>
-            <div class="w-16 h-[1px] bg-amber-500/50 my-3 mx-auto md:mx-0"></div>
-            <p class="text-sm text-stone-300 leading-relaxed font-light">
-              "Paling ditakuti pas nyodorin daftar kas mingguan. Tapi berkat ketelitiannya, uang saku proker kita gak pernah minus sampai hari penarikan."
-            </p>
-            <p class="font-handwriting text-amber-300 text-lg mt-2">"Uang kas minggu ini mana? Jangan pura-pura lupa ya!"</p>
-            <div class="mt-4 flex items-center justify-center md:justify-start gap-4">
-              <a href="#" class="inline-flex items-center gap-2 text-xs text-stone-400 hover:text-amber-400 transition-colors">
-                <i class="fa-brands fa-instagram text-base text-emerald-400"></i><span>@instagram</span>
-              </a>
+            <div class="desc-mover text-center md:text-left max-w-md">
+              <span class="text-xs uppercase tracking-[0.25em] text-amber-400 font-semibold block mb-1">Bendahara 1 • PGSD</span>
+              <h2 class="font-serif-luxury text-3xl sm:text-4xl font-bold text-white tracking-wide">Marsha</h2>
+              <div class="w-16 h-[1px] bg-amber-500/50 my-3 mx-auto md:mx-0"></div>
+              <p class="text-sm text-stone-300 leading-relaxed font-light">"Paling ditakuti pas nyodorin daftar kas mingguan. Tapi berkat ketelitiannya, uang saku proker kita gak pernah minus sampai hari penarikan."</p>
+              <p class="font-handwriting text-amber-300 text-lg mt-2">"Uang kas minggu ini mana? Jangan pura-pura lupa ya!"</p>
+              <div class="mt-4 flex items-center justify-center md:justify-start gap-4">
+                <a href="#" class="inline-flex items-center gap-2 text-xs text-stone-400 hover:text-amber-400 transition-colors"><i class="fa-brands fa-instagram text-base text-emerald-400"></i><span>@instagram</span></a>
+              </div>
             </div>
           </div>
         </div>
-      </section>
+      </div>
 
       <!-- 6: REZAL -->
-      <section class="member-row min-h-screen w-full flex items-center justify-center relative px-6 py-16">
-        <div class="max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-6 md:gap-14">
-          <div class="member-photo-box relative bg-stone-100 p-3 pb-8 rounded-sm shadow-2xl rotate-1 group max-w-[270px] sm:max-w-xs shrink-0">
-            <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-6 tape-effect -rotate-1 z-10"></div>
-            <div class="relative aspect-[3/4] overflow-hidden bg-stone-900">
-              <img src="rezal.JPG" alt="Rezal" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-              <span class="absolute bottom-2 right-2 font-mono text-[10px] text-amber-500 font-bold tracking-widest drop-shadow">'26 08 14</span>
+      <div class="member-scroll-track" data-bg="#241915">
+        <div class="member-sticky-stage px-4 sm:px-8">
+          <div class="stage-content max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-6 md:gap-14 relative">
+            <div class="polaroid-mover relative bg-stone-100 p-3 pb-8 rounded-sm shadow-2xl rotate-1 max-w-[260px] sm:max-w-xs shrink-0">
+              <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-6 tape-effect -rotate-1 z-10"></div>
+              <div class="relative aspect-[3/4] overflow-hidden bg-stone-900">
+                <img src="rezal.JPG" alt="Rezal" class="w-full h-full object-cover">
+                <span class="absolute bottom-2 right-2 font-mono text-[10px] text-amber-500 font-bold tracking-widest drop-shadow">'26 08 14</span>
+              </div>
+              <p class="font-handwriting text-xl text-stone-800 text-center mt-3">Pawang belanja pasar subuh 🥬</p>
             </div>
-            <p class="font-handwriting text-xl text-stone-800 text-center mt-3">Pawang belanja pasar subuh 🥬</p>
-          </div>
-
-          <div class="member-desc-box text-center md:text-left max-w-md">
-            <span class="text-xs uppercase tracking-[0.25em] text-amber-400 font-semibold block mb-1">Bendahara 2 • PGSD</span>
-            <h2 class="font-serif-luxury text-3xl sm:text-4xl font-bold text-white tracking-wide">Rezal</h2>
-            <div class="w-16 h-[1px] bg-amber-500/50 my-3 mx-auto md:mx-0"></div>
-            <p class="text-sm text-stone-300 leading-relaxed font-light">
-              "Jagonya nawar harga bawang sama sayuran di pasar pagi. Kuitansi belanjaan posko tersimpan rapi tanpa selisih serupiah pun."
-            </p>
-            <p class="font-handwriting text-amber-300 text-lg mt-2">"Tenang, tadi dapet diskon seribu dari yu Darmi."</p>
-            <div class="mt-4 flex items-center justify-center md:justify-start gap-4">
-              <a href="#" class="inline-flex items-center gap-2 text-xs text-stone-400 hover:text-amber-400 transition-colors">
-                <i class="fa-brands fa-instagram text-base text-emerald-400"></i><span>@instagram</span>
-              </a>
+            <div class="desc-mover text-center md:text-left max-w-md">
+              <span class="text-xs uppercase tracking-[0.25em] text-amber-400 font-semibold block mb-1">Bendahara 2 • PGSD</span>
+              <h2 class="font-serif-luxury text-3xl sm:text-4xl font-bold text-white tracking-wide">Rezal</h2>
+              <div class="w-16 h-[1px] bg-amber-500/50 my-3 mx-auto md:mx-0"></div>
+              <p class="text-sm text-stone-300 leading-relaxed font-light">"Jagonya nawar harga bawang sama sayuran di pasar pagi. Kuitansi belanjaan posko tersimpan rapi tanpa selisih serupiah pun."</p>
+              <p class="font-handwriting text-amber-300 text-lg mt-2">"Tenang, tadi dapet diskon seribu dari yu Darmi."</p>
+              <div class="mt-4 flex items-center justify-center md:justify-start gap-4">
+                <a href="#" class="inline-flex items-center gap-2 text-xs text-stone-400 hover:text-amber-400 transition-colors"><i class="fa-brands fa-instagram text-base text-emerald-400"></i><span>@instagram</span></a>
+              </div>
             </div>
           </div>
         </div>
-      </section>
+      </div>
 
       <!-- 7: SELLA -->
-      <section class="member-row min-h-screen w-full flex items-center justify-center relative px-6 py-16">
-        <div class="max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-6 md:gap-14">
-          <div class="member-photo-box relative bg-stone-100 p-3 pb-8 rounded-sm shadow-2xl -rotate-2 group max-w-[270px] sm:max-w-xs shrink-0">
-            <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-6 tape-effect rotate-1 z-10"></div>
-            <div class="relative aspect-[3/4] overflow-hidden bg-stone-900">
-              <img src="sella.jpg" alt="Sella" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-              <span class="absolute bottom-2 right-2 font-mono text-[10px] text-amber-500 font-bold tracking-widest drop-shadow">'26 08 14</span>
+      <div class="member-scroll-track" data-bg="#1f1a14">
+        <div class="member-sticky-stage px-4 sm:px-8">
+          <div class="stage-content max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-6 md:gap-14 relative">
+            <div class="polaroid-mover relative bg-stone-100 p-3 pb-8 rounded-sm shadow-2xl -rotate-2 max-w-[260px] sm:max-w-xs shrink-0">
+              <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-6 tape-effect rotate-1 z-10"></div>
+              <div class="relative aspect-[3/4] overflow-hidden bg-stone-900">
+                <img src="sella.jpg" alt="Sella" class="w-full h-full object-cover">
+                <span class="absolute bottom-2 right-2 font-mono text-[10px] text-amber-500 font-bold tracking-widest drop-shadow">'26 08 14</span>
+              </div>
+              <p class="font-handwriting text-xl text-stone-800 text-center mt-3">Otak rundown acara 🎪</p>
             </div>
-            <p class="font-handwriting text-xl text-stone-800 text-center mt-3">Otak rundown acara 🎪</p>
-          </div>
-
-          <div class="member-desc-box text-center md:text-left max-w-md">
-            <span class="text-xs uppercase tracking-[0.25em] text-amber-400 font-semibold block mb-1">Div. Acara • BK</span>
-            <h2 class="font-serif-luxury text-3xl sm:text-4xl font-bold text-white tracking-wide">Sella</h2>
-            <div class="w-16 h-[1px] bg-amber-500/50 my-3 mx-auto md:mx-0"></div>
-            <p class="text-sm text-stone-300 leading-relaxed font-light">
-              "Dari lomba tarik tambang 17-an sampai panggung perpisahan, dialah yang ngatur waktu biar gak molor. Walaupun pas acara kadang ikutan panik sendiri."
-            </p>
-            <p class="font-handwriting text-amber-300 text-lg mt-2">"Rundown udah fiks ya, awas ada yang molor!"</p>
-            <div class="mt-4 flex items-center justify-center md:justify-start gap-4">
-              <a href="#" class="inline-flex items-center gap-2 text-xs text-stone-400 hover:text-amber-400 transition-colors">
-                <i class="fa-brands fa-instagram text-base text-emerald-400"></i><span>@instagram</span>
-              </a>
+            <div class="desc-mover text-center md:text-left max-w-md">
+              <span class="text-xs uppercase tracking-[0.25em] text-amber-400 font-semibold block mb-1">Div. Acara • BK</span>
+              <h2 class="font-serif-luxury text-3xl sm:text-4xl font-bold text-white tracking-wide">Sella</h2>
+              <div class="w-16 h-[1px] bg-amber-500/50 my-3 mx-auto md:mx-0"></div>
+              <p class="text-sm text-stone-300 leading-relaxed font-light">"Dari lomba tarik tambang 17-an sampai panggung perpisahan, dialah yang ngatur waktu biar gak molor. Walaupun pas acara kadang ikutan panik sendiri."</p>
+              <p class="font-handwriting text-amber-300 text-lg mt-2">"Rundown udah fiks ya, awas ada yang molor!"</p>
+              <div class="mt-4 flex items-center justify-center md:justify-start gap-4">
+                <a href="#" class="inline-flex items-center gap-2 text-xs text-stone-400 hover:text-amber-400 transition-colors"><i class="fa-brands fa-instagram text-base text-emerald-400"></i><span>@instagram</span></a>
+              </div>
             </div>
           </div>
         </div>
-      </section>
+      </div>
 
       <!-- 8: CAHYA -->
-      <section class="member-row min-h-screen w-full flex items-center justify-center relative px-6 py-16">
-        <div class="max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-6 md:gap-14">
-          <div class="member-photo-box relative bg-stone-100 p-3 pb-8 rounded-sm shadow-2xl rotate-2 group max-w-[270px] sm:max-w-xs shrink-0">
-            <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-6 tape-effect -rotate-2 z-10"></div>
-            <div class="relative aspect-[3/4] overflow-hidden bg-stone-900">
-              <img src="cahya.jpg" alt="Cahya" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-              <span class="absolute bottom-2 right-2 font-mono text-[10px] text-amber-500 font-bold tracking-widest drop-shadow">'26 08 14</span>
+      <div class="member-scroll-track" data-bg="#1a1c15">
+        <div class="member-sticky-stage px-4 sm:px-8">
+          <div class="stage-content max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-6 md:gap-14 relative">
+            <div class="polaroid-mover relative bg-stone-100 p-3 pb-8 rounded-sm shadow-2xl rotate-2 max-w-[260px] sm:max-w-xs shrink-0">
+              <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-6 tape-effect -rotate-2 z-10"></div>
+              <div class="relative aspect-[3/4] overflow-hidden bg-stone-900">
+                <img src="cahya.jpg" alt="Cahya" class="w-full h-full object-cover">
+                <span class="absolute bottom-2 right-2 font-mono text-[10px] text-amber-500 font-bold tracking-widest drop-shadow">'26 08 14</span>
+              </div>
+              <p class="font-handwriting text-xl text-stone-800 text-center mt-3">MC heboh serba bisa 🎤</p>
             </div>
-            <p class="font-handwriting text-xl text-stone-800 text-center mt-3">MC heboh serba bisa 🎤</p>
-          </div>
-
-          <div class="member-desc-box text-center md:text-left max-w-md">
-            <span class="text-xs uppercase tracking-[0.25em] text-amber-400 font-semibold block mb-1">Div. Acara • PJKR</span>
-            <h2 class="font-serif-luxury text-3xl sm:text-4xl font-bold text-white tracking-wide">Cahya</h2>
-            <div class="w-16 h-[1px] bg-amber-500/50 my-3 mx-auto md:mx-0"></div>
-            <p class="text-sm text-stone-300 leading-relaxed font-light">
-              "Kalo dia udah pegang mic di panggung lapangan, warga sekampung gak ada yang bisa nahan tawa. Suaranya bikin suasana posko selalu rame."
-            </p>
-            <p class="font-handwriting text-amber-300 text-lg mt-2">"Tarik mang! Semangat buat warga Sandran!"</p>
-            <div class="mt-4 flex items-center justify-center md:justify-start gap-4">
-              <a href="#" class="inline-flex items-center gap-2 text-xs text-stone-400 hover:text-amber-400 transition-colors">
-                <i class="fa-brands fa-instagram text-base text-emerald-400"></i><span>@instagram</span>
-              </a>
+            <div class="desc-mover text-center md:text-left max-w-md">
+              <span class="text-xs uppercase tracking-[0.25em] text-amber-400 font-semibold block mb-1">Div. Acara • PJKR</span>
+              <h2 class="font-serif-luxury text-3xl sm:text-4xl font-bold text-white tracking-wide">Cahya</h2>
+              <div class="w-16 h-[1px] bg-amber-500/50 my-3 mx-auto md:mx-0"></div>
+              <p class="text-sm text-stone-300 leading-relaxed font-light">"Kalo dia udah pegang mic di panggung lapangan, warga sekampung gak ada yang bisa nahan tawa. Suaranya bikin suasana posko selalu rame."</p>
+              <p class="font-handwriting text-amber-300 text-lg mt-2">"Tarik mang! Semangat buat warga Sandran!"</p>
+              <div class="mt-4 flex items-center justify-center md:justify-start gap-4">
+                <a href="#" class="inline-flex items-center gap-2 text-xs text-stone-400 hover:text-amber-400 transition-colors"><i class="fa-brands fa-instagram text-base text-emerald-400"></i><span>@instagram</span></a>
+              </div>
             </div>
           </div>
         </div>
-      </section>
+      </div>
 
       <!-- 9: FAUZI -->
-      <section class="member-row min-h-screen w-full flex items-center justify-center relative px-6 py-16">
-        <div class="max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-6 md:gap-14">
-          <div class="member-photo-box relative bg-stone-100 p-3 pb-8 rounded-sm shadow-2xl -rotate-1 group max-w-[270px] sm:max-w-xs shrink-0">
-            <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-6 tape-effect rotate-2 z-10"></div>
-            <div class="relative aspect-[3/4] overflow-hidden bg-stone-900">
-              <img src="fauzi.jpg" alt="Fauzi" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-              <span class="absolute bottom-2 right-2 font-mono text-[10px] text-amber-500 font-bold tracking-widest drop-shadow">'26 08 14</span>
+      <div class="member-scroll-track" data-bg="#161c16">
+        <div class="member-sticky-stage px-4 sm:px-8">
+          <div class="stage-content max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-6 md:gap-14 relative">
+            <div class="polaroid-mover relative bg-stone-100 p-3 pb-8 rounded-sm shadow-2xl -rotate-1 max-w-[260px] sm:max-w-xs shrink-0">
+              <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-6 tape-effect rotate-2 z-10"></div>
+              <div class="relative aspect-[3/4] overflow-hidden bg-stone-900">
+                <img src="fauzi.jpg" alt="Fauzi" class="w-full h-full object-cover">
+                <span class="absolute bottom-2 right-2 font-mono text-[10px] text-amber-500 font-bold tracking-widest drop-shadow">'26 08 14</span>
+              </div>
+              <p class="font-handwriting text-xl text-stone-800 text-center mt-3">Duta silaturahmi RT 🤝</p>
             </div>
-            <p class="font-handwriting text-xl text-stone-800 text-center mt-3">Duta silaturahmi RT 🤝</p>
-          </div>
-
-          <div class="member-desc-box text-center md:text-left max-w-md">
-            <span class="text-xs uppercase tracking-[0.25em] text-amber-400 font-semibold block mb-1">Div. Humas • PJKR</span>
-            <h2 class="font-serif-luxury text-3xl sm:text-4xl font-bold text-white tracking-wide">Fauzi</h2>
-            <div class="w-16 h-[1px] bg-amber-500/50 my-3 mx-auto md:mx-0"></div>
-            <p class="text-sm text-stone-300 leading-relaxed font-light">
-              "Paling gampang akrab sama bapak-bapak warga. Tiap sore ada aja rumah sesepuh yang disowani, pulang-pulang pasti bawa pisang atau gorengan."
-            </p>
-            <p class="font-handwriting text-amber-300 text-lg mt-2">"Gua sowan dulu ke pak RT ya rek."</p>
-            <div class="mt-4 flex items-center justify-center md:justify-start gap-4">
-              <a href="#" class="inline-flex items-center gap-2 text-xs text-stone-400 hover:text-amber-400 transition-colors">
-                <i class="fa-brands fa-instagram text-base text-emerald-400"></i><span>@instagram</span>
-              </a>
+            <div class="desc-mover text-center md:text-left max-w-md">
+              <span class="text-xs uppercase tracking-[0.25em] text-amber-400 font-semibold block mb-1">Div. Humas • PJKR</span>
+              <h2 class="font-serif-luxury text-3xl sm:text-4xl font-bold text-white tracking-wide">Fauzi</h2>
+              <div class="w-16 h-[1px] bg-amber-500/50 my-3 mx-auto md:mx-0"></div>
+              <p class="text-sm text-stone-300 leading-relaxed font-light">"Paling gampang akrab sama bapak-bapak warga. Tiap sore ada aja rumah sesepuh yang disowani, pulang-pulang pasti bawa pisang atau gorengan."</p>
+              <p class="font-handwriting text-amber-300 text-lg mt-2">"Gua sowan dulu ke pak RT ya rek."</p>
+              <div class="mt-4 flex items-center justify-center md:justify-start gap-4">
+                <a href="#" class="inline-flex items-center gap-2 text-xs text-stone-400 hover:text-amber-400 transition-colors"><i class="fa-brands fa-instagram text-base text-emerald-400"></i><span>@instagram</span></a>
+              </div>
             </div>
           </div>
         </div>
-      </section>
+      </div>
 
       <!-- 10: LIA -->
-      <section class="member-row min-h-screen w-full flex items-center justify-center relative px-6 py-16">
-        <div class="max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-6 md:gap-14">
-          <div class="member-photo-box relative bg-stone-100 p-3 pb-8 rounded-sm shadow-2xl rotate-2 group max-w-[270px] sm:max-w-xs shrink-0">
-            <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-6 tape-effect -rotate-1 z-10"></div>
-            <div class="relative aspect-[3/4] overflow-hidden bg-stone-900">
-              <img src="lia.JPG" alt="Lia" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-              <span class="absolute bottom-2 right-2 font-mono text-[10px] text-amber-500 font-bold tracking-widest drop-shadow">'26 08 14</span>
+      <div class="member-scroll-track" data-bg="#141c19">
+        <div class="member-sticky-stage px-4 sm:px-8">
+          <div class="stage-content max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-6 md:gap-14 relative">
+            <div class="polaroid-mover relative bg-stone-100 p-3 pb-8 rounded-sm shadow-2xl rotate-2 max-w-[260px] sm:max-w-xs shrink-0">
+              <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-6 tape-effect -rotate-1 z-10"></div>
+              <div class="relative aspect-[3/4] overflow-hidden bg-stone-900">
+                <img src="lia.JPG" alt="Lia" class="w-full h-full object-cover">
+                <span class="absolute bottom-2 right-2 font-mono text-[10px] text-amber-500 font-bold tracking-widest drop-shadow">'26 08 14</span>
+              </div>
+              <p class="font-handwriting text-xl text-stone-800 text-center mt-3">Kakak favorit bocil desa 👧</p>
             </div>
-            <p class="font-handwriting text-xl text-stone-800 text-center mt-3">Kakak favorit bocil desa 👧</p>
-          </div>
-
-          <div class="member-desc-box text-center md:text-left max-w-md">
-            <span class="text-xs uppercase tracking-[0.25em] text-amber-400 font-semibold block mb-1">Div. Humas • PGSD</span>
-            <h2 class="font-serif-luxury text-3xl sm:text-4xl font-bold text-white tracking-wide">Lia</h2>
-            <div class="w-16 h-[1px] bg-amber-500/50 my-3 mx-auto md:mx-0"></div>
-            <p class="text-sm text-stone-300 leading-relaxed font-light">
-              "Tiap sore posko didatengin adik-adik Desa Waru cuma buat ketemu dan belajar bareng kak Lia. Auranya adem dan bikin posko gak pernah sepi."
-            </p>
-            <p class="font-handwriting text-amber-300 text-lg mt-2">"Adek-adek jangan berantem ya, sini belajar bareng."</p>
-            <div class="mt-4 flex items-center justify-center md:justify-start gap-4">
-              <a href="#" class="inline-flex items-center gap-2 text-xs text-stone-400 hover:text-amber-400 transition-colors">
-                <i class="fa-brands fa-instagram text-base text-emerald-400"></i><span>@instagram</span>
-              </a>
+            <div class="desc-mover text-center md:text-left max-w-md">
+              <span class="text-xs uppercase tracking-[0.25em] text-amber-400 font-semibold block mb-1">Div. Humas • PGSD</span>
+              <h2 class="font-serif-luxury text-3xl sm:text-4xl font-bold text-white tracking-wide">Lia</h2>
+              <div class="w-16 h-[1px] bg-amber-500/50 my-3 mx-auto md:mx-0"></div>
+              <p class="text-sm text-stone-300 leading-relaxed font-light">"Tiap sore posko didatengin adik-adik Desa Waru cuma buat ketemu dan belajar bareng kak Lia. Auranya adem dan bikin posko gak pernah sepi."</p>
+              <p class="font-handwriting text-amber-300 text-lg mt-2">"Adek-adek jangan berantem ya, sini belajar bareng."</p>
+              <div class="mt-4 flex items-center justify-center md:justify-start gap-4">
+                <a href="#" class="inline-flex items-center gap-2 text-xs text-stone-400 hover:text-amber-400 transition-colors"><i class="fa-brands fa-instagram text-base text-emerald-400"></i><span>@instagram</span></a>
+              </div>
             </div>
           </div>
         </div>
-      </section>
+      </div>
 
       <!-- 11: PUSPA -->
-      <section class="member-row min-h-screen w-full flex items-center justify-center relative px-6 py-16">
-        <div class="max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-6 md:gap-14">
-          <div class="member-photo-box relative bg-stone-100 p-3 pb-8 rounded-sm shadow-2xl -rotate-1 group max-w-[270px] sm:max-w-xs shrink-0">
-            <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-6 tape-effect rotate-1 z-10"></div>
-            <div class="relative aspect-[3/4] overflow-hidden bg-stone-900">
-              <img src="puspa.JPG" alt="Puspa" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-              <span class="absolute bottom-2 right-2 font-mono text-[10px] text-amber-500 font-bold tracking-widest drop-shadow">'26 08 14</span>
+      <div class="member-scroll-track" data-bg="#101918">
+        <div class="member-sticky-stage px-4 sm:px-8">
+          <div class="stage-content max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-6 md:gap-14 relative">
+            <div class="polaroid-mover relative bg-stone-100 p-3 pb-8 rounded-sm shadow-2xl -rotate-1 max-w-[260px] sm:max-w-xs shrink-0">
+              <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-6 tape-effect rotate-1 z-10"></div>
+              <div class="relative aspect-[3/4] overflow-hidden bg-stone-900">
+                <img src="puspa.JPG" alt="Puspa" class="w-full h-full object-cover">
+                <span class="absolute bottom-2 right-2 font-mono text-[10px] text-amber-500 font-bold tracking-widest drop-shadow">'26 08 14</span>
+              </div>
+              <p class="font-handwriting text-xl text-stone-800 text-center mt-3">Mata lensa kenangan posko 📸</p>
             </div>
-            <p class="font-handwriting text-xl text-stone-800 text-center mt-3">Mata lensa kenangan posko 📸</p>
-          </div>
-
-          <div class="member-desc-box text-center md:text-left max-w-md">
-            <span class="text-xs uppercase tracking-[0.25em] text-amber-400 font-semibold block mb-1">Div. PDD • BK</span>
-            <h2 class="font-serif-luxury text-3xl sm:text-4xl font-bold text-white tracking-wide">Puspa</h2>
-            <div class="w-16 h-[1px] bg-amber-500/50 my-3 mx-auto md:mx-0"></div>
-            <p class="text-sm text-stone-300 leading-relaxed font-light">
-              "Kamera selalu stand-by di pundak. Ratusan foto candid teman-teman posko dari yang estetik sampai yang aib semuanya ada di memori kameranya."
-            </p>
-            <p class="font-handwriting text-amber-300 text-lg mt-2">"1, 2, 3... senyum yang bener dong woy!"</p>
-            <div class="mt-4 flex items-center justify-center md:justify-start gap-4">
-              <a href="#" class="inline-flex items-center gap-2 text-xs text-stone-400 hover:text-amber-400 transition-colors">
-                <i class="fa-brands fa-instagram text-base text-emerald-400"></i><span>@instagram</span>
-              </a>
+            <div class="desc-mover text-center md:text-left max-w-md">
+              <span class="text-xs uppercase tracking-[0.25em] text-amber-400 font-semibold block mb-1">Div. PDD • BK</span>
+              <h2 class="font-serif-luxury text-3xl sm:text-4xl font-bold text-white tracking-wide">Puspa</h2>
+              <div class="w-16 h-[1px] bg-amber-500/50 my-3 mx-auto md:mx-0"></div>
+              <p class="text-sm text-stone-300 leading-relaxed font-light">"Kamera selalu stand-by di pundak. Ratusan foto candid teman-teman posko dari yang estetik sampai yang aib semuanya ada di memori kameranya."</p>
+              <p class="font-handwriting text-amber-300 text-lg mt-2">"1, 2, 3... senyum yang bener dong woy!"</p>
+              <div class="mt-4 flex items-center justify-center md:justify-start gap-4">
+                <a href="#" class="inline-flex items-center gap-2 text-xs text-stone-400 hover:text-amber-400 transition-colors"><i class="fa-brands fa-instagram text-base text-emerald-400"></i><span>@instagram</span></a>
+              </div>
             </div>
           </div>
         </div>
-      </section>
+      </div>
 
       <!-- 12: PUPUT -->
-      <section class="member-row min-h-screen w-full flex items-center justify-center relative px-6 py-16">
-        <div class="max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-6 md:gap-14">
-          <div class="member-photo-box relative bg-stone-100 p-3 pb-8 rounded-sm shadow-2xl rotate-2 group max-w-[270px] sm:max-w-xs shrink-0">
-            <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-6 tape-effect -rotate-2 z-10"></div>
-            <div class="relative aspect-[3/4] overflow-hidden bg-stone-900">
-              <img src="puput.jpg" alt="Puput" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-              <span class="absolute bottom-2 right-2 font-mono text-[10px] text-amber-500 font-bold tracking-widest drop-shadow">'26 08 14</span>
+      <div class="member-scroll-track" data-bg="#161519">
+        <div class="member-sticky-stage px-4 sm:px-8">
+          <div class="stage-content max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-6 md:gap-14 relative">
+            <div class="polaroid-mover relative bg-stone-100 p-3 pb-8 rounded-sm shadow-2xl rotate-2 max-w-[260px] sm:max-w-xs shrink-0">
+              <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-6 tape-effect -rotate-2 z-10"></div>
+              <div class="relative aspect-[3/4] overflow-hidden bg-stone-900">
+                <img src="puput.jpg" alt="Puput" class="w-full h-full object-cover">
+                <span class="absolute bottom-2 right-2 font-mono text-[10px] text-amber-500 font-bold tracking-widest drop-shadow">'26 08 14</span>
+              </div>
+              <p class="font-handwriting text-xl text-stone-800 text-center mt-3">Kepala Dapur Andalan 🍳</p>
             </div>
-            <p class="font-handwriting text-xl text-stone-800 text-center mt-3">Kepala Dapur Andalan 🍳</p>
-          </div>
-
-          <div class="member-desc-box text-center md:text-left max-w-md">
-            <span class="text-xs uppercase tracking-[0.25em] text-amber-400 font-semibold block mb-1">Konsumsi • PGSD</span>
-            <h2 class="font-serif-luxury text-3xl sm:text-4xl font-bold text-white tracking-wide">Puput</h2>
-            <div class="w-16 h-[1px] bg-amber-500/50 my-3 mx-auto md:mx-0"></div>
-            <p class="text-sm text-stone-300 leading-relaxed font-light">
-              "Pahlawan sejati perut 17 anggota posko. Dari sayur lodeh, ayam goreng, sampai sambal terasi buatannya gak pernah ada yang bersisa di meja makan."
-            </p>
-            <p class="font-handwriting text-amber-300 text-lg mt-2">"Makan siang udah siap rek, cepetan ambil sebelum abis!"</p>
-            <div class="mt-4 flex items-center justify-center md:justify-start gap-4">
-              <a href="#" class="inline-flex items-center gap-2 text-xs text-stone-400 hover:text-amber-400 transition-colors">
-                <i class="fa-brands fa-instagram text-base text-emerald-400"></i><span>@instagram</span>
-              </a>
+            <div class="desc-mover text-center md:text-left max-w-md">
+              <span class="text-xs uppercase tracking-[0.25em] text-amber-400 font-semibold block mb-1">Konsumsi • PGSD</span>
+              <h2 class="font-serif-luxury text-3xl sm:text-4xl font-bold text-white tracking-wide">Puput</h2>
+              <div class="w-16 h-[1px] bg-amber-500/50 my-3 mx-auto md:mx-0"></div>
+              <p class="text-sm text-stone-300 leading-relaxed font-light">"Pahlawan sejati perut 17 anggota posko. Dari sayur lodeh, ayam goreng, sampai sambal terasi buatannya gak pernah ada yang bersisa di meja makan."</p>
+              <p class="font-handwriting text-amber-300 text-lg mt-2">"Makan siang udah siap rek, cepetan ambil sebelum abis!"</p>
+              <div class="mt-4 flex items-center justify-center md:justify-start gap-4">
+                <a href="#" class="inline-flex items-center gap-2 text-xs text-stone-400 hover:text-amber-400 transition-colors"><i class="fa-brands fa-instagram text-base text-emerald-400"></i><span>@instagram</span></a>
+              </div>
             </div>
           </div>
         </div>
-      </section>
+      </div>
 
       <!-- 13: VINA -->
-      <section class="member-row min-h-screen w-full flex items-center justify-center relative px-6 py-16">
-        <div class="max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-6 md:gap-14">
-          <div class="member-photo-box relative bg-stone-100 p-3 pb-8 rounded-sm shadow-2xl -rotate-2 group max-w-[270px] sm:max-w-xs shrink-0">
-            <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-6 tape-effect rotate-2 z-10"></div>
-            <div class="relative aspect-[3/4] overflow-hidden bg-stone-900">
-              <img src="vina.JPG" alt="Vina" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-              <span class="absolute bottom-2 right-2 font-mono text-[10px] text-amber-500 font-bold tracking-widest drop-shadow">'26 08 14</span>
+      <div class="member-scroll-track" data-bg="#1a141b">
+        <div class="member-sticky-stage px-4 sm:px-8">
+          <div class="stage-content max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-6 md:gap-14 relative">
+            <div class="polaroid-mover relative bg-stone-100 p-3 pb-8 rounded-sm shadow-2xl -rotate-2 max-w-[260px] sm:max-w-xs shrink-0">
+              <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-6 tape-effect rotate-2 z-10"></div>
+              <div class="relative aspect-[3/4] overflow-hidden bg-stone-900">
+                <img src="vina.JPG" alt="Vina" class="w-full h-full object-cover">
+                <span class="absolute bottom-2 right-2 font-mono text-[10px] text-amber-500 font-bold tracking-widest drop-shadow">'26 08 14</span>
+              </div>
+              <p class="font-handwriting text-xl text-stone-800 text-center mt-3">Barista teh hangat posko ☕</p>
             </div>
-            <p class="font-handwriting text-xl text-stone-800 text-center mt-3">Barista teh hangat posko ☕</p>
-          </div>
-
-          <div class="member-desc-box text-center md:text-left max-w-md">
-            <span class="text-xs uppercase tracking-[0.25em] text-amber-400 font-semibold block mb-1">Konsumsi • P.Biologi</span>
-            <h2 class="font-serif-luxury text-3xl sm:text-4xl font-bold text-white tracking-wide">Vina</h2>
-            <div class="w-16 h-[1px] bg-amber-500/50 my-3 mx-auto md:mx-0"></div>
-            <p class="text-sm text-stone-300 leading-relaxed font-light">
-              "Partner setia dapur yang selalu sedia cemilan pas rapat malam mulai suntuk. Kalo galon air atau persediaan gula posko habis, dia yang paling sigap."
-            </p>
-            <p class="font-handwriting text-amber-300 text-lg mt-2">"Gua bikin kopi sama teh ya, yang mau angkat tangan!"</p>
-            <div class="mt-4 flex items-center justify-center md:justify-start gap-4">
-              <a href="#" class="inline-flex items-center gap-2 text-xs text-stone-400 hover:text-amber-400 transition-colors">
-                <i class="fa-brands fa-instagram text-base text-emerald-400"></i><span>@instagram</span>
-              </a>
+            <div class="desc-mover text-center md:text-left max-w-md">
+              <span class="text-xs uppercase tracking-[0.25em] text-amber-400 font-semibold block mb-1">Konsumsi • P.Biologi</span>
+              <h2 class="font-serif-luxury text-3xl sm:text-4xl font-bold text-white tracking-wide">Vina</h2>
+              <div class="w-16 h-[1px] bg-amber-500/50 my-3 mx-auto md:mx-0"></div>
+              <p class="text-sm text-stone-300 leading-relaxed font-light">"Partner setia dapur yang selalu sedia cemilan pas rapat malam mulai suntuk. Kalo galon air atau persediaan gula posko habis, dia yang paling sigap."</p>
+              <p class="font-handwriting text-amber-300 text-lg mt-2">"Gua bikin kopi sama teh ya, yang mau angkat tangan!"</p>
+              <div class="mt-4 flex items-center justify-center md:justify-start gap-4">
+                <a href="#" class="inline-flex items-center gap-2 text-xs text-stone-400 hover:text-amber-400 transition-colors"><i class="fa-brands fa-instagram text-base text-emerald-400"></i><span>@instagram</span></a>
+              </div>
             </div>
           </div>
         </div>
-      </section>
+      </div>
 
       <!-- 14: ADAM -->
-      <section class="member-row min-h-screen w-full flex items-center justify-center relative px-6 py-16">
-        <div class="max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-6 md:gap-14">
-          <div class="member-photo-box relative bg-stone-100 p-3 pb-8 rounded-sm shadow-2xl rotate-1 group max-w-[270px] sm:max-w-xs shrink-0">
-            <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-6 tape-effect -rotate-1 z-10"></div>
-            <div class="relative aspect-[3/4] overflow-hidden bg-stone-900">
-              <img src="adam.JPG" alt="Adam" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-              <span class="absolute bottom-2 right-2 font-mono text-[10px] text-amber-500 font-bold tracking-widest drop-shadow">'26 08 14</span>
+      <div class="member-scroll-track" data-bg="#14141e">
+        <div class="member-sticky-stage px-4 sm:px-8">
+          <div class="stage-content max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-6 md:gap-14 relative">
+            <div class="polaroid-mover relative bg-stone-100 p-3 pb-8 rounded-sm shadow-2xl rotate-1 max-w-[260px] sm:max-w-xs shrink-0">
+              <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-6 tape-effect -rotate-1 z-10"></div>
+              <div class="relative aspect-[3/4] overflow-hidden bg-stone-900">
+                <img src="adam.JPG" alt="Adam" class="w-full h-full object-cover">
+                <span class="absolute bottom-2 right-2 font-mono text-[10px] text-amber-500 font-bold tracking-widest drop-shadow">'26 08 14</span>
+              </div>
+              <p class="font-handwriting text-xl text-stone-800 text-center mt-3">IT Guy perakit website ini 💻</p>
             </div>
-            <p class="font-handwriting text-xl text-stone-800 text-center mt-3">IT Guy perakit website ini 💻</p>
-          </div>
-
-          <div class="member-desc-box text-center md:text-left max-w-md">
-            <span class="text-xs uppercase tracking-[0.25em] text-amber-400 font-semibold block mb-1">Perkap & Web • Informatika</span>
-            <h2 class="font-serif-luxury text-3xl sm:text-4xl font-bold text-white tracking-wide">Adam</h2>
-            <div class="w-16 h-[1px] bg-amber-500/50 my-3 mx-auto md:mx-0"></div>
-            <p class="text-sm text-stone-300 leading-relaxed font-light">
-              "Siang bantu pasang sound system sama terpal lapangan, malemnya begadang ngetik kodingan buat bikin website galeri kenangan posko ini."
-            </p>
-            <p class="font-handwriting text-amber-300 text-lg mt-2">"Web-nya udah gue update ya, coba cek di HP masing-masing!"</p>
-            <div class="mt-4 flex items-center justify-center md:justify-start gap-4">
-              <a href="#" class="inline-flex items-center gap-2 text-xs text-stone-400 hover:text-amber-400 transition-colors">
-                <i class="fa-brands fa-instagram text-base text-emerald-400"></i><span>@instagram</span>
-              </a>
+            <div class="desc-mover text-center md:text-left max-w-md">
+              <span class="text-xs uppercase tracking-[0.25em] text-amber-400 font-semibold block mb-1">Perkap & Web • Informatika</span>
+              <h2 class="font-serif-luxury text-3xl sm:text-4xl font-bold text-white tracking-wide">Adam</h2>
+              <div class="w-16 h-[1px] bg-amber-500/50 my-3 mx-auto md:mx-0"></div>
+              <p class="text-sm text-stone-300 leading-relaxed font-light">"Siang bantu pasang sound system sama terpal lapangan, malemnya begadang ngetik kodingan buat bikin website galeri kenangan posko ini."</p>
+              <p class="font-handwriting text-amber-300 text-lg mt-2">"Web-nya udah gue update ya, coba cek di HP masing-masing!"</p>
+              <div class="mt-4 flex items-center justify-center md:justify-start gap-4">
+                <a href="#" class="inline-flex items-center gap-2 text-xs text-stone-400 hover:text-amber-400 transition-colors"><i class="fa-brands fa-instagram text-base text-emerald-400"></i><span>@instagram</span></a>
+              </div>
             </div>
           </div>
         </div>
-      </section>
+      </div>
 
       <!-- 15: IRWAN -->
-      <section class="member-row min-h-screen w-full flex items-center justify-center relative px-6 py-16">
-        <div class="max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-6 md:gap-14">
-          <div class="member-photo-box relative bg-stone-100 p-3 pb-8 rounded-sm shadow-2xl -rotate-2 group max-w-[270px] sm:max-w-xs shrink-0">
-            <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-6 tape-effect rotate-2 z-10"></div>
-            <div class="relative aspect-[3/4] overflow-hidden bg-stone-900">
-              <img src="irwan.JPG" alt="Irwan" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-              <span class="absolute bottom-2 right-2 font-mono text-[10px] text-amber-500 font-bold tracking-widest drop-shadow">'26 08 14</span>
+      <div class="member-scroll-track" data-bg="#11161d">
+        <div class="member-sticky-stage px-4 sm:px-8">
+          <div class="stage-content max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-6 md:gap-14 relative">
+            <div class="polaroid-mover relative bg-stone-100 p-3 pb-8 rounded-sm shadow-2xl -rotate-2 max-w-[260px] sm:max-w-xs shrink-0">
+              <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-6 tape-effect rotate-2 z-10"></div>
+              <div class="relative aspect-[3/4] overflow-hidden bg-stone-900">
+                <img src="irwan.JPG" alt="Irwan" class="w-full h-full object-cover">
+                <span class="absolute bottom-2 right-2 font-mono text-[10px] text-amber-500 font-bold tracking-widest drop-shadow">'26 08 14</span>
+              </div>
+              <p class="font-handwriting text-xl text-stone-800 text-center mt-3">Pawang sound & kabel rol 🔊</p>
             </div>
-            <p class="font-handwriting text-xl text-stone-800 text-center mt-3">Pawang sound & kabel rol 🔊</p>
-          </div>
-
-          <div class="member-desc-box text-center md:text-left max-w-md">
-            <span class="text-xs uppercase tracking-[0.25em] text-amber-400 font-semibold block mb-1">Perkap • Informatika</span>
-            <h2 class="font-serif-luxury text-3xl sm:text-4xl font-bold text-white tracking-wide">Irwan</h2>
-            <div class="w-16 h-[1px] bg-amber-500/50 my-3 mx-auto md:mx-0"></div>
-            <p class="text-sm text-stone-300 leading-relaxed font-light">
-              "Kalo urusan mic mendengung atau proyektor gak mau nyala, dialah yang langsung lari benerin. Tenaganya gak ada habisnya pas angkut barang."
-            </p>
-            <p class="font-handwriting text-amber-300 text-lg mt-2">"Tes tes 1 2 3... kabel mic aman bro!"</p>
-            <div class="mt-4 flex items-center justify-center md:justify-start gap-4">
-              <a href="#" class="inline-flex items-center gap-2 text-xs text-stone-400 hover:text-amber-400 transition-colors">
-                <i class="fa-brands fa-instagram text-base text-emerald-400"></i><span>@instagram</span>
-              </a>
+            <div class="desc-mover text-center md:text-left max-w-md">
+              <span class="text-xs uppercase tracking-[0.25em] text-amber-400 font-semibold block mb-1">Perkap • Informatika</span>
+              <h2 class="font-serif-luxury text-3xl sm:text-4xl font-bold text-white tracking-wide">Irwan</h2>
+              <div class="w-16 h-[1px] bg-amber-500/50 my-3 mx-auto md:mx-0"></div>
+              <p class="text-sm text-stone-300 leading-relaxed font-light">"Kalo urusan mic mendengung atau proyektor gak mau nyala, dialah yang langsung lari benerin. Tenaganya gak ada habisnya pas angkut barang."</p>
+              <p class="font-handwriting text-amber-300 text-lg mt-2">"Tes tes 1 2 3... kabel mic aman bro!"</p>
+              <div class="mt-4 flex items-center justify-center md:justify-start gap-4">
+                <a href="#" class="inline-flex items-center gap-2 text-xs text-stone-400 hover:text-amber-400 transition-colors"><i class="fa-brands fa-instagram text-base text-emerald-400"></i><span>@instagram</span></a>
+              </div>
             </div>
           </div>
         </div>
-      </section>
+      </div>
 
       <!-- 16: MELI -->
-      <section class="member-row min-h-screen w-full flex items-center justify-center relative px-6 py-16">
-        <div class="max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-6 md:gap-14">
-          <div class="member-photo-box relative bg-stone-100 p-3 pb-8 rounded-sm shadow-2xl rotate-2 group max-w-[270px] sm:max-w-xs shrink-0">
-            <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-6 tape-effect -rotate-1 z-10"></div>
-            <div class="relative aspect-[3/4] overflow-hidden bg-stone-900">
-              <img src="meli.JPG" alt="Meli" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-              <span class="absolute bottom-2 right-2 font-mono text-[10px] text-amber-500 font-bold tracking-widest drop-shadow">'26 08 14</span>
+      <div class="member-scroll-track" data-bg="#0f191a">
+        <div class="member-sticky-stage px-4 sm:px-8">
+          <div class="stage-content max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-6 md:gap-14 relative">
+            <div class="polaroid-mover relative bg-stone-100 p-3 pb-8 rounded-sm shadow-2xl rotate-2 max-w-[260px] sm:max-w-xs shrink-0">
+              <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-6 tape-effect -rotate-1 z-10"></div>
+              <div class="relative aspect-[3/4] overflow-hidden bg-stone-900">
+                <img src="meli.JPG" alt="Meli" class="w-full h-full object-cover">
+                <span class="absolute bottom-2 right-2 font-mono text-[10px] text-amber-500 font-bold tracking-widest drop-shadow">'26 08 14</span>
+              </div>
+              <p class="font-handwriting text-xl text-stone-800 text-center mt-3">Ibu kost penjaga posko 🧹</p>
             </div>
-            <p class="font-handwriting text-xl text-stone-800 text-center mt-3">Ibu kost penjaga posko 🧹</p>
-          </div>
-
-          <div class="member-desc-box text-center md:text-left max-w-md">
-            <span class="text-xs uppercase tracking-[0.25em] text-amber-400 font-semibold block mb-1">Div. Umum • PGSD</span>
-            <h2 class="font-serif-luxury text-3xl sm:text-4xl font-bold text-white tracking-wide">Meli</h2>
-            <div class="w-16 h-[1px] bg-amber-500/50 my-3 mx-auto md:mx-0"></div>
-            <p class="text-sm text-stone-300 leading-relaxed font-light">
-              "Yang paling rajin ngingetin jadwal piket sapu teras sama cuci piring. Kalo posko berantakan, suara omelannya bikin seisi rumah langsung gerak."
-            </p>
-            <p class="font-handwriting text-amber-300 text-lg mt-2">"Piring kotor di wastafel cucian siapa tuh? Jangan dibiarin!"</p>
-            <div class="mt-4 flex items-center justify-center md:justify-start gap-4">
-              <a href="#" class="inline-flex items-center gap-2 text-xs text-stone-400 hover:text-amber-400 transition-colors">
-                <i class="fa-brands fa-instagram text-base text-emerald-400"></i><span>@instagram</span>
-              </a>
+            <div class="desc-mover text-center md:text-left max-w-md">
+              <span class="text-xs uppercase tracking-[0.25em] text-amber-400 font-semibold block mb-1">Div. Umum • PGSD</span>
+              <h2 class="font-serif-luxury text-3xl sm:text-4xl font-bold text-white tracking-wide">Meli</h2>
+              <div class="w-16 h-[1px] bg-amber-500/50 my-3 mx-auto md:mx-0"></div>
+              <p class="text-sm text-stone-300 leading-relaxed font-light">"Yang paling rajin ngingetin jadwal piket sapu teras sama cuci piring. Kalo posko berantakan, suara omelannya bikin seisi rumah langsung gerak."</p>
+              <p class="font-handwriting text-amber-300 text-lg mt-2">"Piring kotor di wastafel cucian siapa tuh? Jangan dibiarin!"</p>
+              <div class="mt-4 flex items-center justify-center md:justify-start gap-4">
+                <a href="#" class="inline-flex items-center gap-2 text-xs text-stone-400 hover:text-amber-400 transition-colors"><i class="fa-brands fa-instagram text-base text-emerald-400"></i><span>@instagram</span></a>
+              </div>
             </div>
           </div>
         </div>
-      </section>
+      </div>
 
       <!-- 17: IVANDA -->
-      <section class="member-row min-h-screen w-full flex items-center justify-center relative px-6 py-16">
-        <div class="max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-6 md:gap-14">
-          <div class="member-photo-box relative bg-stone-100 p-3 pb-8 rounded-sm shadow-2xl -rotate-1 group max-w-[270px] sm:max-w-xs shrink-0">
-            <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-6 tape-effect rotate-1 z-10"></div>
-            <div class="relative aspect-[3/4] overflow-hidden bg-stone-900">
-              <img src="ivanda.JPG" alt="Ivanda" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-              <span class="absolute bottom-2 right-2 font-mono text-[10px] text-amber-500 font-bold tracking-widest drop-shadow">'26 08 14</span>
+      <div class="member-scroll-track" data-bg="#0c1817">
+        <div class="member-sticky-stage px-4 sm:px-8">
+          <div class="stage-content max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-6 md:gap-14 relative">
+            <div class="polaroid-mover relative bg-stone-100 p-3 pb-8 rounded-sm shadow-2xl -rotate-1 max-w-[260px] sm:max-w-xs shrink-0">
+              <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-6 tape-effect rotate-1 z-10"></div>
+              <div class="relative aspect-[3/4] overflow-hidden bg-stone-900">
+                <img src="ivanda.JPG" alt="Ivanda" class="w-full h-full object-cover">
+                <span class="absolute bottom-2 right-2 font-mono text-[10px] text-amber-500 font-bold tracking-widest drop-shadow">'26 08 14</span>
+              </div>
+              <p class="font-handwriting text-xl text-stone-800 text-center mt-3">Raja candid & video reels 🎬</p>
             </div>
-            <p class="font-handwriting text-xl text-stone-800 text-center mt-3">Raja candid & video reels 🎬</p>
-          </div>
-
-          <div class="member-desc-box text-center md:text-left max-w-md">
-            <span class="text-xs uppercase tracking-[0.25em] text-amber-400 font-semibold block mb-1">Div. PDD • PJKR</span>
-            <h2 class="font-serif-luxury text-3xl sm:text-4xl font-bold text-white tracking-wide">Ivanda</h2>
-            <div class="w-16 h-[1px] bg-amber-500/50 my-3 mx-auto md:mx-0"></div>
-            <p class="text-sm text-stone-300 leading-relaxed font-light">
-              "Gak pernah lepas dari kamera HP buat bikin video after movie dan reels instagram. Semua momen random kita ber-17 kesimpan rapi di galerinya."
-            </p>
-            <p class="font-handwriting text-amber-300 text-lg mt-2">"Bagus nih view-nya, bentar gue videoin buat after movie!"</p>
-            <div class="mt-4 flex items-center justify-center md:justify-start gap-4">
-              <a href="#" class="inline-flex items-center gap-2 text-xs text-stone-400 hover:text-amber-400 transition-colors">
-                <i class="fa-brands fa-instagram text-base text-emerald-400"></i><span>@ivanda_ig</span>
-              </a>
+            <div class="desc-mover text-center md:text-left max-w-md">
+              <span class="text-xs uppercase tracking-[0.25em] text-amber-400 font-semibold block mb-1">Div. PDD • PJKR</span>
+              <h2 class="font-serif-luxury text-3xl sm:text-4xl font-bold text-white tracking-wide">Ivanda</h2>
+              <div class="w-16 h-[1px] bg-amber-500/50 my-3 mx-auto md:mx-0"></div>
+              <p class="text-sm text-stone-300 leading-relaxed font-light">"Gak pernah lepas dari kamera HP buat bikin video after movie dan reels instagram. Semua momen random kita ber-17 kesimpan rapi di galerinya."</p>
+              <p class="font-handwriting text-amber-300 text-lg mt-2">"Bagus nih view-nya, bentar gue videoin buat after movie!"</p>
+              <div class="mt-4 flex items-center justify-center md:justify-start gap-4">
+                <a href="#" class="inline-flex items-center gap-2 text-xs text-stone-400 hover:text-amber-400 transition-colors"><i class="fa-brands fa-instagram text-base text-emerald-400"></i><span>@ivanda_ig</span></a>
+              </div>
             </div>
           </div>
         </div>
-      </section>
+      </div>
 
     </div>
 
-    <!-- ================= 4. TIMELINE: TRANSISI KE COKELAT SENJA ================= -->
-    <section class="py-24 px-4 sm:px-8 max-w-4xl mx-auto relative bg-gradient-to-b from-[#1c1813] via-[#201a14] to-[#181917] rounded-3xl my-8 border border-amber-900/30" id="jejak-pengabdian">
+    <!-- ================= 4. TIMELINE JEJAK PENGABDIAN ================= -->
+    <section class="py-24 px-4 sm:px-8 max-w-4xl mx-auto relative rounded-3xl my-8 border border-stone-800/60 bg-black/30 backdrop-blur-md" id="jejak-pengabdian" data-bg="#181512">
       <div class="text-center mb-16" data-aos="fade-up">
         <span class="text-xs uppercase tracking-[0.3em] text-amber-400 font-semibold block">Kronologi 35 Hari</span>
         <h2 class="font-serif-luxury text-3xl sm:text-5xl font-bold text-white tracking-wide mt-2">Jejak Langkah Pengabdian</h2>
@@ -821,8 +737,8 @@
       </div>
     </section>
 
-    <!-- ================= 5. GALERI FOTO: LATAR NETRAL DUSUN ================= -->
-    <section class="py-24 px-4 sm:px-8 max-w-7xl mx-auto relative bg-gradient-to-b from-[#181917] via-[#101915] to-[#0d1614] rounded-3xl" id="galeri-foto">
+    <!-- ================= 5. GALERI FOTO KEGIATAN ================= -->
+    <section class="py-24 px-4 sm:px-8 max-w-7xl mx-auto relative rounded-3xl" id="galeri-foto" data-bg="#0f1614">
       <div class="text-center max-w-2xl mx-auto mb-8" data-aos="fade-up">
         <span class="text-xs uppercase tracking-[0.3em] text-emerald-400 font-semibold block">Dokumentasi Lengkap</span>
         <h2 class="font-serif-luxury text-3xl sm:text-5xl font-bold text-white tracking-wide mt-2">Galeri Arsip Foto</h2>
@@ -852,7 +768,7 @@
     </section>
 
     <!-- ================= 6. KKN POSKO AWARDS ================= -->
-    <section class="py-24 px-4 sm:px-8 max-w-6xl mx-auto relative bg-gradient-to-b from-[#0d1614] via-[#161713] to-[#121616]" id="awards">
+    <section class="py-24 px-4 sm:px-8 max-w-6xl mx-auto relative" id="awards" data-bg="#161314">
       <div class="text-center max-w-2xl mx-auto mb-14" data-aos="fade-up">
         <span class="text-xs uppercase tracking-[0.3em] text-amber-400 font-semibold block">Apresiasi Spesial</span>
         <h2 class="font-serif-luxury text-3xl sm:text-5xl font-bold text-white tracking-wide mt-2">KKN Posko Awards 2026</h2>
@@ -891,7 +807,7 @@
     </section>
 
     <!-- ================= 7. VIDEO AFTER MOVIE ================= -->
-    <section class="min-h-screen w-full flex flex-col justify-center items-center py-20 px-4 sm:px-6 relative bg-gradient-to-b from-[#121616] via-[#0b1210] to-[#0e1715]" id="after-movie">
+    <section class="min-h-screen w-full flex flex-col justify-center items-center py-20 px-4 sm:px-6 relative" id="after-movie" data-bg="#0c1012">
       <div class="max-w-4xl w-full mx-auto text-center space-y-4" data-aos="fade-up">
         <span class="text-xs uppercase tracking-[0.3em] text-amber-400 font-semibold block">Kenangan Sinematik</span>
         <h2 class="font-serif-luxury text-3xl sm:text-5xl font-bold text-white tracking-wide">After Movie KKN Waru 2026</h2>
@@ -913,7 +829,7 @@
     </section>
 
     <!-- ================= 8. PETA TITIK JEJAK POSKO (GMAPS) ================= -->
-    <section class="py-24 px-4 sm:px-8 max-w-6xl mx-auto relative bg-gradient-to-b from-[#0e1715] via-[#141a16] to-[#0c1412] rounded-3xl my-8 border border-emerald-950" id="lokasi-posko">
+    <section class="py-24 px-4 sm:px-8 max-w-6xl mx-auto relative rounded-3xl my-8 border border-stone-800" id="lokasi-posko" data-bg="#091312">
       <div class="text-center max-w-2xl mx-auto mb-12" data-aos="fade-up">
         <span class="text-xs uppercase tracking-[0.3em] text-emerald-400 font-semibold block">Titik Jejak Pengabdian</span>
         <h2 class="font-serif-luxury text-3xl sm:text-5xl font-bold text-white tracking-wide mt-2">Posko Sandran, Desa Waru</h2>
@@ -950,7 +866,7 @@
     </section>
 
     <!-- ================= 9. BUKU TAMU INTERAKTIF ================= -->
-    <section class="py-24 px-4 sm:px-8 max-w-3xl mx-auto relative bg-gradient-to-b from-[#0c1412] to-[#080d0b]" id="buku-tamu">
+    <section class="py-24 px-4 sm:px-8 max-w-3xl mx-auto relative" id="buku-tamu" data-bg="#060b09">
       <div class="text-center mb-10" data-aos="fade-up">
         <span class="text-xs uppercase tracking-[0.3em] text-emerald-400 font-semibold block">Kotak Pesan Teman</span>
         <h2 class="font-serif-luxury text-3xl sm:text-4xl font-bold text-white tracking-wide mt-2">Buku Kenangan Posko</h2>
@@ -977,7 +893,7 @@
     </section>
 
     <!-- ================= 10. FOOTER ================= -->
-    <footer class="py-20 text-center px-4 border-t border-stone-800 bg-[#050807]">
+    <footer class="py-20 text-center px-4 border-t border-stone-800 bg-[#040605]" data-bg="#040605">
       <div class="max-w-2xl mx-auto space-y-4" data-aos="fade-up">
         <h3 class="font-serif-luxury text-2xl sm:text-3xl text-white">Terima Kasih, Desa Waru</h3>
         <p class="text-xs sm:text-sm text-stone-400 leading-relaxed font-light">"Pengabdian telah tuntas, namun ikatan persaudaraan ini akan selalu tinggal dalam ingatan."</p>
@@ -1036,6 +952,62 @@
     function handleVideoPlay() {
       if (isPlaying) toggleAudio();
     }
+
+    // ================= REAL-TIME SCROLL INTERACTION =================
+    function updateScrollEffects() {
+      const isMobile = window.innerWidth < 768;
+      const tracks = document.querySelectorAll('.member-scroll-track');
+
+      tracks.forEach(track => {
+        const rect = track.getBoundingClientRect();
+        const trackHeight = track.offsetHeight - window.innerHeight;
+        
+        // Menghitung progress scroll dari 0.0 (atas) sampai 1.0 (bawah)
+        let progress = -rect.top / trackHeight;
+        progress = Math.max(0, Math.min(1, progress));
+
+        const polaroid = track.querySelector('.polaroid-mover');
+        const desc = track.querySelector('.desc-mover');
+
+        if (polaroid && desc) {
+          if (!isMobile) {
+            // DESKTOP: Mula-mula di tengah (translateX 160px), mengecil & geser ke kiri (translateX 0px)
+            const transX = (1 - progress) * 160;
+            const scale = 1.15 - (progress * 0.2); // dari 1.15x mengecil ke 0.95x
+            polaroid.style.transform = `translateX(${transX}px) scale(${scale})`;
+
+            // Deskripsi: Masuk dari kanan ke samping kiri persis
+            const descTransX = (1 - progress) * 60;
+            desc.style.transform = `translateX(${descTransX}px)`;
+            desc.style.opacity = Math.min(1, progress * 1.6);
+          } else {
+            // HP/MOBILE: Mula-mula besar di tengah, lalu sedikit mengecil dan bergeser ke atas/kiri memberi jalan teks
+            const scale = 1.1 - (progress * 0.18);
+            const transY = (1 - progress) * 40;
+            polaroid.style.transform = `translateY(${transY}px) scale(${scale})`;
+
+            const descTransY = (1 - progress) * 50;
+            desc.style.transform = `translateY(${descTransY}px)`;
+            desc.style.opacity = Math.min(1, progress * 1.5);
+          }
+        }
+      });
+
+      // TRANSISI WARNA LATAR OTOMATIS BERDASARKAN BAGIAN YANG SEDANG DILIHAT
+      const allColorSections = document.querySelectorAll('[data-bg]');
+      allColorSections.forEach(sec => {
+        const r = sec.getBoundingClientRect();
+        if (r.top <= window.innerHeight * 0.5 && r.bottom >= window.innerHeight * 0.2) {
+          const targetColor = sec.getAttribute('data-bg');
+          if (targetColor) {
+            document.body.style.backgroundColor = targetColor;
+          }
+        }
+      });
+    }
+
+    window.addEventListener('scroll', updateScrollEffects, { passive: true });
+    window.addEventListener('resize', updateScrollEffects, { passive: true });
 
     // ================= LIGHTBOX LOGIC =================
     function bukaLightbox(index) {
@@ -1223,30 +1195,10 @@
       renderPesan();
     }
 
-    // ================= DETEKSI SCROLL INTERAKSI ANGGOTA =================
     document.addEventListener("DOMContentLoaded", () => {
       muatFotoDrive();
       renderPesan();
-
-      const observerOptions = {
-        root: null,
-        rootMargin: "0px",
-        threshold: 0.35
-      };
-
-      const memberObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('active');
-          } else {
-            entry.target.classList.remove('active');
-          }
-        });
-      }, observerOptions);
-
-      document.querySelectorAll('.member-row').forEach(row => {
-        memberObserver.observe(row);
-      });
+      updateScrollEffects();
     });
   </script>
 </body>
