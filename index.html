@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <!-- AOS (Animate On Scroll) -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
-  <!-- Google Fonts -->
+  <!-- Google Fonts: Caveat, Cormorant Garamond, Montserrat -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -76,6 +76,50 @@
       filter: blur(120px);
       opacity: 0.15;
       pointer-events: none;
+    }
+
+    /* ================= ANIMASI SCROLL ANGGOTA ================= */
+    .member-photo-box {
+      transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.6s ease;
+      transform: translateY(20px) scale(1.08);
+      opacity: 0.9;
+    }
+
+    .member-desc-box {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+      pointer-events: none;
+    }
+
+    @media (min-width: 768px) {
+      .member-photo-box {
+        transform: translateX(140px) scale(1.15);
+      }
+      .member-desc-box {
+        transform: translateX(40px);
+      }
+      .member-row.active .member-photo-box {
+        transform: translateX(0) scale(1);
+        opacity: 1;
+      }
+      .member-row.active .member-desc-box {
+        opacity: 1;
+        transform: translateX(0);
+        pointer-events: auto;
+      }
+    }
+
+    @media (max-width: 767px) {
+      .member-row.active .member-photo-box {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+      }
+      .member-row.active .member-desc-box {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: auto;
+      }
     }
   </style>
 </head>
@@ -171,11 +215,10 @@
   <!-- ================= 2. ISI UTAMA ================= -->
   <main id="main-content">
 
-    <!-- HERO BANNER: TRANSISI DARI FOREST GREEN KE OLIVE DUSUN -->
+    <!-- HERO BANNER: SEAMLESS DUAL LAYER -->
     <section class="relative min-h-screen w-full flex flex-col justify-between items-center text-center py-8 bg-gradient-to-b from-[#071712] via-[#091f19] to-[#121c17] overflow-hidden">
       <div class="ambient-glow bg-emerald-500 -top-20 -left-20"></div>
 
-      <!-- LAYER BACKGROUND POTRAIT -->
       <div class="absolute inset-0 z-0 overflow-hidden pointer-events-none">
         <img src="kumpuldisawah.JPG" alt="Background Potret" class="w-full h-full object-cover object-center filter brightness-[0.4] contrast-[1.1] scale-105">
         <div class="absolute inset-0 bg-gradient-to-b from-[#071712]/90 via-[#0b211a]/50 to-[#121c17]/95"></div>
@@ -190,7 +233,6 @@
         </h1>
       </div>
 
-      <!-- LAYER FOTO LANSKAP SEAMLESS -->
       <div class="relative z-10 w-full my-auto flex items-center justify-center pointer-events-none" data-aos="zoom-in" data-aos-duration="1000">
         <div class="relative w-full overflow-hidden">
           <img src="barisdisawah.JPG" alt="17 Anggota Baris di Sawah" 
@@ -233,15 +275,15 @@
       </div>
     </section>
 
-    <!-- ================= 3. ANGGOTA KELOMPOK: LATAR WARM EARTHY OLIVE ================= -->
+    <!-- ================= 3. ANGGOTA KELOMPOK (DENGAN EFEK SCROLL SHIFT) ================= -->
     <div id="members-container" class="relative divide-y divide-stone-800/60 bg-gradient-to-b from-[#121c17] via-[#161a15] to-[#1c1813] overflow-hidden">
       <div class="ambient-glow bg-amber-600/10 top-1/4 -right-24"></div>
       <div class="ambient-glow bg-emerald-600/10 top-3/4 -left-24"></div>
 
       <!-- 1: FADHIL -->
-      <section class="min-h-screen w-full flex items-center justify-center relative px-6 py-16">
-        <div class="max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-8 md:gap-14">
-          <div class="relative bg-stone-100 p-3 pb-8 rounded-sm shadow-2xl -rotate-2 hover:rotate-0 transition-transform duration-300 group max-w-[280px] sm:max-w-xs" data-aos="zoom-in">
+      <section class="member-row min-h-screen w-full flex items-center justify-center relative px-6 py-16">
+        <div class="max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-6 md:gap-14">
+          <div class="member-photo-box relative bg-stone-100 p-3 pb-8 rounded-sm shadow-2xl -rotate-2 group max-w-[270px] sm:max-w-xs shrink-0">
             <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-6 tape-effect rotate-1 z-10"></div>
             <div class="relative aspect-[3/4] overflow-hidden bg-stone-900">
               <img src="fadhil.jpg" alt="Fadhil" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
@@ -250,7 +292,7 @@
             <p class="font-handwriting text-xl text-stone-800 text-center mt-3">Pak Kordes kita ni bos 🫡</p>
           </div>
 
-          <div class="text-center md:text-left max-w-md" data-aos="fade-left">
+          <div class="member-desc-box text-center md:text-left max-w-md">
             <span class="text-xs uppercase tracking-[0.25em] text-amber-400 font-semibold block mb-1">Kordes • PJKR</span>
             <h2 class="font-serif-luxury text-3xl sm:text-4xl font-bold text-white tracking-wide">Fadhil</h2>
             <div class="w-16 h-[1px] bg-amber-500/50 my-3 mx-auto md:mx-0"></div>
@@ -268,9 +310,9 @@
       </section>
 
       <!-- 2: IVAN GEDE -->
-      <section class="min-h-screen w-full flex items-center justify-center relative px-6 py-16">
-        <div class="max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-8 md:gap-14">
-          <div class="relative bg-stone-100 p-3 pb-8 rounded-sm shadow-2xl rotate-2 hover:rotate-0 transition-transform duration-300 group max-w-[280px] sm:max-w-xs" data-aos="zoom-in">
+      <section class="member-row min-h-screen w-full flex items-center justify-center relative px-6 py-16">
+        <div class="max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-6 md:gap-14">
+          <div class="member-photo-box relative bg-stone-100 p-3 pb-8 rounded-sm shadow-2xl rotate-2 group max-w-[270px] sm:max-w-xs shrink-0">
             <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-6 tape-effect -rotate-2 z-10"></div>
             <div class="relative aspect-[3/4] overflow-hidden bg-stone-900">
               <img src="ivan.JPG" alt="Ivan Gede" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
@@ -279,7 +321,7 @@
             <p class="font-handwriting text-xl text-stone-800 text-center mt-3">Korcam keliling Mranggen 🛵</p>
           </div>
 
-          <div class="text-center md:text-left max-w-md" data-aos="fade-left">
+          <div class="member-desc-box text-center md:text-left max-w-md">
             <span class="text-xs uppercase tracking-[0.25em] text-amber-400 font-semibold block mb-1">Korcam • Informatika</span>
             <h2 class="font-serif-luxury text-3xl sm:text-4xl font-bold text-white tracking-wide">Ivan Gede</h2>
             <div class="w-16 h-[1px] bg-amber-500/50 my-3 mx-auto md:mx-0"></div>
@@ -297,9 +339,9 @@
       </section>
 
       <!-- 3: PUTRI DJ -->
-      <section class="min-h-screen w-full flex items-center justify-center relative px-6 py-16">
-        <div class="max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-8 md:gap-14">
-          <div class="relative bg-stone-100 p-3 pb-8 rounded-sm shadow-2xl -rotate-1 hover:rotate-0 transition-transform duration-300 group max-w-[280px] sm:max-w-xs" data-aos="zoom-in">
+      <section class="member-row min-h-screen w-full flex items-center justify-center relative px-6 py-16">
+        <div class="max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-6 md:gap-14">
+          <div class="member-photo-box relative bg-stone-100 p-3 pb-8 rounded-sm shadow-2xl -rotate-1 group max-w-[270px] sm:max-w-xs shrink-0">
             <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-6 tape-effect rotate-1 z-10"></div>
             <div class="relative aspect-[3/4] overflow-hidden bg-stone-900">
               <img src="putridj.JPG" alt="Putri DJ" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
@@ -308,7 +350,7 @@
             <p class="font-handwriting text-xl text-stone-800 text-center mt-3">Tukang nagih bab laporan ✍️</p>
           </div>
 
-          <div class="text-center md:text-left max-w-md" data-aos="fade-left">
+          <div class="member-desc-box text-center md:text-left max-w-md">
             <span class="text-xs uppercase tracking-[0.25em] text-amber-400 font-semibold block mb-1">Sekretaris 1 • Teknik Sipil</span>
             <h2 class="font-serif-luxury text-3xl sm:text-4xl font-bold text-white tracking-wide">Putri DJ</h2>
             <div class="w-16 h-[1px] bg-amber-500/50 my-3 mx-auto md:mx-0"></div>
@@ -326,9 +368,9 @@
       </section>
 
       <!-- 4: NISA -->
-      <section class="min-h-screen w-full flex items-center justify-center relative px-6 py-16">
-        <div class="max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-8 md:gap-14">
-          <div class="relative bg-stone-100 p-3 pb-8 rounded-sm shadow-2xl rotate-2 hover:rotate-0 transition-transform duration-300 group max-w-[280px] sm:max-w-xs" data-aos="zoom-in">
+      <section class="member-row min-h-screen w-full flex items-center justify-center relative px-6 py-16">
+        <div class="max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-6 md:gap-14">
+          <div class="member-photo-box relative bg-stone-100 p-3 pb-8 rounded-sm shadow-2xl rotate-2 group max-w-[270px] sm:max-w-xs shrink-0">
             <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-6 tape-effect -rotate-1 z-10"></div>
             <div class="relative aspect-[3/4] overflow-hidden bg-stone-900">
               <img src="nisa.JPG" alt="Nisa" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
@@ -337,7 +379,7 @@
             <p class="font-handwriting text-xl text-stone-800 text-center mt-3">Partner persuratan posko 📋</p>
           </div>
 
-          <div class="text-center md:text-left max-w-md" data-aos="fade-left">
+          <div class="member-desc-box text-center md:text-left max-w-md">
             <span class="text-xs uppercase tracking-[0.25em] text-amber-400 font-semibold block mb-1">Sekretaris 2 • PGSD</span>
             <h2 class="font-serif-luxury text-3xl sm:text-4xl font-bold text-white tracking-wide">Nisa</h2>
             <div class="w-16 h-[1px] bg-amber-500/50 my-3 mx-auto md:mx-0"></div>
@@ -355,9 +397,9 @@
       </section>
 
       <!-- 5: MARSHA -->
-      <section class="min-h-screen w-full flex items-center justify-center relative px-6 py-16">
-        <div class="max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-8 md:gap-14">
-          <div class="relative bg-stone-100 p-3 pb-8 rounded-sm shadow-2xl -rotate-2 hover:rotate-0 transition-transform duration-300 group max-w-[280px] sm:max-w-xs" data-aos="zoom-in">
+      <section class="member-row min-h-screen w-full flex items-center justify-center relative px-6 py-16">
+        <div class="max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-6 md:gap-14">
+          <div class="member-photo-box relative bg-stone-100 p-3 pb-8 rounded-sm shadow-2xl -rotate-2 group max-w-[270px] sm:max-w-xs shrink-0">
             <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-6 tape-effect rotate-2 z-10"></div>
             <div class="relative aspect-[3/4] overflow-hidden bg-stone-900">
               <img src="marsha.jpg" alt="Marsha" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
@@ -366,7 +408,7 @@
             <p class="font-handwriting text-xl text-stone-800 text-center mt-3">Menteri Keuangan Sandran 💰</p>
           </div>
 
-          <div class="text-center md:text-left max-w-md" data-aos="fade-left">
+          <div class="member-desc-box text-center md:text-left max-w-md">
             <span class="text-xs uppercase tracking-[0.25em] text-amber-400 font-semibold block mb-1">Bendahara 1 • PGSD</span>
             <h2 class="font-serif-luxury text-3xl sm:text-4xl font-bold text-white tracking-wide">Marsha</h2>
             <div class="w-16 h-[1px] bg-amber-500/50 my-3 mx-auto md:mx-0"></div>
@@ -384,9 +426,9 @@
       </section>
 
       <!-- 6: REZAL -->
-      <section class="min-h-screen w-full flex items-center justify-center relative px-6 py-16">
-        <div class="max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-8 md:gap-14">
-          <div class="relative bg-stone-100 p-3 pb-8 rounded-sm shadow-2xl rotate-1 hover:rotate-0 transition-transform duration-300 group max-w-[280px] sm:max-w-xs" data-aos="zoom-in">
+      <section class="member-row min-h-screen w-full flex items-center justify-center relative px-6 py-16">
+        <div class="max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-6 md:gap-14">
+          <div class="member-photo-box relative bg-stone-100 p-3 pb-8 rounded-sm shadow-2xl rotate-1 group max-w-[270px] sm:max-w-xs shrink-0">
             <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-6 tape-effect -rotate-1 z-10"></div>
             <div class="relative aspect-[3/4] overflow-hidden bg-stone-900">
               <img src="rezal.JPG" alt="Rezal" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
@@ -395,7 +437,7 @@
             <p class="font-handwriting text-xl text-stone-800 text-center mt-3">Pawang belanja pasar subuh 🥬</p>
           </div>
 
-          <div class="text-center md:text-left max-w-md" data-aos="fade-left">
+          <div class="member-desc-box text-center md:text-left max-w-md">
             <span class="text-xs uppercase tracking-[0.25em] text-amber-400 font-semibold block mb-1">Bendahara 2 • PGSD</span>
             <h2 class="font-serif-luxury text-3xl sm:text-4xl font-bold text-white tracking-wide">Rezal</h2>
             <div class="w-16 h-[1px] bg-amber-500/50 my-3 mx-auto md:mx-0"></div>
@@ -413,9 +455,9 @@
       </section>
 
       <!-- 7: SELLA -->
-      <section class="min-h-screen w-full flex items-center justify-center relative px-6 py-16">
-        <div class="max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-8 md:gap-14">
-          <div class="relative bg-stone-100 p-3 pb-8 rounded-sm shadow-2xl -rotate-2 hover:rotate-0 transition-transform duration-300 group max-w-[280px] sm:max-w-xs" data-aos="zoom-in">
+      <section class="member-row min-h-screen w-full flex items-center justify-center relative px-6 py-16">
+        <div class="max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-6 md:gap-14">
+          <div class="member-photo-box relative bg-stone-100 p-3 pb-8 rounded-sm shadow-2xl -rotate-2 group max-w-[270px] sm:max-w-xs shrink-0">
             <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-6 tape-effect rotate-1 z-10"></div>
             <div class="relative aspect-[3/4] overflow-hidden bg-stone-900">
               <img src="sella.jpg" alt="Sella" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
@@ -424,7 +466,7 @@
             <p class="font-handwriting text-xl text-stone-800 text-center mt-3">Otak rundown acara 🎪</p>
           </div>
 
-          <div class="text-center md:text-left max-w-md" data-aos="fade-left">
+          <div class="member-desc-box text-center md:text-left max-w-md">
             <span class="text-xs uppercase tracking-[0.25em] text-amber-400 font-semibold block mb-1">Div. Acara • BK</span>
             <h2 class="font-serif-luxury text-3xl sm:text-4xl font-bold text-white tracking-wide">Sella</h2>
             <div class="w-16 h-[1px] bg-amber-500/50 my-3 mx-auto md:mx-0"></div>
@@ -442,9 +484,9 @@
       </section>
 
       <!-- 8: CAHYA -->
-      <section class="min-h-screen w-full flex items-center justify-center relative px-6 py-16">
-        <div class="max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-8 md:gap-14">
-          <div class="relative bg-stone-100 p-3 pb-8 rounded-sm shadow-2xl rotate-2 hover:rotate-0 transition-transform duration-300 group max-w-[280px] sm:max-w-xs" data-aos="zoom-in">
+      <section class="member-row min-h-screen w-full flex items-center justify-center relative px-6 py-16">
+        <div class="max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-6 md:gap-14">
+          <div class="member-photo-box relative bg-stone-100 p-3 pb-8 rounded-sm shadow-2xl rotate-2 group max-w-[270px] sm:max-w-xs shrink-0">
             <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-6 tape-effect -rotate-2 z-10"></div>
             <div class="relative aspect-[3/4] overflow-hidden bg-stone-900">
               <img src="cahya.jpg" alt="Cahya" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
@@ -453,7 +495,7 @@
             <p class="font-handwriting text-xl text-stone-800 text-center mt-3">MC heboh serba bisa 🎤</p>
           </div>
 
-          <div class="text-center md:text-left max-w-md" data-aos="fade-left">
+          <div class="member-desc-box text-center md:text-left max-w-md">
             <span class="text-xs uppercase tracking-[0.25em] text-amber-400 font-semibold block mb-1">Div. Acara • PJKR</span>
             <h2 class="font-serif-luxury text-3xl sm:text-4xl font-bold text-white tracking-wide">Cahya</h2>
             <div class="w-16 h-[1px] bg-amber-500/50 my-3 mx-auto md:mx-0"></div>
@@ -471,9 +513,9 @@
       </section>
 
       <!-- 9: FAUZI -->
-      <section class="min-h-screen w-full flex items-center justify-center relative px-6 py-16">
-        <div class="max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-8 md:gap-14">
-          <div class="relative bg-stone-100 p-3 pb-8 rounded-sm shadow-2xl -rotate-1 hover:rotate-0 transition-transform duration-300 group max-w-[280px] sm:max-w-xs" data-aos="zoom-in">
+      <section class="member-row min-h-screen w-full flex items-center justify-center relative px-6 py-16">
+        <div class="max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-6 md:gap-14">
+          <div class="member-photo-box relative bg-stone-100 p-3 pb-8 rounded-sm shadow-2xl -rotate-1 group max-w-[270px] sm:max-w-xs shrink-0">
             <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-6 tape-effect rotate-2 z-10"></div>
             <div class="relative aspect-[3/4] overflow-hidden bg-stone-900">
               <img src="fauzi.jpg" alt="Fauzi" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
@@ -482,7 +524,7 @@
             <p class="font-handwriting text-xl text-stone-800 text-center mt-3">Duta silaturahmi RT 🤝</p>
           </div>
 
-          <div class="text-center md:text-left max-w-md" data-aos="fade-left">
+          <div class="member-desc-box text-center md:text-left max-w-md">
             <span class="text-xs uppercase tracking-[0.25em] text-amber-400 font-semibold block mb-1">Div. Humas • PJKR</span>
             <h2 class="font-serif-luxury text-3xl sm:text-4xl font-bold text-white tracking-wide">Fauzi</h2>
             <div class="w-16 h-[1px] bg-amber-500/50 my-3 mx-auto md:mx-0"></div>
@@ -500,9 +542,9 @@
       </section>
 
       <!-- 10: LIA -->
-      <section class="min-h-screen w-full flex items-center justify-center relative px-6 py-16">
-        <div class="max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-8 md:gap-14">
-          <div class="relative bg-stone-100 p-3 pb-8 rounded-sm shadow-2xl rotate-2 hover:rotate-0 transition-transform duration-300 group max-w-[280px] sm:max-w-xs" data-aos="zoom-in">
+      <section class="member-row min-h-screen w-full flex items-center justify-center relative px-6 py-16">
+        <div class="max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-6 md:gap-14">
+          <div class="member-photo-box relative bg-stone-100 p-3 pb-8 rounded-sm shadow-2xl rotate-2 group max-w-[270px] sm:max-w-xs shrink-0">
             <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-6 tape-effect -rotate-1 z-10"></div>
             <div class="relative aspect-[3/4] overflow-hidden bg-stone-900">
               <img src="lia.JPG" alt="Lia" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
@@ -511,7 +553,7 @@
             <p class="font-handwriting text-xl text-stone-800 text-center mt-3">Kakak favorit bocil desa 👧</p>
           </div>
 
-          <div class="text-center md:text-left max-w-md" data-aos="fade-left">
+          <div class="member-desc-box text-center md:text-left max-w-md">
             <span class="text-xs uppercase tracking-[0.25em] text-amber-400 font-semibold block mb-1">Div. Humas • PGSD</span>
             <h2 class="font-serif-luxury text-3xl sm:text-4xl font-bold text-white tracking-wide">Lia</h2>
             <div class="w-16 h-[1px] bg-amber-500/50 my-3 mx-auto md:mx-0"></div>
@@ -529,9 +571,9 @@
       </section>
 
       <!-- 11: PUSPA -->
-      <section class="min-h-screen w-full flex items-center justify-center relative px-6 py-16">
-        <div class="max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-8 md:gap-14">
-          <div class="relative bg-stone-100 p-3 pb-8 rounded-sm shadow-2xl -rotate-1 hover:rotate-0 transition-transform duration-300 group max-w-[280px] sm:max-w-xs" data-aos="zoom-in">
+      <section class="member-row min-h-screen w-full flex items-center justify-center relative px-6 py-16">
+        <div class="max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-6 md:gap-14">
+          <div class="member-photo-box relative bg-stone-100 p-3 pb-8 rounded-sm shadow-2xl -rotate-1 group max-w-[270px] sm:max-w-xs shrink-0">
             <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-6 tape-effect rotate-1 z-10"></div>
             <div class="relative aspect-[3/4] overflow-hidden bg-stone-900">
               <img src="puspa.JPG" alt="Puspa" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
@@ -540,7 +582,7 @@
             <p class="font-handwriting text-xl text-stone-800 text-center mt-3">Mata lensa kenangan posko 📸</p>
           </div>
 
-          <div class="text-center md:text-left max-w-md" data-aos="fade-left">
+          <div class="member-desc-box text-center md:text-left max-w-md">
             <span class="text-xs uppercase tracking-[0.25em] text-amber-400 font-semibold block mb-1">Div. PDD • BK</span>
             <h2 class="font-serif-luxury text-3xl sm:text-4xl font-bold text-white tracking-wide">Puspa</h2>
             <div class="w-16 h-[1px] bg-amber-500/50 my-3 mx-auto md:mx-0"></div>
@@ -558,9 +600,9 @@
       </section>
 
       <!-- 12: PUPUT -->
-      <section class="min-h-screen w-full flex items-center justify-center relative px-6 py-16">
-        <div class="max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-8 md:gap-14">
-          <div class="relative bg-stone-100 p-3 pb-8 rounded-sm shadow-2xl rotate-2 hover:rotate-0 transition-transform duration-300 group max-w-[280px] sm:max-w-xs" data-aos="zoom-in">
+      <section class="member-row min-h-screen w-full flex items-center justify-center relative px-6 py-16">
+        <div class="max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-6 md:gap-14">
+          <div class="member-photo-box relative bg-stone-100 p-3 pb-8 rounded-sm shadow-2xl rotate-2 group max-w-[270px] sm:max-w-xs shrink-0">
             <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-6 tape-effect -rotate-2 z-10"></div>
             <div class="relative aspect-[3/4] overflow-hidden bg-stone-900">
               <img src="puput.jpg" alt="Puput" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
@@ -569,7 +611,7 @@
             <p class="font-handwriting text-xl text-stone-800 text-center mt-3">Kepala Dapur Andalan 🍳</p>
           </div>
 
-          <div class="text-center md:text-left max-w-md" data-aos="fade-left">
+          <div class="member-desc-box text-center md:text-left max-w-md">
             <span class="text-xs uppercase tracking-[0.25em] text-amber-400 font-semibold block mb-1">Konsumsi • PGSD</span>
             <h2 class="font-serif-luxury text-3xl sm:text-4xl font-bold text-white tracking-wide">Puput</h2>
             <div class="w-16 h-[1px] bg-amber-500/50 my-3 mx-auto md:mx-0"></div>
@@ -587,9 +629,9 @@
       </section>
 
       <!-- 13: VINA -->
-      <section class="min-h-screen w-full flex items-center justify-center relative px-6 py-16">
-        <div class="max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-8 md:gap-14">
-          <div class="relative bg-stone-100 p-3 pb-8 rounded-sm shadow-2xl -rotate-2 hover:rotate-0 transition-transform duration-300 group max-w-[280px] sm:max-w-xs" data-aos="zoom-in">
+      <section class="member-row min-h-screen w-full flex items-center justify-center relative px-6 py-16">
+        <div class="max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-6 md:gap-14">
+          <div class="member-photo-box relative bg-stone-100 p-3 pb-8 rounded-sm shadow-2xl -rotate-2 group max-w-[270px] sm:max-w-xs shrink-0">
             <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-6 tape-effect rotate-2 z-10"></div>
             <div class="relative aspect-[3/4] overflow-hidden bg-stone-900">
               <img src="vina.JPG" alt="Vina" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
@@ -598,7 +640,7 @@
             <p class="font-handwriting text-xl text-stone-800 text-center mt-3">Barista teh hangat posko ☕</p>
           </div>
 
-          <div class="text-center md:text-left max-w-md" data-aos="fade-left">
+          <div class="member-desc-box text-center md:text-left max-w-md">
             <span class="text-xs uppercase tracking-[0.25em] text-amber-400 font-semibold block mb-1">Konsumsi • P.Biologi</span>
             <h2 class="font-serif-luxury text-3xl sm:text-4xl font-bold text-white tracking-wide">Vina</h2>
             <div class="w-16 h-[1px] bg-amber-500/50 my-3 mx-auto md:mx-0"></div>
@@ -616,9 +658,9 @@
       </section>
 
       <!-- 14: ADAM -->
-      <section class="min-h-screen w-full flex items-center justify-center relative px-6 py-16">
-        <div class="max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-8 md:gap-14">
-          <div class="relative bg-stone-100 p-3 pb-8 rounded-sm shadow-2xl rotate-1 hover:rotate-0 transition-transform duration-300 group max-w-[280px] sm:max-w-xs" data-aos="zoom-in">
+      <section class="member-row min-h-screen w-full flex items-center justify-center relative px-6 py-16">
+        <div class="max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-6 md:gap-14">
+          <div class="member-photo-box relative bg-stone-100 p-3 pb-8 rounded-sm shadow-2xl rotate-1 group max-w-[270px] sm:max-w-xs shrink-0">
             <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-6 tape-effect -rotate-1 z-10"></div>
             <div class="relative aspect-[3/4] overflow-hidden bg-stone-900">
               <img src="adam.JPG" alt="Adam" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
@@ -627,12 +669,12 @@
             <p class="font-handwriting text-xl text-stone-800 text-center mt-3">IT Guy perakit website ini 💻</p>
           </div>
 
-          <div class="text-center md:text-left max-w-md" data-aos="fade-left">
+          <div class="member-desc-box text-center md:text-left max-w-md">
             <span class="text-xs uppercase tracking-[0.25em] text-amber-400 font-semibold block mb-1">Perkap & Web • Informatika</span>
             <h2 class="font-serif-luxury text-3xl sm:text-4xl font-bold text-white tracking-wide">Adam</h2>
             <div class="w-16 h-[1px] bg-amber-500/50 my-3 mx-auto md:mx-0"></div>
             <p class="text-sm text-stone-300 leading-relaxed font-light">
-              "Siang bantu pasang sound system sama terpal lapangan, malemnya begadang ngetik kodingan buat bikin website galeri memori ini."
+              "Siang bantu pasang sound system sama terpal lapangan, malemnya begadang ngetik kodingan buat bikin website galeri kenangan posko ini."
             </p>
             <p class="font-handwriting text-amber-300 text-lg mt-2">"Web-nya udah gue update ya, coba cek di HP masing-masing!"</p>
             <div class="mt-4 flex items-center justify-center md:justify-start gap-4">
@@ -645,9 +687,9 @@
       </section>
 
       <!-- 15: IRWAN -->
-      <section class="min-h-screen w-full flex items-center justify-center relative px-6 py-16">
-        <div class="max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-8 md:gap-14">
-          <div class="relative bg-stone-100 p-3 pb-8 rounded-sm shadow-2xl -rotate-2 hover:rotate-0 transition-transform duration-300 group max-w-[280px] sm:max-w-xs" data-aos="zoom-in">
+      <section class="member-row min-h-screen w-full flex items-center justify-center relative px-6 py-16">
+        <div class="max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-6 md:gap-14">
+          <div class="member-photo-box relative bg-stone-100 p-3 pb-8 rounded-sm shadow-2xl -rotate-2 group max-w-[270px] sm:max-w-xs shrink-0">
             <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-6 tape-effect rotate-2 z-10"></div>
             <div class="relative aspect-[3/4] overflow-hidden bg-stone-900">
               <img src="irwan.JPG" alt="Irwan" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
@@ -656,7 +698,7 @@
             <p class="font-handwriting text-xl text-stone-800 text-center mt-3">Pawang sound & kabel rol 🔊</p>
           </div>
 
-          <div class="text-center md:text-left max-w-md" data-aos="fade-left">
+          <div class="member-desc-box text-center md:text-left max-w-md">
             <span class="text-xs uppercase tracking-[0.25em] text-amber-400 font-semibold block mb-1">Perkap • Informatika</span>
             <h2 class="font-serif-luxury text-3xl sm:text-4xl font-bold text-white tracking-wide">Irwan</h2>
             <div class="w-16 h-[1px] bg-amber-500/50 my-3 mx-auto md:mx-0"></div>
@@ -674,9 +716,9 @@
       </section>
 
       <!-- 16: MELI -->
-      <section class="min-h-screen w-full flex items-center justify-center relative px-6 py-16">
-        <div class="max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-8 md:gap-14">
-          <div class="relative bg-stone-100 p-3 pb-8 rounded-sm shadow-2xl rotate-2 hover:rotate-0 transition-transform duration-300 group max-w-[280px] sm:max-w-xs" data-aos="zoom-in">
+      <section class="member-row min-h-screen w-full flex items-center justify-center relative px-6 py-16">
+        <div class="max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-6 md:gap-14">
+          <div class="member-photo-box relative bg-stone-100 p-3 pb-8 rounded-sm shadow-2xl rotate-2 group max-w-[270px] sm:max-w-xs shrink-0">
             <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-6 tape-effect -rotate-1 z-10"></div>
             <div class="relative aspect-[3/4] overflow-hidden bg-stone-900">
               <img src="meli.JPG" alt="Meli" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
@@ -685,7 +727,7 @@
             <p class="font-handwriting text-xl text-stone-800 text-center mt-3">Ibu kost penjaga posko 🧹</p>
           </div>
 
-          <div class="text-center md:text-left max-w-md" data-aos="fade-left">
+          <div class="member-desc-box text-center md:text-left max-w-md">
             <span class="text-xs uppercase tracking-[0.25em] text-amber-400 font-semibold block mb-1">Div. Umum • PGSD</span>
             <h2 class="font-serif-luxury text-3xl sm:text-4xl font-bold text-white tracking-wide">Meli</h2>
             <div class="w-16 h-[1px] bg-amber-500/50 my-3 mx-auto md:mx-0"></div>
@@ -703,9 +745,9 @@
       </section>
 
       <!-- 17: IVANDA -->
-      <section class="min-h-screen w-full flex items-center justify-center relative px-6 py-16">
-        <div class="max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-8 md:gap-14">
-          <div class="relative bg-stone-100 p-3 pb-8 rounded-sm shadow-2xl -rotate-1 hover:rotate-0 transition-transform duration-300 group max-w-[280px] sm:max-w-xs" data-aos="zoom-in">
+      <section class="member-row min-h-screen w-full flex items-center justify-center relative px-6 py-16">
+        <div class="max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-6 md:gap-14">
+          <div class="member-photo-box relative bg-stone-100 p-3 pb-8 rounded-sm shadow-2xl -rotate-1 group max-w-[270px] sm:max-w-xs shrink-0">
             <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-6 tape-effect rotate-1 z-10"></div>
             <div class="relative aspect-[3/4] overflow-hidden bg-stone-900">
               <img src="ivanda.JPG" alt="Ivanda" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
@@ -714,7 +756,7 @@
             <p class="font-handwriting text-xl text-stone-800 text-center mt-3">Raja candid & video reels 🎬</p>
           </div>
 
-          <div class="text-center md:text-left max-w-md" data-aos="fade-left">
+          <div class="member-desc-box text-center md:text-left max-w-md">
             <span class="text-xs uppercase tracking-[0.25em] text-amber-400 font-semibold block mb-1">Div. PDD • PJKR</span>
             <h2 class="font-serif-luxury text-3xl sm:text-4xl font-bold text-white tracking-wide">Ivanda</h2>
             <div class="w-16 h-[1px] bg-amber-500/50 my-3 mx-auto md:mx-0"></div>
@@ -995,7 +1037,7 @@
       if (isPlaying) toggleAudio();
     }
 
-    // LIGHTBOX
+    // ================= LIGHTBOX LOGIC =================
     function bukaLightbox(index) {
       indexLightbox = index;
       updateLightboxContent();
@@ -1039,7 +1081,7 @@
       if (e.key === 'Escape') tutupLightbox();
     });
 
-    // GALERI & FILTER
+    // ================= GALERI & FILTER LOGIC =================
     async function muatFotoDrive() {
       const container = document.getElementById('drive-gallery');
       if (!container) return;
@@ -1137,7 +1179,7 @@
       }
     }
 
-    // BUKU TAMU LOCALSTORAGE
+    // ================= BUKU TAMU LOCALSTORAGE =================
     function renderPesan() {
       const listContainer = document.getElementById('messages-list');
       const data = JSON.parse(localStorage.getItem('kkn_messages') || '[]');
@@ -1181,9 +1223,30 @@
       renderPesan();
     }
 
+    // ================= DETEKSI SCROLL INTERAKSI ANGGOTA =================
     document.addEventListener("DOMContentLoaded", () => {
       muatFotoDrive();
       renderPesan();
+
+      const observerOptions = {
+        root: null,
+        rootMargin: "0px",
+        threshold: 0.35
+      };
+
+      const memberObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('active');
+          } else {
+            entry.target.classList.remove('active');
+          }
+        });
+      }, observerOptions);
+
+      document.querySelectorAll('.member-row').forEach(row => {
+        memberObserver.observe(row);
+      });
     });
   </script>
 </body>
